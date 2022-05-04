@@ -1,0 +1,133 @@
+<div>
+  <div *nzModalTitle>
+    {{ editModal ? "Chỉnh sửa địa chỉ" : "Tạo mới địa chỉ" }}
+  </div>
+  <div>
+    <form
+      nz-form
+      [formGroup]="createContentForm"
+      (ngSubmit)="submitContent()"
+      [nzLayout]="'vertical'"
+      class="px-3"
+    >
+      <div nz-row [nzGutter]="[20, 20]">
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzFor="provinceId" nzRequired>
+              <span nz-typography>Tỉnh/Thành phố</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn Tỉnh/Thành phố!">
+              <nz-select
+                class="width-full"
+                nzShowSearch
+                formControlName="provinceId"
+                nzPlaceHolder="Chọn tỉnh"
+                nzAllowClear
+                (ngModelChange)="provinceChange($event)"
+              >
+                <nz-option
+                  *ngFor="let o of listOfProvince"
+                  [nzValue]="o.maTinh"
+                  [nzLabel]="o.name"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzFor="distId" nzRequired>
+              <span nz-typography>Quận/Huyện</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn Quận/Huyện!">
+              <nz-select
+                class="width-full"
+                nzShowSearch
+                formControlName="distId"
+                nzPlaceHolder="Chọn quận/huyện"
+                nzAllowClear
+                (ngModelChange)="distChange($event)"
+              >
+                <nz-option
+                  *ngFor="let o of listOfDist"
+                  [nzValue]="o.id"
+                  [nzLabel]="o.tenQuanHuyen"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzFor="wardId" nzRequired>
+              <span nz-typography>Phường/Xã</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng chọn Phường/Xã!">
+              <nz-select
+                class="width-full"
+                nzShowSearch
+                formControlName="wardId"
+                nzPlaceHolder="Chọn phường/xã"
+                nzAllowClear
+              >
+                <nz-option
+                  class="width-full"
+                  *ngFor="let o of listOfWard"
+                  [nzValue]="o.id"
+                  [nzLabel]="o.name"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label nzFor="detail" nzRequired>
+          <span nz-typography>Địa chỉ chi tiết</span>
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng nhập nội dung!">
+          <input
+            nz-input
+            class="pl-3"
+            id="detail"
+            formControlName="detail"
+            placeholder="Nhập nội dung"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="buildclass" nzRequired>
+          <span nz-typography>Phân hạng điểm đặt</span>
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng chọn phân hạng điểm đặt!">
+          <nz-select
+            class="width-full"
+            nzShowSearch
+            formControlName="buildclass"
+            nzPlaceHolder="Chọn phân hạng điểm đặt"
+            nzAllowClear
+          >
+            <nz-option
+              class="width-full"
+              *ngFor="let o of listOfBuidClass"
+              [nzValue]="o.id"
+              [nzLabel]="o.name"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitContent()"
+      [nzLoading]="createSubmitting"
+      class="m-2"
+    >
+      Cập nhật
+    </button>
+    <button nz-button nzType="default" (click)="cancelContent()">Hủy</button>
+  </div>
+</div>

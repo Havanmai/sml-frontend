@@ -1,0 +1,122 @@
+<div class="login-wrapper">
+  <nz-card>
+    <div nz-row>
+      <div
+        nz-col
+        nzXs="24"
+        nzSm="24"
+        nzMd="12"
+        nzLg="12"
+        nzXl="12"
+        class="text-center left-login"
+      >
+        <div class="mb-3"><img src="/assets/logo.svg" /></div>
+        <h1 nz-typography>Smart Locker</h1>
+        <div class="mb-4"><img src="/assets/login-divider.png" /></div>
+        <div>
+          <nz-alert
+            *ngIf="errorMsg"
+            nzType="error"
+            [nzMessage]="errorMsg"
+            nzCloseable
+            class="mb-4 text-left"
+          ></nz-alert>
+          <form
+            nz-form
+            [formGroup]="validateForm"
+            class="login-form"
+            (ngSubmit)="submitForm()"
+          >
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Vui lòng nhập thông tin tài khoản!">
+                <nz-input-group nzPrefixIcon="user" nzSize="large">
+                  <input
+                    type="text"
+                    nz-input
+                    formControlName="userName"
+                    placeholder="Tên đăng nhập"
+                  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control
+                nzErrorTip="Mật khẩu không được trống và tối thiểu 5 ký tự!"
+              >
+                <nz-input-group
+                  nzPrefixIcon="lock"
+                  [nzSuffix]="suffixTemplate"
+                  nzSize="large"
+                >
+                  <input
+                    [type]="passwordVisible ? 'text' : 'password'"
+                    nz-input
+                    formControlName="password"
+                    placeholder="Mật khẩu"
+                    nzSize="large"
+                  />
+                </nz-input-group>
+                <ng-template #suffixTemplate>
+                  <i
+                    nz-icon
+                    [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                    (click)="passwordVisible = !passwordVisible"
+                  ></i>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" class="text-left mb-4">
+                <label nz-checkbox formControlName="remember">
+                  <span>Ghi nhớ mật khẩu</span>
+                </label>
+              </div>
+            </div>
+            <button
+              nz-button
+              class="mt-2"
+              [nzType]="'primary'"
+              nzBlock
+              nzSize="large"
+              [nzLoading]="isLoginLoading"
+            >
+              Đăng Nhập
+            </button>
+          </form>
+          <div nz-row class="login-form-margin mt-4">
+            <div nz-col [nzSpan]="24">
+              <a href="javascript:void(0);" class="login-form-forgot"
+                >Bạn quên mật khẩu?</a
+              >
+            </div>
+          </div>
+          <nz-divider nzPlain nzText="Hoặc"></nz-divider>
+          <a
+            href="javascript:void(0);"
+            nz-button
+            class="login-form-button login-form-margin"
+            [nzType]="'primary'"
+            nzBlock
+            nzSize="large"
+            [disabled]="isLoginLoading"
+            >Đăng Nhập bằng Viettel SSO</a
+          >
+        </div>
+      </div>
+      <div
+        nz-col
+        nzXs="0"
+        nzSm="0"
+        nzMd="12"
+        nzLg="12"
+        nzXl="12"
+        class="right-login"
+      ></div>
+    </div>
+  </nz-card>
+  <div class="text-center mt-5">
+    <span nz-typography nzType="secondary"
+      >©2021 by ViettelPost SmartLocker</span
+    >
+  </div>
+</div>

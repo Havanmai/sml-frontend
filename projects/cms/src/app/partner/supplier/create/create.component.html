@@ -1,0 +1,105 @@
+<cms-page title="Tạo supplier mới" [close]="true">
+  <div action>
+    <a nz-button nzType="primary" (click)="submitCreateSupplier()"
+      ><i nz-icon nzType="check" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Xác nhận</span></a
+    >
+  </div>
+  <div content>
+    <form
+      nz-form
+      [formGroup]="createFormSupplier"
+      (ngSubmit)="submitCreateSupplier()"
+      class="mt-9"
+      style="width: 60%"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="vendor" nzRequired
+          >Tên supplier</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để tên supplier!"
+        >
+          <input
+            nz-input
+            formControlName="namesupplier"
+            id="namesupplier"
+            placeholder="nhập tên supplier"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired
+          >Email</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống email!"
+        >
+          <input
+            nz-input
+            id="email"
+            formControlName="email"
+            placeholder="nhập email"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone" nzRequired
+          >SDT</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống số điện thoại !"
+        >
+          <input
+            nz-input
+            id="phone"
+            formControlName="phone"
+            placeholder="nhập số điện thoại"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="address" nzRequired
+          >Địa chỉ</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống địa chỉ !"
+        >
+          <input
+            nz-input
+            id="address"
+            formControlName="address"
+            placeholder="nhập địa chỉ"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="note"
+          >Ghi chú</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống ghi chú!"
+        >
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="note"
+              placeholder="Ghi chú"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</cms-page>

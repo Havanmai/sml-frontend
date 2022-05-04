@@ -1,0 +1,297 @@
+<cms-page [title]="'Thiết lập kho'" [close]="false">
+  <div action>
+    <a nz-button nzType="primary" class="mr-3" (click)="createItem()"
+      ><i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Tạo mới thiết bị</span></a
+    >
+    <a nz-button nzType="primary" class="mr-3" (click)="creategroup()"
+      ><i nz-icon nzType="folder-add" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Tạo mới nhóm thiết bị</span></a
+    >
+    <a nz-button nzType="primary" (click)="createDepot()"
+      ><i nz-icon nzType="plus" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Tạo mới kho</span></a
+    >
+  </div>
+
+  <div content>
+    <nz-tabset>
+      <nz-tab nzTitle="Danh mục thiết bị">
+        <cms-list-device-category></cms-list-device-category>
+      </nz-tab>
+      <nz-tab nzTitle="Nhóm thiết bị ">
+        <cms-list-group-device-category></cms-list-group-device-category>
+      </nz-tab>
+      <nz-tab nzTitle="Kho hàng">
+        <cms-depot></cms-depot>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showCreateGroup"
+  [nzClosable]="false"
+  nzTitle="Tạo mới nhóm thiết bị"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createGroupForm"
+      (ngSubmit)="submitGroup()"
+      [nzLayout]="'vertical'"
+      class="px-3"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="groupName" nzRequired>
+          <span>Tên nhóm thiết bị</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên nhóm thiết bị!"
+        >
+          <input
+            nz-input
+            id="groupName"
+            formControlName="groupName"
+            placeholder="Nhập tên nhóm thiết bị"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="noteGroup">
+          <span>Ghi chú</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <textarea
+            nz-input
+            id="noteGroup"
+            formControlName="noteGroup"
+            placeholder="Nhập ghi chú"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitGroup()"
+      [nzLoading]="groupSubmitting"
+      class="m-2"
+    >
+      {{ editGroupFlag ? "Cập nhật nhóm thiết bị" : "Tạo mới nhóm thiết bị" }}
+    </button>
+    <button nz-button nzType="default" (click)="cancelGroup()">Hủy</button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="showCreatItem"
+  [nzClosable]="false"
+  nzTitle="Tạo mới thiết bị"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createItemForm"
+      (ngSubmit)="submitItem()"
+      class="px-3"
+    >
+      <nz-form-item>
+        <!-- <nz-form-control nzXs="12">
+          <span nz-checkbox formControlName="isLockerCabinet"
+            [nzDisabled]="createItemForm.controls.isBlock.value">Locker</span>
+        </nz-form-control>
+        <nz-form-control nzXs="12">
+          <span nz-checkbox formControlName="isBlock"
+            [nzDisabled]="createItemForm.controls.isLockerCabinet.value">Block</span>
+        </nz-form-control> -->
+        <nz-form-control nzXs="24">
+          <nz-radio-group
+            formControlName="type"
+            (ngModelChange)="onChangeType()"
+          >
+            <label nz-radio [nzValue]="1">Locker</label>
+            <label nz-radio [nzValue]="2">Block</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzXs]="24" nzFor="itemName" nzRequired>
+          <span>Tên thiết bị</span>
+        </nz-form-label>
+        <nz-form-control [nzXs]="24" nzErrorTip="Vui lòng nhập tên thiết bị!">
+          <input
+            nz-input
+            class="pl-3"
+            id="itemName"
+            formControlName="itemName"
+            placeholder="Nhập tên nhóm thiết bị"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzXs]="24" nzFor="category" nzRequired>
+          <span>Tên nhóm thiết bị</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên nhóm thiết bị!"
+        >
+          <nz-select formControlName="category">
+            <nz-option
+              *ngFor="let c of listOfCategory"
+              [nzValue]="c.id"
+              [nzLabel]="c.name"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzXs]="24" nzFor="noteItem" nzRequired>
+          <span>Đơn vị</span>
+        </nz-form-label>
+        <nz-form-control [nzXs]="24" nzErrorTip="Vui lòng nhập đơn vị!">
+          <input
+            nz-input
+            class="pl-3"
+            id="noteItem"
+            formControlName="noteItem"
+            placeholder="Nhập đơn vị"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitItem()"
+      [nzLoading]="itemSubmitting"
+      class="m-2"
+    >
+      {{ editItemFlag ? "Cập nhập " : "Tạo mới thiết bị" }}
+    </button>
+    <button nz-button nzType="default" (click)="cancelItem()">Hủy</button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="showCreatDepot"
+  [nzClosable]="false"
+  nzTitle="Tạo mới kho hàng"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createDepotForm"
+      [nzLayout]="'vertical'"
+      class="px-3"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="code" nzRequired>
+          <span>Mã kho hàng</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập mã kho hàng!"
+        >
+          <input
+            nz-input
+            class="pl-3"
+            id="code"
+            formControlName="code"
+            placeholder="Nhập mã kho hàng"
+            (keyup.enter)="changeCodeDepot()"
+            (blur)="changeCodeDepot()"
+          />
+          <p class="required" *ngIf="isDuplicateCodeDepot">
+            Mã kho hàng đã tồn tại !
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="name" nzRequired>
+          <span>Tên kho hàng</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên kho hàng!"
+        >
+          <input
+            nz-input
+            class="pl-3"
+            id="name"
+            formControlName="name"
+            placeholder="Nhập tên kho hàng"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="address">
+          <span>Địa chỉ </span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <input
+            nz-input
+            class="pl-3"
+            id="address"
+            formControlName="address"
+            placeholder="Nhập địa chỉ"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="phone">
+          <span>SDT </span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <input
+            nz-input
+            class="pl-3"
+            id="phone"
+            formControlName="phone"
+            placeholder="Nhập số điện thoại"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="note">
+          <span>Ghi chú</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập ghi chú!"
+        >
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="note"
+              placeholder="Nhập ghi chú"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitDepot()"
+      [nzLoading]="depotSubmitting"
+      class="m-2"
+    >
+      {{ editDepotFlag ? "Cập nhập " : "Tạo mới kho hàng" }}
+    </button>
+    <button nz-button nzType="default" (click)="cancelDepot()">Hủy</button>
+  </div>
+</nz-modal>

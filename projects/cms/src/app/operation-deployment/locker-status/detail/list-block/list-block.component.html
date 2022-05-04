@@ -1,0 +1,351 @@
+<div class="mt-2">
+  <div class="detail-list-block mt-2">
+    <div nz-row>
+      <div nz-col>
+        <span nz-typography class="mr-2">Danh sách khối tủ:</span>
+        <ng-container *ngIf="checkFullBlock">
+          <button
+            nz-button
+            nzType="default"
+            *ngFor="let itembock of listBlock; let i = index"
+            class="mx-3 my-3"
+            (click)="moveStep(i)"
+            nzGhost
+          >
+            {{ i + 1 }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="!checkFullBlock">
+          <button
+            nz-button
+            nzType="default"
+            *ngFor="let itembock of listBlock; let i = index"
+            class="mx-3 my-3"
+            (click)="moveStep(i)"
+            nzGhost
+          >
+            {{ itembock[0].block }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <div class="block mt-2 ml-5 text-center">
+      <!-- *ngIf="checkNull==false" -->
+      <drag-scroll [scrollbar-hidden]="true" class="mt-2" #nav>
+        <div
+          drag-scroll-item
+          style="padding-left: 15px; padding-right: 15px; padding-top: 15px"
+          [style.background-color]="checkNull ? '#f2f2f2' : '#fff'"
+          *ngFor="let itembock of listBlock; let itemindex = index"
+          #navItem
+        >
+          <div
+            nz-row
+            [nzGutter]="10"
+            *ngIf="itembock.length !== 0"
+            [style.border]="
+              itemindex == focus && !checkNull
+                ? '1px solid #EE1A30'
+                : itemindex == focus && checkNull
+                ? '1px solid #808080'
+                : '#fff'
+            "
+            [style.background-color]="
+              itemindex == focus && !checkNull
+                ? '#f0d9d8'
+                : itemindex == focus && checkNull
+                ? '1px solid #f4f4f4'
+                : '#fff'
+            "
+            style="border-radius: 5px"
+          >
+            <div nz-col nzSpan="12" class="text-center">
+              <div
+                nz-row
+                *ngFor="
+                  let it of (itembock | listItemBlock).slice(
+                    0,
+                    itembock | middleNumberBock
+                  );
+                  let i = index
+                "
+                class="my-1"
+                nzJustify="center"
+                nzAlign="middle"
+              >
+                <button
+                  nz-button
+                  nzBlock
+                  style="border-radius: 5px; width: 108px"
+                  nz-popover
+                  [nzPopoverTrigger]="'click'"
+                  [nzPopoverContent]="
+                    !checkNull && it.status != 3
+                      ? contentTemplate
+                      : 'Ngăn tủ chưa được kích hoạt ! '
+                  "
+                  [nzPopoverTitle]="titleTemplate"
+                  nzPopoverPlacement="right"
+                  [ngStyle]="{
+                    'height.px': it.sizeType | sizeLocked,
+                    'background-color': it.maVanDon | colorLocked: it.status
+                  }"
+                  class="px-8 locker"
+                >
+                  <div>{{ i + 1 }}</div>
+                  <img
+                    *ngIf="it.status === 1"
+                    src="/assets/opendoor.svg"
+                    class="open-door-img"
+                  />
+                  <i nz-icon class="icon-lock" nzType="lock"  nzTheme="outline"></i>
+                </button>
+                <ng-template #titleTemplate>
+                  <div style="display: flex; justify-content: space-between">
+                    <h5 nz-typography class="my-2">Thông tin ngăn tủ</h5>
+                    <button
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      class="mt-2"
+                      (click)="closePopover()"
+                    >
+                      <i nz-icon nzType="close" nzTheme="outline"></i>
+                    </button>
+                  </div>
+                </ng-template>
+                <ng-template #contentTemplate>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Mã ngăn : </span>
+                    <span>{{ it.id }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Khối : </span>
+                    <span>{{ it.block }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Trạng thái : </span>
+                    <span>{{ it.status }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Cảm biến vật thể : </span>
+                    <span>{{ it.objectSensor }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Đèn : </span>
+                    <span>{{ it.light }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Đèn UV : </span>
+                    <span>{{ it.uvLight }} </span>
+                  </div>
+                  <div style="text-align: center" class="my-3">
+                    <button
+                      nz-button
+                      nzType="default"
+                      *ngIf="it.status == 2"
+                      (click)="itemConfirmOpen(it)"
+                    >
+                      <i nz-icon nzType="lock" nzTheme="outline"></i>
+                    </button>
+                    <button
+                      nz-button
+                      nzType="default"
+                      *ngIf="it.status != 2"
+                      (click)="itemConfirmLocker(it)"
+                    >
+                      <i nz-icon nzType="unlock" nzTheme="outline"></i>
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+            <div nz-col nzSpan="12" style="text-align: center">
+              <div
+                nz-row
+                *ngFor="
+                  let it of (itembock | listItemBlock)
+                    .slice(itembock | middleNumberBock, itembock.length + 1)
+                    .reverse();
+                  let i = index
+                "
+                class="my-1"
+                nzJustify="center"
+              >
+                <button
+                  nz-button
+                  nzBlock
+                  style="border-radius: 5px; width: 108px"
+                  nz-popover
+                  [nzPopoverContent]="
+                    !checkNull && it.status != 3
+                      ? contentTemplate1
+                      : 'Ngăn tủ chưa được kích hoạt!'
+                  "
+                  [nzPopoverTrigger]="'click'"
+                  [nzPopoverTitle]="titleTemplate1"
+                  nzPopoverPlacement="right"
+                  [ngStyle]="{
+                    'height.px': it.sizeType | sizeLocked,
+                    'background-color': it.maVanDon | colorLocked: it.status
+                  }"
+                  class="px-8 locker"
+                >
+                  <div>{{ (itembock | listItemBlock).length - i }}</div>
+                  <img
+                    *ngIf="it.status === 1"
+                    src="/assets/opendoor.svg"
+                    class="open-door-img"
+                  />
+                  <i nz-icon class="icon-lock" nzType="lock"  nzTheme="outline"></i>
+                </button>
+                <ng-template #titleTemplate1>
+                  <div
+                    nz-row
+                    style="display: flex; justify-content: space-between"
+                  >
+                    <h5 nz-typography class="my-2">Thông tin ngăn tủ</h5>
+                    <button
+                      nz-button
+                      nzType="text"
+                      nzSize="small"
+                      class="mt-2"
+                      (click)="closePopover()"
+                    >
+                      <i nz-icon nzType="close" nzTheme="outline"></i>
+                    </button>
+                  </div>
+                </ng-template>
+                <ng-template #contentTemplate1>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Mã ngăn : </span>
+                    <span>{{ it.id }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Khối : </span>
+                    <span>{{ it.block }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Trạng thái : </span>
+                    <span>{{ it.status }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Cảm biến vật thể : </span>
+                    <span>{{ it.objectSensor }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Đèn : </span>
+                    <span>{{ it.light }} </span>
+                  </div>
+                  <div nz-row class="px-3 py-2">
+                    <span class="item-title">Đèn UV : </span>
+                    <span>{{ it.uvLight }} </span>
+                  </div>
+                  <div class="text-center my-3">
+                    <button
+                      nz-button
+                      nzType="default"
+                      *ngIf="it.status == 2"
+                      (click)="itemConfirmOpen(it)"
+                    >
+                      <i nz-icon nzType="lock" nzTheme="outline"></i>
+                    </button>
+                    <button
+                      nz-button
+                      nzType="default"
+                      *ngIf="it.status != 2"
+                      (click)="itemConfirmLocker(it)"
+                    >
+                      <i nz-icon nzType="unlock" nzTheme="outline"></i>
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div
+            nz-row
+            nzJustify="center"
+            class="mt-4 mb-3"
+            *ngIf="itembock.length !== 0"
+          >
+            <div nz-col nzSpan="5">
+              <button
+                nz-button
+                nzType="primary"
+                (click)="blockConfirmOpen(itembock)"
+                style="width: 100%"
+                *ngIf="display(itemindex, itembock) == true"
+                nz-tooltip
+                [nzTooltipTitle]="'Mở tủ'"
+                [nzTooltipColor]="'#EE1A30'"
+              >
+                <i nz-icon nzType="lock" nzTheme="outline"></i>
+              </button>
+              <button
+                nz-button
+                nzType="default"
+                (click)="blockConfirmLocker(itembock)"
+                style="width: 100%"
+                *ngIf="display(itemindex, itembock) == false"
+                nz-tooltip
+                [nzTooltipTitle]="'Khóa tủ'"
+                [nzTooltipColor]="'#EE1A30'"
+              >
+                <i nz-icon nzType="unlock" nzTheme="outline"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </drag-scroll>
+      <div
+        *ngIf="checkwidthDrall == true"
+        class="previous-tab"
+        (click)="moveLeft()"
+      >
+        <i nz-icon nzType="left" nzTheme="outline"></i>
+      </div>
+      <div
+        *ngIf="checkwidthDrall == true"
+        class="next-tab"
+        (click)="moveRight()"
+      >
+        <i nz-icon nzType="right" nzTheme="outline"></i>
+      </div>
+    </div>
+    <!--  <div *ngIf="checkNull==true" class="block mt-8 text-center" style="height: 250px;">
+      <nz-empty></nz-empty>
+    </div> -->
+  </div>
+</div>
+<div nz-row class="mt-3">
+  <div nz-col [nzXs]="24" [nzLg]="24" [nzXl]="16" [nzXXl]="18">
+    <div nz-row>
+      <div class="mt-3" nz-col nzXs="8" nzMd="6" nzLg="6" nzXl="4" [nzXXl]="3">
+        <nz-tag [nzColor]="'#0DD80D'">{{ emptyStatus }}</nz-tag>
+        <span nz-typography> Còn trống</span>
+      </div>
+      <div class="mt-3" nz-col nzXs="8" nzMd="6" nzLg="6" nzXl="4" [nzXXl]="3">
+        <nz-tag [nzColor]="'#3b5999'">{{ normalStatus }}</nz-tag>
+        <span nz-typography> Đã có hàng</span>
+      </div>
+      <div class="mt-3" nz-col nzXs="8" nzMd="6" nzLg="4" nzXl="3" [nzXXl]="2">
+        <nz-tag [nzColor]="'#EC1B2E'">{{ errorStatus }}</nz-tag>
+        <span nz-typography> Lỗi</span>
+      </div>
+      <div class="mt-3" nz-col nzXs="8" nzMd="6" nzLg="5" nzXl="3" [nzXXl]="2">
+        <nz-tag [nzColor]="'#FF9F10'">{{ lockedStatus }}</nz-tag>
+        <span nz-typography> Bị khóa</span>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3" nz-col [nzXs]="6" [nzLg]="6" [nzXl]="4" [nzXXl]="3">
+    <img src="/assets/opendoor.svg" style="width: 22px; height: 22px" />
+    <span nz-typography> Chưa đóng tủ</span>
+  </div>
+  <div class="mt-3" nz-col [nzXs]="6" [nzLg]="6" [nzXl]="4" [nzXXl]="3">
+    <i nz-icon nzType="lock"  nzTheme="outline"></i>
+    <span nz-typography> Khóa</span>
+  </div>
+
+</div>

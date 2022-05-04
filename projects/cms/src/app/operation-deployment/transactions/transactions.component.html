@@ -1,0 +1,418 @@
+<cms-page title="Lịch sử giao dịch" [close]="false">
+  <div action></div>
+  <div content id="main-content">
+    <div nz-row class="mt-7" [nzGutter]="[16, 5]">
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="6"
+        nzLg="6"
+        nzXl="5"
+        nzXXl="3"
+      >
+        <nz-input-group
+          class="width-full"
+          [nzPrefix]="prefixIconSearch"
+          [nzSuffix]="inputClearTpl"
+        >
+          <input
+            type="text"
+            nz-input
+            placeholder="Nhập mã vận đơn"
+            [(ngModel)]="keyword"
+            (keyup.enter)="searchKeyWord()"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconSearch>
+          <i nz-icon nzType="search" (click)="searchKeyWord()"></i>
+        </ng-template>
+        <ng-template #inputClearTpl>
+          <i
+            nz-icon
+            class="ant-input-clear-icon"
+            nzTheme="fill"
+            nzType="close-circle"
+            *ngIf="keyword"
+            (click)="keyword = ''; searchKeyWord()"
+          ></i>
+        </ng-template>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="6"
+        nzLg="6"
+        nzXl="4"
+        nzXXl="3"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="serviceId"
+          (nzScrollToBottom)="loadMoreService()"
+          [nzDropdownRender]="renderTemplate0"
+          nzPlaceHolder="Chọn dịch vụ"
+          nzAllowClear
+          (ngModelChange)="searchService($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfService"
+            [nzValue]="o.code"
+            [nzLabel]="o.name"
+          ></nz-option>
+          <ng-template #renderTemplate0>
+            <nz-spin *ngIf="isLoadingServiceScroll"></nz-spin>
+          </ng-template>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="6"
+        nzLg="6"
+        nzXl="4"
+        nzXXl="3"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="dpId"
+          (nzScrollToBottom)="loadMoreDP()"
+          [nzDropdownRender]="renderTemplate4"
+          nzPlaceHolder="Chọn delivery partner"
+          nzAllowClear
+          (ngModelChange)="searchDP($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfDP"
+            [nzValue]="o.code"
+            [nzLabel]="o.name"
+          ></nz-option>
+          <ng-template #renderTemplate4>
+            <nz-spin *ngIf="isLoadingDPScroll"></nz-spin>
+          </ng-template>
+        </nz-select>
+      </div>
+
+      <!-- <div nz-col class="mt-3" nzXs="12" nzSm="8" nzMd="6" nzLg="6" nzXl="4" nzXXl='3'>
+        <nz-select class="width-full" nzShowSearch [ngModel]="postmanId" (nzOnSearch)="getPostmanSearchLoad($event)"   (nzScrollToBottom)="loadMorePostMan()"  [nzDropdownRender]="renderTemplate2"   [nzDropdownRender]="renderTemplate2" nzPlaceHolder="Chọn Bưu tá" nzAllowClear (ngModelChange)="searchPostman($event)">
+          <nz-option *ngFor="let o of listOfPostMan" [nzValue]="o.userId" [nzLabel]="o.userName"></nz-option>
+          <ng-template #renderTemplate2>
+            <nz-spin *ngIf="isLoadingPostmanScroll"></nz-spin>
+          </ng-template>
+      </nz-select>
+      </div> -->
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="6"
+        nzMd="6"
+        nzLg="6"
+        nzXl="4"
+        nzXXl="3"
+      >
+        <nz-select
+          [(ngModel)]="status"
+          nzShowSearch
+          nzAllowClear
+          style="width: 100%"
+          nzPlaceHolder="Trạng thái"
+          (ngModelChange)="searchStatus($event)"
+        >
+          <nz-option nzValue="1" nzLabel="Chờ khách lấy"></nz-option>
+          <nz-option nzValue="2" nzLabel="Quá hạn 24H"></nz-option>
+          <nz-option nzValue="3" nzLabel="Quá hạn 48H"></nz-option>
+          <nz-option nzValue="4" nzLabel="Khách đã lấy hàng"></nz-option>
+          <nz-option nzValue="5" nzLabel="Đã thu hồi"></nz-option>
+          <nz-option nzValue="6" nzLabel="Đã khóa"></nz-option>
+          <nz-option nzValue="7" nzLabel="Chờ bưu tá lấy hàng"></nz-option>
+          <nz-option nzValue="8" nzLabel="Bưu tá đã nhận"></nz-option>
+          <nz-option nzValue="9" nzLabel="Hủy đơn"></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="6"
+        nzMd="6"
+        nzLg="6"
+        nzXl="4"
+        nzXXl="3"
+      >
+        <nz-select
+          [(ngModel)]="lockersize"
+          nzShowSearch
+          nzAllowClear
+          style="width: 100%"
+          nzPlaceHolder="Loại ngăn tủ"
+          (ngModelChange)="searchLockerSize($event)"
+        >
+          <nz-option nzValue="1" nzLabel="S"></nz-option>
+          <nz-option nzValue="2" nzLabel="M"></nz-option>
+          <nz-option nzValue="3" nzLabel="L"></nz-option>
+          <nz-option nzValue="4" nzLabel="LCD"></nz-option>
+          <nz-option nzValue="5" nzLabel="BOX"></nz-option>
+          <nz-option nzValue="6" nzLabel="T"></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="7"
+        nzMd="7"
+        nzLg="7"
+        nzXl="5"
+        nzXXl="4"
+      >
+        <cms-date-selector
+          (onSelect)="filterSelect($event)"
+        ></cms-date-selector>
+      </div>
+      <ng-container *ngIf="checkUpgrade">
+        <div
+          nz-col
+          class="mt-3"
+          nzXs="12"
+          nzSm="8"
+          nzMd="6"
+          nzLg="6"
+          nzXl="4"
+          nzXXl="3"
+        >
+          <nz-select
+            class="width-full"
+            nzShowSearch
+            [(ngModel)]="postId"
+            (nzOnSearch)="getBuuCucSearchLoad($event)"
+            (nzScrollToBottom)="loadMore()"
+            [nzDropdownRender]="renderTemplate"
+            [nzDropdownRender]="renderTemplate"
+            nzPlaceHolder="Chọn bưu cục"
+            nzAllowClear
+            (ngModelChange)="searchPost($event)"
+          >
+            <nz-option
+              *ngFor="let o of listOfPost"
+              [nzValue]="o.maBuuCuc"
+              nzLabel="{{ o.maBuuCuc }}-{{ o.name }}"
+            ></nz-option>
+            <ng-template #renderTemplate>
+              <nz-spin *ngIf="isLoadingScroll"></nz-spin>
+            </ng-template>
+          </nz-select>
+        </div>
+        <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="6"
+        nzLg="6"
+        nzXl="4"
+        nzXXl="3"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="supplierId"
+          (nzScrollToBottom)="loadMoreSupplier()"
+          [nzDropdownRender]="renderTemplate3"
+          nzPlaceHolder="Chọn Supplier"
+          nzAllowClear
+          (ngModelChange)="searchSupplier($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfSupplier"
+            [nzValue]="o.code"
+            [nzLabel]="o.name"
+          ></nz-option>
+          <ng-template #renderTemplate3>
+            <nz-spin *ngIf="isLoadingSupplierScroll"></nz-spin>
+          </ng-template>
+        </nz-select>
+      </div>
+        <div
+          nz-col
+          class="mt-3"
+          nzXs="12"
+          nzSm="8"
+          nzMd="6"
+          nzLg="6"
+          nzXl="4"
+          nzXXl="3"
+        >
+          <nz-select
+            class="width-full"
+            nzShowSearch
+            [ngModel]="lockerId"
+            (nzScrollToBottom)="loadMoreLocker()"
+            [nzDropdownRender]="renderTemplate1"
+            nzPlaceHolder="Chọn Locker"
+            nzAllowClear
+            (ngModelChange)="searchLocker($event)"
+          >
+            <nz-option
+              *ngFor="let o of listOfLocker"
+              [nzValue]="o.id"
+              [nzLabel]="o.code"
+            ></nz-option>
+            <ng-template #renderTemplate1>
+              <nz-spin *ngIf="isLoadingLockerScroll"></nz-spin>
+            </ng-template>
+          </nz-select>
+        </div>
+        <div
+          nz-col
+          class="mt-3"
+          nzXs="12"
+          nzSm="8"
+          nzMd="6"
+          nzLg="6"
+          nzXl="4"
+          nzXXl="3"
+        >
+          <nz-select
+            class="width-full"
+            nzShowSearch
+            [ngModel]="postmanId"
+            (nzOnSearch)="getPostmanSearchLoad($event)"
+            (nzScrollToBottom)="loadMorePostMan()"
+            [nzDropdownRender]="renderTemplate2"
+            [nzDropdownRender]="renderTemplate2"
+            nzPlaceHolder="Chọn Bưu tá"
+            nzAllowClear
+            (ngModelChange)="searchPostman($event)"
+          >
+            <nz-option
+              *ngFor="let o of listOfPostMan"
+              [nzValue]="o.userId"
+              [nzLabel]="o.userName"
+            ></nz-option>
+            <ng-template #renderTemplate2>
+              <nz-spin *ngIf="isLoadingPostmanScroll"></nz-spin>
+            </ng-template>
+          </nz-select>
+        </div>
+      </ng-container>
+
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="11"
+        nzMd="10"
+        nzLg="9"
+        nzXl="8"
+        nzXXl="5"
+      >
+        <button
+          nz-button
+          nzType="primary"
+          class="mr-3"
+          (click)="searchKeyWord()"
+        >
+          <i nz-icon nzType="search" nzTheme="outline"></i> Tìm kiếm
+        </button>
+        <button
+          *ngIf="!checkUpgrade"
+          nz-button
+          nzType="default"
+          (click)="upgraded()"
+        >
+          <img width="16px" class="mr-2" src="/assets/reverse.svg" /> Nâng cao
+        </button>
+        <button
+          *ngIf="checkUpgrade"
+          nz-button
+          nzType="primary"
+          (click)="upgraded()"
+        >
+          <i nz-icon nzType="double-left" nzTheme="outline"></i> Ẩn bớt
+        </button>
+      </div>
+    </div>
+    <nz-table
+      class="mt-5"
+      #basicTable
+      [nzData]="listOfData"
+      [nzFooter]="footer"
+      [nzFrontPagination]="false"
+      [nzPageSize]="size"
+      [nzPageIndex]="page"
+      [nzTotal]="total"
+      (nzPageIndexChange)="pageChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Mã vận đơn</th>
+          <th>Bưu cục</th>
+          <th>Mã Locker</th>
+          <th>Mã Bưu tá</th>
+          <th>Dịch vụ</th>
+          <th>Supplier</th>
+          <th>Delivery Partner</th>
+          <th>Loại ngăn</th>
+          <th>Ngày vào tủ</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>
+            <a routerLink="detail/{{ data.maVanDon }}">{{ data.maVanDon }}</a>
+            <i
+              class="ml-2"
+              nz-icon
+              nzType="copy"
+              style="cursor: pointer"
+              nzTheme="outline"
+              (click)="coppyCode(data)"
+              nzTooltipTitle="copy"
+              nzTooltipPlacement="topLeft"
+              nz-tooltip
+            ></i>
+          </td>
+          <td>
+            {{
+              data.maBuuCuc
+                ? data.tenBuuCuc
+                  ? data.maBuuCuc.concat(" - ", data.tenBuuCuc)
+                  : data.maBuuCuc
+                : "-"
+            }}
+          </td>
+          <td>{{ data.cabinetCode ? data.cabinetCode : "-" }}</td>
+          <td>{{ data.maBuuTa ? data.maBuuTa : "-" }}</td>
+          <td>{{ data.dichVu ? data.dichVu : "-" }}</td>
+          <td>{{ data.supplierCode ? data.supplierCode : "-" }}</td>
+          <td>{{ data.partnerCode ? data.partnerCode : "-" }}</td>
+          <td>
+            {{ data.lockerSize ? (data.lockerSize | typeLockerName) : "-" }}
+          </td>
+          <td>{{ data.enter ? (data.enter | dateHistory) : "-" }}</td>
+          <td class="text-center">
+            <nz-tag
+              *ngIf="data.status != null"
+              [nzColor]="data.status | colorDetailStatus"
+              >{{ data.status | textDetailStatus }}</nz-tag
+            >
+          </td>
+        </tr>
+      </tbody>
+      <ng-template #footer>
+        <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+      </ng-template>
+    </nz-table>
+
+    <div></div>
+  </div>
+</cms-page>

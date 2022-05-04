@@ -1,0 +1,125 @@
+<cms-page title="Quản lý vị trí" [close]="false">
+  <div action>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createLocationLocker()"
+      class="mr-3"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Tạo vị trí Locker</span>
+    </button>
+  </div>
+  <div content class="mt-8">
+    <nz-table
+      [nzData]="listLocationLocker"
+      [nzFrontPagination]="false"
+      [nzPageSize]="filterLocation.pageSize"
+      [nzPageIndex]="filterLocation.pageNumber"
+      [nzTotal]="total"
+      (nzPageIndexChange)="onPageChange($event)"
+      [nzFooter]="footer"
+      class="mt-11"
+    >
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Vị trí locker</th>
+          <th nzWidth="160px">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listLocationLocker; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="text-bold">{{ data.name }}</td>
+          <td>
+            <button
+              nz-button
+              nzType="text"
+              class="mr-1"
+              title="Sửa"
+              (click)="onEdit(data)"
+            >
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </button>
+            <button
+              nz-button
+              nzType="text"
+              title="Xóa"
+              (click)="onDelete(data)"
+            >
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                class="text-danger"
+              ></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <ng-template #footer>
+        <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+      </ng-template>
+    </nz-table>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showCreateLocation"
+  [nzClosable]="false"
+  nzTitle="Tạo mới vị trí Locker"
+  style="width: 500px !important"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createLocationForm"
+      (ngSubmit)="submitLocation()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="locationName">
+          <span>Vị trí Locker</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập vị trí locker!"
+        >
+          <input
+            nz-input
+            id="locationName"
+            formControlName="locationName"
+            placeholder="Nhập vị trí Locker"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="note">
+          <span>Ghi chú</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <textarea
+            nz-input
+            id="note"
+            formControlName="note"
+            placeholder="Ghi chú"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitLocation()"
+      [nzLoading]="submitting"
+      class="m-2"
+    >
+      {{ editLocation ? "Cập nhật vị trí Locker" : "Tạo vị trí Locker" }}
+    </button>
+    <button nz-button nzType="default" (click)="cancelModal()">Hủy</button>
+  </div>
+</nz-modal>

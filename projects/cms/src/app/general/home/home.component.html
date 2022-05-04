@@ -1,0 +1,45 @@
+<nz-layout>
+  <nz-header>
+    <cms-header></cms-header>
+  </nz-header>
+  <nz-layout>
+    <nz-sider
+      nzWidth="250px"
+      nzTheme="light"
+      [(nzCollapsed)]="isCollapsed"
+      nzBreakpoint="lg"
+      [nzCollapsedWidth]="0"
+      class="vertical-submenu"
+    >
+      <cms-sidebar></cms-sidebar>
+    </nz-sider>
+    <nz-layout
+      [ngClass]="{
+        'inner-layout': true,
+        'px-2': true,
+        'px-md-4': true,
+        'pb-0': true,
+        'inner-layout-collapse': isCollapsed
+      }"
+    >
+      <cms-breadcrumb></cms-breadcrumb>
+      <nz-content>
+        <router-outlet></router-outlet>
+      </nz-content>
+      <nz-footer class="text-center"
+        ><span nz-typography nzType="secondary"
+          >©2021 by ViettelPost SmartLocker</span
+        ></nz-footer
+      >
+    </nz-layout>
+  </nz-layout>
+</nz-layout>
+<div *ngIf="showLoading" class="loading_wr">
+  <ng-template #indicatorTemplate>
+    <i nz-icon nzType="loading"></i>
+    <div class="text-center mt-2">
+      <span>Đang tải, vui lòng chờ chút...</span>
+    </div>
+  </ng-template>
+  <nz-spin nzSimple [nzIndicator]="indicatorTemplate" class="spin_wr"></nz-spin>
+</div>

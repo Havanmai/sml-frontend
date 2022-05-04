@@ -1,0 +1,94 @@
+<nz-card nzTitle="Top Bưu cục" [nzExtra]="extraTemplate">
+  <nz-table #basicTable>
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Mã bưu cục</th>
+        <th>Địa chỉ</th>
+        <th>Số Locker</th>
+        <th>Đơn hàng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a routerLink="detail/4" class="text-bold">1111</a></td>
+        <td>Trung hòa nhân chính hà nội</td>
+        <td>20</td>
+        <td>150</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="text-right mt-3">
+    <a routerLink="/postoffices"
+      >Xem tất cả bưu cục <i nz-icon nzType="right" nzTheme="outline"></i
+    ></a>
+  </div>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <cms-date-selector (onSelect)="filterSelect($event)"></cms-date-selector>
+</ng-template>

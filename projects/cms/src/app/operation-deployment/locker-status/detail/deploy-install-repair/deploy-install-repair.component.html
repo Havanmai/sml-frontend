@@ -1,0 +1,53 @@
+<div>
+  <nz-table
+    #basicTable
+    [nzData]="listOfDevices"
+    [nzFooter]="footer"
+    [nzFrontPagination]="true"
+    [nzPageSize]="size"
+    [nzPageIndex]="page"
+    [nzTotal]="total"
+  >
+    <thead>
+      <tr>
+        <th>Thời gian</th>
+        <th>Hành động</th>
+        <th>Danh mục</th>
+        <th>Nhóm</th>
+        <th>Mã</th>
+        <th>Phiếu gốc</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>{{ data.importDate ? (data.importDate | dateText) : "-" }}</td>
+        <td>{{ data.bill ? (data.bill.name ? data.bill.name : "-") : "-" }}</td>
+        <td>
+          {{ data.model ? (data.model.name ? data.model.name : "-") : "-" }}
+        </td>
+        <td>
+          {{
+            data.model
+              ? data.model.category
+                ? data.model.category.name
+                  ? data.model.category.name
+                  : "-"
+                : "-"
+              : "-"
+          }}
+        </td>
+        <td>{{ data.id ? data.id : "-" }}</td>
+        <td>{{ data.bill ? (data.bill.code ? data.bill.code : "-") : "-" }}</td>
+        <td>
+          <nz-tag [nzColor]="data.status | colorDeploy">{{
+            data.status | textStatusDeploy
+          }}</nz-tag>
+        </td>
+      </tr>
+    </tbody>
+    <ng-template #footer>
+      <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+    </ng-template>
+  </nz-table>
+</div>

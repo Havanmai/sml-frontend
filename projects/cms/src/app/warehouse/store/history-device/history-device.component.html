@@ -1,0 +1,59 @@
+<cms-page title="Lịch sử nhập xuất" [close]="true" (onClose)="onClose()">
+  <div content>
+    <div nz-row class="my-0 p-0">
+      <div nz-col nzXs="24">
+        <cms-filter-history
+          [filterObj]="filterObj"
+          (onFilter)="onFilter()"
+        ></cms-filter-history>
+      </div>
+      <div nz-col nzXs="24">
+        <nz-table
+          #iDataTable
+          [nzFrontPagination]="false"
+          [nzPageSize]="pageSize"
+          [nzPageIndex]="pageNumber"
+          [nzTotal]="totalPage"
+          (nzPageIndexChange)="pageChange($event)"
+          [nzData]="isLoading && lstBills.length > 0 ? lstBills : []"
+          [nzScroll]="{ y: '100%' }"
+        >
+          <thead>
+            <tr>
+              <th>Stt</th>
+              <th>Mã phiếu</th>
+              <th>Loại phiếu</th>
+              <th>Kho nhập</th>
+              <th>Kho xuất</th>
+              <th>Người tạo</th>
+              <th>Người nhận</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of iDataTable.data; let i = index">
+              <td>{{ (pageNumber - 1) * pageSize + i + 1 }}</td>
+              <td>{{ item.code }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.warehouse.name }}</td>
+              <td>{{ item.destinationLocation }}</td>
+              <td>
+                {{
+                  item.createdByUser.firstName +
+                    " " +
+                    item.createdByUser.lastName
+                }}
+              </td>
+              <td>{{ item.receiver }}</td>
+              <td>
+                <div (click)="actionView(item)" class="icon-view">
+                  <i nz-icon nzType="eye" nzTheme="outline"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</cms-page>

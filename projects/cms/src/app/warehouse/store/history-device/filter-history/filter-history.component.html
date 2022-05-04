@@ -1,0 +1,65 @@
+<form nz-form [formGroup]="mainForm" (ngSubmit)="submitForm(mainForm)">
+    <div nz-row [nzGutter]="[16,5]" class="mt-3">
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control [nzSpan]="24">
+                    <nz-input-group [nzPrefix]="prefixIconSearch" class="width-full">
+                        <input type="text" formControlName="idTicket" nz-input placeholder="Mã phiếu"
+                            (keyup.enter)="searchAll()" />
+                    </nz-input-group>
+                    <ng-template #prefixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control [nzSpan]="24">
+                    <nz-select class="width-full" formControlName="typeTicket" nzAllowClear nzPlaceHolder="Loại phiếu">
+                        <nz-option *ngFor="let item of lstTypeTicket" [nzLabel]="item.name" [nzValue]="item.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control [nzSpan]="24">
+                    <nz-input-group [nzPrefix]="prefixIconSearch" class="width-full">
+                        <input type="text" formControlName="idUser" nz-input placeholder="Người nhận"
+                            (keyup.enter)="searchAll()" />
+                    </nz-input-group>
+                    <ng-template #prefixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control [nzSpan]="24">
+                    <nz-select class="width-full" formControlName="importDevice" nzAllowClear nzPlaceHolder="Kho nhập">
+                        <nz-option *ngFor='let m of lstImportDevice' [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control [nzSpan]="24">
+                    <nz-select class="width-full" formControlName="exportDevice" nzAllowClear nzPlaceHolder="Kho xuất">
+                        <nz-option *ngFor='let m of lstExportDevice' [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzXs]='12' [nzSm]='8' [nzXl]='4' [nzXXl]='4'>
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" type="submit"><i nz-icon nzType="search"></i> Tìm kiếm</button>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+</form>

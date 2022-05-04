@@ -1,0 +1,264 @@
+<div>
+  <div *nzModalTitle>Xuất Locker mới</div>
+  <div>
+    <form
+      nz-form
+      [formGroup]="createExportLocker"
+      [nzLayout]="'vertical'"
+      class="px-2 px-md-4"
+    >
+      <nz-form-item>
+        <nz-form-label nzFor="categorylock" nzRequired>
+          <span>Nhóm Locker</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn nhóm Locker!"
+        >
+          <nz-select
+            formControlName="categorylock"
+            nzPlaceHolder="Chọn nhóm Locker"
+          >
+            <nz-option
+              *ngFor="let p of listOfCategoryLock"
+              [nzLabel]="p.name"
+              [nzValue]="p.id"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="postOffice" nzRequired>
+          <span>Bưu cục</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn Bưu cục!"
+        >
+          <div class="mb-2">
+            <input
+              nz-input
+              id="postOffice"
+              [disabled]="checkRandom"
+              (blur)="setProvince()"
+              formControlName="postOffice"
+              placeholder="Nhập mã bưu cục"
+            />
+          </div>
+          <a
+            href="javascript:void(0);"
+            (click)="tonggleSeachPostOffice()"
+            class="mt-2"
+          >
+            {{ showPostOffice ? "Ẩn tìm kiếm" : "Tìm kiếm bưu cục" }}
+          </a>
+          <i
+            *ngIf="!showPostOffice"
+            nz-icon
+            nzType="right"
+            nzTheme="outline"
+            style="font-size: 10px"
+          ></i>
+          <div *ngIf="showPostOffice" class="mt-2">
+            <cms-post-search
+              (onSelect)="onSelectPost($event)"
+            ></cms-post-search>
+          </div>
+          <div *ngIf="checkAddress" style="color: #b11226">
+            <span>*Mã bưu cục không tồn tại. Vui lòng nhập lại!</span>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="nameLocker" nzRequired>
+          <span>Tên hiển thị</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên hiển thị!"
+        >
+          <input
+            nz-input
+            id="nameLocker"
+            formControlName="nameLocker"
+            placeholder="Nhập tên hiển thị"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <div style="display: flex; justify-content: space-between" class="mb-2">
+          <nz-form-label nzFor="codeSecret" nzRequired>
+            <span>Mã bí mật</span>
+          </nz-form-label>
+          <nz-form-label class="mr-6">
+            <span
+              nz-checkbox
+              formControlName="randomSecret"
+              (ngModelChange)="genCodeSecret($event)"
+              >Random</span
+            >
+          </nz-form-label>
+        </div>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập mã bí mật!"
+        >
+          <input
+            nz-input
+            id="codeSecret"
+            [disabled]="checkRandom"
+            formControlName="codeSecret"
+            placeholder="Nhập Mã bí mật"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <ng-container *ngIf="checkPost">
+        <nz-divider
+          nzText="Thông tin địa chỉ Locker"
+          nzOrientation="left"
+        ></nz-divider>
+        <div nz-row [nzGutter]="[20, 20]">
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzFor="provinceId" nzRequired>
+                <span nz-typography>Tỉnh/Thành phố</span>
+              </nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng chọn Tỉnh/Thành phố!">
+                <nz-select
+                  class="width-full"
+                  nzShowSearch
+                  formControlName="provinceId"
+                  nzPlaceHolder="Chọn tỉnh"
+                  nzAllowClear
+                  (ngModelChange)="provinceChange($event)"
+                >
+                  <nz-option
+                    *ngFor="let o of listOfProvince"
+                    [nzValue]="o.maTinh"
+                    [nzLabel]="o.name"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzFor="distId" nzRequired>
+                <span nz-typography>Quận/Huyện</span>
+              </nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng chọn Quận/Huyện!">
+                <nz-select
+                  class="width-full"
+                  nzShowSearch
+                  formControlName="distId"
+                  nzPlaceHolder="Chọn quận/huyện"
+                  nzAllowClear
+                  (ngModelChange)="distChange($event)"
+                >
+                  <nz-option
+                    *ngFor="let o of listOfDist"
+                    [nzValue]="o.id"
+                    [nzLabel]="o.tenQuanHuyen"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzFor="wardId" nzRequired>
+                <span nz-typography>Phường/Xã</span>
+              </nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng chọn Phường/Xã!">
+                <nz-select
+                  class="width-full"
+                  nzShowSearch
+                  formControlName="wardId"
+                  nzPlaceHolder="Chọn phường/xã"
+                  nzAllowClear
+                  (ngModelChange)="wardChange()"
+                >
+                  <nz-option
+                    class="width-full"
+                    *ngFor="let o of listOfWard"
+                    [nzValue]="o.id"
+                    [nzLabel]="o.name"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <nz-form-item>
+          <nz-form-label nzFor="streetAddress" nzRequired>
+            <span>Địa chỉ : </span>
+          </nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng không bỏ trống địa chỉ!">
+            <nz-select
+              nzShowSearch
+              nzAllowClear
+              formControlName="streetAddress"
+              [nzDropdownRender]="renderTemplate"
+              nzPlaceHolder="Chọn địa chỉ"
+            >
+              <ng-container *ngIf="total > 0">
+                <nz-option
+                  *ngFor="let m of listOfAddress"
+                  [nzLabel]="m.detail.concat(' - ', m.buildingClass.name)"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </ng-container>
+            </nz-select>
+            <ng-template #renderTemplate>
+              <nz-divider></nz-divider>
+              <div class="container">
+                <a nzType="primary" class="add-address" (click)="addAddress()">
+                  <i nz-icon nzType="plus"></i>
+                  <span class="ml-1">Thêm địa chỉ mới</span>
+                </a>
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="locationlocker" nzRequired>
+            <span nz-typography>Vị trí đặt locker</span>
+          </nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng chọn loại địa điểm!">
+            <nz-select
+              class="width-full"
+              nzShowSearch
+              formControlName="locationlocker"
+              nzPlaceHolder="Chọn loại địa điểm"
+              nzAllowClear
+            >
+              <nz-option
+                class="width-full"
+                *ngFor="let o of listOfLocationLocker"
+                [nzValue]="o.id"
+                [nzLabel]="o.name"
+              ></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitExportLocker()"
+      class="m-2"
+    >
+      Xác nhận xuất Locker
+    </button>
+    <button nz-button nzType="default" (click)="cancelExportLocker()">
+      Hủy
+    </button>
+  </div>
+</div>

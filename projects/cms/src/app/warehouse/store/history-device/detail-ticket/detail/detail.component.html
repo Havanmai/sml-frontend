@@ -1,0 +1,131 @@
+<div nz-row nzGutter="16" class="infor-wrapper" *ngIf="iData">
+  <div nz-col nzSpan="12">
+    <h5 nz-typography>Thông tin chung</h5>
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="24">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span>Ngày tạo</span>
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span *ngIf="iData.createTime">{{
+              iData.createTime | datetimePipe: "DD/MM/YYYY"
+            }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span>Người tạo phiếu</span>
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span
+              *ngIf="
+                iData.createdByUser.firstName && iData.createdByUser.lastName
+              "
+              >{{ iData.createdByUser.firstName }}
+              {{ iData.createdByUser.lastName }}</span
+            >
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </div>
+  <div nz-col nzSpan="12">
+    <h5 nz-typography *ngIf="iData.type">
+      <span *ngIf="iData.type === billsType.XUATKHO">Xuất Kho</span>
+      <span *ngIf="iData.type === billsType.NHAPKHO">Nhập Kho</span>
+      <span *ngIf="iData.type === billsType.HOANKHO">Hoàn Kho</span>
+      <span *ngIf="iData.type === billsType.CHUYENKHO">Chuyển Kho</span>
+    </h5>
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="24">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span>Người nhận</span>
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span *ngIf="iData.receiver">{{ iData.receiver }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span *ngIf="iData.type === billsType.XUATKHO">Xuất tại kho</span>
+            <span *ngIf="iData.type === billsType.NHAPKHO">Nhập tại kho</span>
+            <span *ngIf="iData.type === billsType.HOANKHO">Hoàn vào kho</span>
+            <span *ngIf="iData.type === billsType.CHUYENKHO"
+              >Chuyển từ kho</span
+            >
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span *ngIf="iData.warehouse.name">{{ iData.warehouse.name }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" *ngIf="iData.type === billsType.CHUYENKHO">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span>Chuyển tới kho</span>
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span *ngIf="iData.destinationLocation">{{
+              iData.destinationLocation
+            }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item class="m-0">
+          <nz-form-label
+            class="p-0"
+            [nzXl]="7"
+            [nzMd]="8"
+            [nzSm]="11"
+            [nzXs]="24"
+          >
+            <span *ngIf="iData.type === billsType.XUATKHO">Lý do xuất</span>
+            <span *ngIf="iData.type === billsType.NHAPKHO">Lý do nhập</span>
+            <span *ngIf="iData.type === billsType.HOANKHO">Lý do hoàn</span>
+            <span *ngIf="iData.type === billsType.CHUYENKHO">Lý do chuyển</span>
+          </nz-form-label>
+          <nz-form-control [nzXl]="17" [nzMd]="16" [nzSm]="13" [nzXs]="24">
+            <span *ngIf="iData.description">{{ iData.description }}</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </div>
+</div>

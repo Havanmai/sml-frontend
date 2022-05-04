@@ -1,0 +1,55 @@
+<cms-page
+  title="{{ lockerCabinet ? lockerCabinet.code : '-' }} / {{
+    lockerCabinet ? lockerCabinet.title : '-'
+  }}"
+  [close]="true"
+>
+  <div action>
+    <button nz-button nzType="primary" (click)="refresh()" class="mr-3">
+      <i nz-icon nzType="redo" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Làm mới</span>
+    </button>
+    <button nz-button nzType="primary" (click)="updated()" class="mr-3">
+      <i nz-icon nzType="edit" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Cập nhật</span>
+    </button>
+    <button nz-button nzType="primary" (click)="locked()">
+      <i nz-icon nzType="lock" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Khóa</span>
+    </button>
+    <!--     <button nz-button nzType="primary" (click)="opened()"><i nz-icon nzType="lock" nzTheme="outline"></i><span class="d-none d-md-inline-block">Mở khóa</span></button>
+ -->
+  </div>
+  <div content>
+    <div nz-row class="my-2 p-0 p-lg-4">
+      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzXl="24">
+        <cms-detail-hardwarestatus
+          [Cabinet]="lockerCabinet"
+          [hardwareStatus]="hardwareStatus"
+        ></cms-detail-hardwarestatus>
+        <nz-tabset [nzSelectedIndex]="tabSelected">
+          <nz-tab nzTitle="Sơ đồ khối" (nzSelect)="selectTab(1)">
+            <ng-template nz-tab>
+              <cms-list-block></cms-list-block>
+            </ng-template>
+          </nz-tab>
+          <nz-tab nzTitle="Giao dịch" (nzSelect)="selectTab(2)">
+            <ng-template nz-tab>
+              <cms-chart-line></cms-chart-line>
+            </ng-template>
+          </nz-tab>
+          <nz-tab nzTitle="Log hoạt động" (nzSelect)="selectTab(3)">
+            <ng-template nz-tab>
+              <cms-logs-active></cms-logs-active>
+            </ng-template>
+          </nz-tab>
+          <nz-tab nzTitle="Triển khai & Lắp đặt" (nzSelect)="selectTab(4)">
+            <ng-template nz-tab>
+              <cms-deploy-install-repair></cms-deploy-install-repair>
+            </ng-template>
+          </nz-tab>
+        </nz-tabset>
+      </div>
+    </div>
+  </div>
+</cms-page>

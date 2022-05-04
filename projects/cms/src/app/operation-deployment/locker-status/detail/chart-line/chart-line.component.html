@@ -1,0 +1,25 @@
+<nz-card>
+  <div class="transaction mt-3">
+    <div nz-row nzJustify="space-between">
+      <div nz-col [nzXs]="24" [nzSm]="8" [nzMd]="7" [nzXl]="6" [nzXXl]="5">
+        <h5 nz-typography>Giao dịch</h5>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="9" [nzMd]="7" [nzXl]="6" [nzXXl]="5">
+        <nz-range-picker
+          nzFormat="dd/MM/yyyy"
+          [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"
+          ngModel
+          (ngModelChange)="onChange($event)"
+        ></nz-range-picker>
+      </div>
+    </div>
+    <div class="map-line mt-5">
+      <nz-card style="width: 97%; margin: auto" [nzBordered]="false">
+        <div #chartsContainer></div>
+      </nz-card>
+    </div>
+    <div style="text-align: center" class="mt-3">
+      <button nz-button nzType="primary">Tất cả các giao dịch</button>
+    </div>
+  </div>
+</nz-card>

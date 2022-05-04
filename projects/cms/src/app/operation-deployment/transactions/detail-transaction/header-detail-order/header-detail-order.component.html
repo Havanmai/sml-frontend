@@ -1,0 +1,432 @@
+<div class="card-detal-order mt-9">
+  <div nz-row [nzGutter]="[20, 20]">
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; width: 100%; min-height: 230px"
+        [nzTitle]="titleTemplate"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Mã vận đơn :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.maVanDon
+              ? DetailTransaction.maVanDon
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mt-1">
+          <span nz-col nzSpan="8" class="text-bold" nz-typography>
+            Dịch vụ :</span
+          >
+          <span nz-col nzSpan="16" nz-typography>{{
+            DetailTransaction && DetailTransaction.dichVu
+              ? DetailTransaction.dichVu
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mt-1">
+          <span nz-col nzSpan="8" class="text-bold" nz-typography>
+            Source :</span
+          >
+          <span nz-col nzSpan="16" nz-typography>{{
+            DetailTransaction && DetailTransaction.type
+              ? (DetailTransaction.type | vandonType)
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="9"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Ngày vào tủ :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="15" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.enter
+              ? (DetailTransaction.enter | dateHistory)
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="9"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Trạng thái :</span
+          >
+          <nz-tag
+            [nzColor]="
+              DetailTransaction
+                ? (DetailTransaction.status | colorDetailStatus)
+                : ''
+            "
+            >{{
+              DetailTransaction
+                ? (DetailTransaction.status | textDetailStatus)
+                : ""
+            }}</nz-tag
+          >
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate>
+        <img height="28px" class="mr-2" src="/assets/barcode-product 1.svg" />
+        <span nz-typography> Thông tin vận đơn </span>
+      </ng-template>
+    </div>
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; width: 100%; min-height: 230px"
+        [nzBodyStyle]="{ 'box-shadow': 'none!important' }"
+        [nzTitle]="titleTemplate2"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Tên :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.sender
+              ? DetailTransaction.sender
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            SDT :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.senderPhoneNumber
+              ? DetailTransaction.senderPhoneNumber
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Địa chỉ :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.senderAddress
+              ? DetailTransaction.senderAddress
+              : "-"
+          }}</span>
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate2>
+        <img height="20px" src="/assets/account.svg" />
+        <span nz-typography> Thông tin người gửi </span>
+      </ng-template>
+    </div>
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; min-height: 230px; width: 100%"
+        [nzTitle]="titleTemplate3"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Tên :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.receiver
+              ? DetailTransaction.receiver
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            SDT :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.receiverPhoneNumber
+              ? DetailTransaction.receiverPhoneNumber
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Địa chỉ :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailTransaction && DetailTransaction.receiverAddress
+              ? DetailTransaction.receiverAddress
+              : "-"
+          }}</span>
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate3>
+        <img height="22px" class="mr-2" src="/assets/receiver-red.svg" />
+        <span nz-typography> Thông tin người nhận </span>
+      </ng-template>
+    </div>
+    <!--  </div>
+  <div nz-row class="mt-4" nzGutter="20"> -->
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; min-height: 230px"
+        [nzTitle]="titleTemplate4"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="10"
+            nzXl="10"
+            nzXXl="10"
+            class="text-bold"
+            nz-typography
+          >
+            Tên bưu tá :</span
+          >
+          <span nz-col nzSm="14" nzMd="14" nzXl="14" nzXXl="14" nz-typography>{{
+            HistoryDetail && HistoryDetail.buutaName
+              ? HistoryDetail.buutaName
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="10"
+            nzXl="10"
+            nzXXl="10"
+            class="text-bold"
+            nz-typography
+          >
+            SDT :</span
+          >
+          <span nz-col nzSm="14" nzMd="14" nzXl="14" nzXXl="14" nz-typography>{{
+            HistoryDetail && HistoryDetail.buutaPhone
+              ? HistoryDetail.buutaPhone
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="10"
+            nzXl="10"
+            nzXXl="10"
+            class="text-bold"
+            nz-typography
+          >
+            DeliveryPartner :</span
+          >
+          <span nz-col nzSm="14" nzMd="14" nzXl="14" nzXXl="14" nz-typography>{{
+            HistoryDetail && HistoryDetail.deliveryPartner
+              ? HistoryDetail.deliveryPartner
+              : "-"
+          }}</span>
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate4>
+        <img height="24px" class="mr-2" src="/assets/postman-red.svg" />
+        <span nz-typography> Bưu tá bàn giao </span>
+      </ng-template>
+    </div>
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; min-height: 230px; width: 100%"
+        [nzTitle]="titleTemplate5"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Tên Locker:</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailCabinets && DetailCabinets.title ? DetailCabinets.title : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Địa chỉ :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailCabinets && DetailCabinets.address
+              ? DetailCabinets.address.detail
+                ? DetailCabinets.address.detail.concat(
+                    ",",
+                    DetailCabinets.address.vtpPhuongXa.name,
+                    ",",
+                    DetailCabinets.address.vtpPhuongXa.quanHuyen.tenQuanHuyen,
+                    ",",
+                    DetailCabinets.address.vtpPhuongXa.quanHuyen.tinh.name
+                  )
+                : "-"
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Mã Ngăn :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            HistoryDetail && HistoryDetail.lockerId
+              ? HistoryDetail.lockerId
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Supplier :</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailCabinets && DetailCabinets.supplier
+              ? DetailCabinets.supplier.name
+              : "-"
+          }}</span>
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate5>
+        <img height="20px" class="mr-2" src="/assets/locker (2).svg" />
+        <span nz-typography> Locker </span>
+      </ng-template>
+    </div>
+    <div nz-col nzSm="14" nzMd="12" nzXl="8">
+      <nz-card
+        style="min-width: 280px; min-height: 230px; width: 100%"
+        [nzTitle]="titleTemplate6"
+      >
+        <div nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Bưu Cục:</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailCabinets && DetailCabinets.buuCuc.name
+              ? DetailCabinets.buuCuc.name
+              : "-"
+          }}</span>
+        </div>
+        <div nz-row nz-row class="mb-1">
+          <span
+            nz-col
+            nzSm="10"
+            nzMd="8"
+            nzXl="8"
+            nzXXl="6"
+            class="text-bold"
+            nz-typography
+          >
+            Địa chỉ</span
+          >
+          <span nz-col nzSm="14" nzMd="16" nzXl="16" nzXXl="18" nz-typography>{{
+            DetailCabinets && DetailCabinets.buuCuc.address
+              ? DetailCabinets.buuCuc.address
+              : "-"
+          }}</span>
+        </div>
+      </nz-card>
+      <ng-template #titleTemplate6>
+        <img height="20px" class="mr-2" src="/assets/post-red.svg" />
+        <span nz-typography> Bưu Cục </span>
+      </ng-template>
+    </div>
+  </div>
+</div>

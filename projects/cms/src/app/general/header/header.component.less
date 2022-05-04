@@ -1,0 +1,90 @@
+.header-wr {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 0 30px;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.more-link {
+  float: right;
+}
+.username {
+  font-weight: 600;
+  color: #000;
+  margin: 0px 10px 0px 4px;
+  vertical-align: middle;
+}
+
+.avatar-menu {
+  border: 1px solid #d2d5df;
+  padding: 0px 3px;
+  border-radius: 60px;
+  line-height: 0px;
+  background-color: #ffffff;
+}
+
+.user-avatar {
+  border: 1px solid #d2d5df;
+}
+
+.quick-menu {
+  background: #fd961e;
+  border-color: #fd961e;
+}
+
+@media (max-width: 576px) {
+  .header-wr {
+    padding: 0 15px;
+  }
+
+  .logo img {
+    width: 100px;
+  }
+
+  .quick-menu {
+    background: transparent;
+    border: transparent;
+  }
+
+  .quick-menu i {
+    color: #ee1a30;
+  }
+  .avatar-menu {
+    border: 1px solid transparent;
+  }
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+  .menu-avatar {
+    width: 56px;
+    margin-right: 14px;
+  }
+
+  .menu-avatar-text {
+    width: 56px;
+    margin-right: 14px;
+  }
+
+  .truncate {
+    margin-bottom: 0px;
+  }
+  .email {
+    font-size: 12px;
+  }
+  .topbar-avatar {
+    margin-right: 14px;
+  }
+  .avatar-text {
+    position: fixed;
+    top: 22px;
+    left: 30px;
+    color: #fff;
+  }
+}

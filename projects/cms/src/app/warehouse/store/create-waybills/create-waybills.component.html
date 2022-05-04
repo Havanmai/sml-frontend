@@ -1,0 +1,590 @@
+<cms-page title="Tạo phiếu" [close]="true" (onClose)="onClose()">
+  <div action>
+    <a nz-button nzType="primary" (click)="submitForm()"
+      ><i nz-icon nzType="check" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Xác nhận</span></a
+    >
+  </div>
+  <div content>
+    <form nz-form [formGroup]="mainForm" class="mt-9" style="width: 100%">
+      <div nz-row>
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="type"
+              >Loại phiếu</nz-form-label
+            >
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống danh mục!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="type"
+                nzAllowClear
+                nzPlaceHolder="Chọn loại phiếu"
+                (ngModelChange)="onChangeType()"
+              >
+                <nz-option
+                  *ngFor="let m of lstBillsType"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- Field Phiếu nhập kho  -->
+          <nz-form-item *ngIf="mainForm.controls.statusBills.value">
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="warehouseId"
+              >Nhập tại kho
+            </nz-form-label>
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống kho!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="warehouseId"
+                nzAllowClear
+                nzPlaceHolder="Chọn kho"
+              >
+                <nz-option
+                  *ngFor="let m of lstWarehouse"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- Field Phiếu xuất kho  -->
+          <nz-form-item
+            *ngIf="mainForm.controls.type.value === billsType.XUATKHO"
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="warehouseId"
+              >Xuất tại kho
+            </nz-form-label>
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống kho!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="warehouseId"
+                nzAllowClear
+                nzPlaceHolder="Chọn kho"
+              >
+                <nz-option
+                  *ngFor="let m of lstWarehouse"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- Field Phiếu hoàn kho  -->
+          <nz-form-item
+            *ngIf="mainForm.controls.type.value === billsType.HOANKHO"
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="warehouseId"
+              >Hoàn vào kho
+            </nz-form-label>
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống kho!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="warehouseId"
+                nzAllowClear
+                nzPlaceHolder="Chọn kho"
+              >
+                <nz-option
+                  *ngFor="let m of lstWarehouse"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- Field Phiếu chuyển kho  -->
+          <nz-form-item
+            *ngIf="mainForm.controls.type.value === billsType.CHUYENKHO"
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="warehouseId"
+              >Chuyển từ kho
+            </nz-form-label>
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống kho!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="warehouseId"
+                nzAllowClear
+                nzPlaceHolder="Chọn kho"
+              >
+                <nz-option
+                  *ngFor="let m of lstWarehouse"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item
+            *ngIf="mainForm.controls.type.value === billsType.CHUYENKHO"
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzRequired
+              nzFor="destinationWarehouse"
+              >Chuyển tới kho
+            </nz-form-label>
+            <nz-form-control
+              nzMd="14"
+              nzSm="13"
+              nzXs="24"
+              nzErrorTip="Không được để trống kho!"
+            >
+              <nz-select
+                class="width-full"
+                formControlName="destinationWarehouse"
+                nzAllowClear
+                nzPlaceHolder="Chọn kho"
+              >
+                <nz-option
+                  *ngFor="let m of lstWarehouse"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- Field Phiếu nhập kho  -->
+          <nz-form-item
+            *ngIf="
+              mainForm.controls.statusBills.value === statusTypeBills.NHAPLO
+            "
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzFor="batchNumber"
+              nzRequired
+            >
+              <span>Mã lô</span>
+            </nz-form-label>
+            <nz-form-control
+              nzXl="11"
+              nzMd="10"
+              nzSm="7"
+              nzXs="24"
+              nzErrorTip="Vui lòng nhập mã lô!"
+            >
+              <input
+                nz-input
+                id="batchNumber"
+                formControlName="batchNumber"
+                placeholder="Nhập mã lô"
+              />
+            </nz-form-control>
+            <nz-form-control
+              nzXl="3"
+              nzMd="4"
+              nzSm="6"
+              nzXs="24"
+              nzErrorTip="Vui lòng nhập mã lô!"
+              style="text-align: end"
+            >
+              <span
+                nz-checkbox
+                formControlName="random"
+                [(ngModel)]="checkRandomBatch"
+                (ngModelChange)="genCodeBatch($event)"
+                class="pl-2"
+                >Random</span
+              >
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item
+            *ngIf="mainForm.controls.type.value === billsType.XUATKHO"
+          >
+            <nz-form-label nzXl="6" nzMd="8" nzSm="9" nzXs="24" nzFor="lockerId"
+              >Xuất vào locker</nz-form-label
+            >
+            <nz-form-control [nzSm]="14" nzXs="24">
+              <nz-select
+                nzShowSearch
+                nzAllowClear
+                formControlName="lockerId"
+                [nzDropdownRender]="renderTemplate"
+                nzPlaceHolder="Chọn locker"
+              >
+                <nz-option
+                  *ngFor="let m of lstLocker"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+              <ng-template #renderTemplate>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <a nzType="primary" class="add-locker" (click)="addLocker()">
+                    <i nz-icon nzType="plus"></i>
+                    <span class="ml-1">Thêm locker mới</span>
+                  </a>
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item
+            *ngIf="
+              mainForm.controls.type.value &&
+              mainForm.controls.type.value === billsType.NHAPKHO
+            "
+          >
+            <nz-form-label nzXl="6" nzMd="8" nzSm="9" nzXs="24" nzRequired
+              >Kiểu nhập</nz-form-label
+            >
+            <nz-form-control
+              [nzSm]="14"
+              nzXs="24"
+              nzErrorTip="Vui lòng chọn kiểu nhập!"
+            >
+              <nz-radio-group
+                formControlName="statusBills"
+                (ngModelChange)="onChangeStatusBill()"
+              >
+                <label nz-radio [nzValue]="1">Nhập lẻ</label>
+                <label nz-radio [nzValue]="2">Nhập lô</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item
+            *ngIf="
+              (mainForm.controls.type.value &&
+                mainForm.controls.type.value === billsType.NHAPKHO &&
+                mainForm.controls.statusBills.value) ||
+              (mainForm.controls.type.value &&
+                mainForm.controls.type.value !== billsType.NHAPKHO)
+            "
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzFor="receiver"
+              nzRequired
+              >Người nhận</nz-form-label
+            >
+            <nz-form-control
+              [nzSm]="14"
+              nzXs="24"
+              nzErrorTip="Vui lòng nhập tên người nhận!"
+            >
+              <input
+                nz-input
+                id="vendor"
+                formControlName="receiver"
+                nzAllowClear
+                placeholder="Nhập tên người nhận"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item
+            *ngIf="
+              (mainForm.controls.type.value &&
+                mainForm.controls.type.value === billsType.NHAPKHO &&
+                mainForm.controls.statusBills.value) ||
+              (mainForm.controls.type.value &&
+                mainForm.controls.type.value !== billsType.NHAPKHO)
+            "
+          >
+            <nz-form-label
+              nzXl="6"
+              nzMd="8"
+              nzSm="9"
+              nzXs="24"
+              nzFor="description"
+              >Ghi chú</nz-form-label
+            >
+            <nz-form-control [nzSm]="14" nzXs="24">
+              <input
+                nz-input
+                id="description"
+                formControlName="description"
+                nzAllowClear
+                placeholder="Ghi chú"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24">
+          <ng-container
+            *ngIf="
+              mainForm.controls.statusBills.value === statusTypeBills.NHAPLO
+            "
+          >
+            <cms-batch-number
+              [isValidFile]="isValidFile"
+              [iData]="lstDeviceUploadFile"
+              [lstDevice]="lstDevice"
+              (onDelectFile)="onDelectFile()"
+            ></cms-batch-number>
+          </ng-container>
+          <nz-table
+            #iDataTable
+            [nzFrontPagination]="false"
+            [nzScroll]="{ y: '100%' }"
+            [nzData]="device.controls"
+            [nzFooter]="footer"
+            *ngIf="
+              mainForm.controls.type.value &&
+              mainForm.controls.type.value === billsType.NHAPKHO &&
+              mainForm.controls.statusBills.value === statusTypeBills.NHAPLE
+            "
+          >
+            <thead>
+              <tr>
+                <th *ngFor="let h of lstHeaderImport" class="tb-header">
+                  {{ h.name }}
+                  <span *ngIf="h.require" [ngClass]="{ require: h.require }"
+                    >*</span
+                  >
+                </th>
+              </tr>
+            </thead>
+            <tbody formArrayName="device">
+              <tr
+                *ngFor="let lessonForm of device.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <nz-select
+                        class="width-full"
+                        formControlName="modelId"
+                        nzAllowClear
+                        nzPlaceHolder="Danh mục"
+                      >
+                        <nz-option
+                          *ngFor="let m of lstDevice"
+                          [nzLabel]="m.name"
+                          [nzValue]="m.id"
+                        ></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="color"
+                        nzAllowClear
+                        placeholder="Màu"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="vendor"
+                        nzAllowClear
+                        placeholder="Nhà cung cấp"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="weight"
+                        nzAllowClear
+                        placeholder="Trọng lượng"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="long"
+                        nzAllowClear
+                        placeholder="Dài"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="wide"
+                        nzAllowClear
+                        placeholder="Rộng"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="high"
+                        nzAllowClear
+                        placeholder="Cao"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="version"
+                        nzAllowClear
+                        placeholder="Phiên bản"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="serial"
+                        nzAllowClear
+                        placeholder="Serial"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="price"
+                        nzAllowClear
+                        placeholder="Giá"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <nz-form-item class="m-0">
+                    <nz-form-control [nzXs]="24">
+                      <input
+                        nz-input
+                        formControlName="note"
+                        nzAllowClear
+                        placeholder="Ghi chú"
+                      />
+                    </nz-form-control>
+                  </nz-form-item>
+                </td>
+                <td>
+                  <div class="btn-delete" *ngIf="device.controls.length > 1">
+                    <button
+                      nz-button
+                      nzType="text"
+                      title="Xóa"
+                      (click)="deleteDevice(i)"
+                    >
+                      <i
+                        nz-icon
+                        nzType="delete"
+                        nzTheme="outline"
+                        class="text-danger"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <ng-template #footer>
+              <a class="add-form-array" (click)="addImportDevice()"
+                ><i nz-icon nzType="plus" nzTheme="outline"></i>
+                <span class="ml-1">Thêm thiết bị</span>
+              </a>
+            </ng-template>
+          </nz-table>
+          <ng-container
+            *ngIf="
+              mainForm.controls.type.value &&
+              mainForm.controls.type.value !== billsType.NHAPKHO
+            "
+          >
+            <cms-list-device
+              [isWarehouse]="mainForm.controls.warehouseId.value"
+              [iData]="objFilter.exportDevice"
+              (onDelete)="deleteExportDevice($event)"
+              (onAdd)="addListDevice()"
+            ></cms-list-device>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+</cms-page>
