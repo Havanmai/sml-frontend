@@ -1,0 +1,86 @@
+<nz-table
+  #basicTable
+  [nzData]="listOfData"
+  [nzFrontPagination]="false"
+  [nzPageSize]="size"
+  [nzPageIndex]="page"
+  [nzTotal]="total"
+  (nzPageIndexChange)="pageChange($event)"
+  [nzFooter]="footer"
+>
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Mã thiết bị</th>
+      <th>Tên thiết bị</th>
+      <th>Nhóm thiết bị</th>
+      <th>Đơn vị</th>
+      <th>Loker</th>
+      <th>Block</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.id }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.category.name }}</td>
+      <td>{{ data.unit }}</td>
+      <td>
+        <i
+          nz-icon
+          style="color: #18c607"
+          *ngIf="data.isLockerCabinet == true"
+          nzType="check"
+          nzTheme="outline"
+        ></i>
+        <i
+          style="color: #ee230f"
+          *ngIf="data.isLockerCabinet == false"
+          nz-icon
+          nzType="close"
+          nzTheme="outline"
+        ></i>
+      </td>
+      <td>
+        <i
+          nz-icon
+          style="color: #18c607"
+          *ngIf="data.isBlock == true"
+          nzType="check"
+          nzTheme="outline"
+        ></i>
+        <i
+          style="color: #ee230f"
+          *ngIf="data.isBlock == false"
+          nz-icon
+          nzType="close"
+          nzTheme="outline"
+        ></i>
+      </td>
+      <td>
+        <button
+          nz-button
+          nzType="text"
+          class="pr-1"
+          title="Sửa"
+          (click)="editItemGroup(data)"
+        >
+          <i nz-icon nzType="edit" nzTheme="outline"></i>
+        </button>
+        <button
+          nz-button
+          nzType="text"
+          title="Xóa"
+          (click)="deleteItemGroup(data)"
+        >
+          <i nz-icon nzType="delete" nzTheme="outline" class="text-danger"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <ng-template #footer>
+    <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+  </ng-template>
+</nz-table>

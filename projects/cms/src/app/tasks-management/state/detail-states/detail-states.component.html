@@ -1,0 +1,78 @@
+<cms-page title="Chi tiết State" [close]="true">
+  <div action>
+    <button nz-button nzType="primary" class="mr-3">
+      <i nz-icon nzType="edit" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block" (click)="onEdit(iData)"
+        >Cập nhật</span
+      >
+    </button>
+  </div>
+  <div content>
+    <div nz-row class="my-2 p-0 p-lg-4">
+      <div nz-col nzXs="24" class="infor-wrapper">
+        <div nz-row [nzGutter]="[60, 20]">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">
+                <span>Tên State</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <span>{{ iData.name }}</span>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userHolder">
+                <span>Người sở hữu State</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <span *ngIf="iData.userHolder">{{
+                  iData.userHolder.firstName + " " + iData.userHolder.lastName
+                }}</span>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">
+                <span>Ghi chú</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <span>{{ iData.description }}</span>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <nz-table
+        #iDataTable
+        [nzFrontPagination]="false"
+        [nzTotal]="lstUser.length"
+        [nzData]="lstUser"
+        [nzScroll]="{ y: '100%' }"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="50px">Stt</th>
+            <th>Tên người dùng</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of lstUser; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <span>{{ data.firstName + data.lastName }}</span>
+            </td>
+            <td>
+              <span>{{ data.email }}</span>
+            </td>
+            <td>
+              <span>{{ data.phoneNumber }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</cms-page>

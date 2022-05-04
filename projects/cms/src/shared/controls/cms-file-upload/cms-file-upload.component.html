@@ -1,0 +1,69 @@
+<div nz-row class="mt-5" [ngClass]="containerClass">
+  <div
+    nz-col
+    nzSpan="6"
+    *ngIf="label"
+    [class.required]="hasValidator('required', ngControl)"
+  >
+    <span nz-typography>{{ label }}</span>
+  </div>
+  <div nz-col nzSpan="18">
+    <div nz-row>
+      <nz-upload
+        nzType="drag"
+        [nzMultiple]="false"
+        (nzChange)="handleChange($event)"
+        nzListType="text"
+        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        [nzFileListRender]="defaultListFileTemplate"
+      >
+        <ng-template [ngTemplateOutlet]="template || defaultUploadTemplate">
+        </ng-template>
+      </nz-upload>
+    </div>
+  </div>
+</div>
+
+<!-- Default drop zone template-->
+<ng-template #defaultUploadTemplate>
+  <ng-container #choseFile>
+    <nz-spin [nzTip]="'Loading...'" [nzSpinning]="isLoading">
+      <nz-result class="p-0 mt-3">
+        <p class="ant-upload-drag-icon">
+          <i nz-icon nzType="cloud-upload" nzTheme="outline"></i>
+        </p>
+        <p class="ant-upload-text">
+          Kéo thả file của bạn hoặc <a>chọn tệp tin</a>
+        </p>
+      </nz-result>
+    </nz-spin>
+  </ng-container>
+</ng-template>
+
+<ng-template #defaultListFileTemplate>
+  <ng-container #listFile *ngIf="lstFile && lstFile.length > 0 && isResult">
+    <ul
+      class="p-0 mt-2"
+      nz-list
+      [nzDataSource]="lstFile"
+      nzBordered
+      nzSize="large"
+    >
+      <li nz-list-item *ngFor="let item of lstFile" nzNoFlex>
+        {{ item.name }}
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <a (click)="removeFile(item.uid)">
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                class="text-danger"
+              ></i>
+            </a>
+          </nz-list-item-action>
+        </ul>
+      </li>
+    </ul>
+  </ng-container>
+</ng-template>

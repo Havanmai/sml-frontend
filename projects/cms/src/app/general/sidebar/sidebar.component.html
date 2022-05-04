@@ -1,0 +1,151 @@
+<div class="sidebar_wr pt-4">
+  <h5 nz-typography class="pl-4" style="color: #223b55">Menu</h5>
+  <ul nz-menu nzMode="inline">
+    <ng-container *ngFor="let data of menuData">
+      <!-- <ng-container *ngxPermissionsOnly="data.permission">
+        <li
+          *ngIf="!data.children"
+          nz-menu-item
+          [routerLink]="data.routerLink"
+          class="menu-item"
+          [routerLinkActive]="'ant-menu-item-selected'"
+        >
+          <img [src]="'/assets/' + data.icon" />{{ data.title }}
+        </li>
+      </ng-container> -->
+      <li
+        *ngIf="data.children && data.children.length > 0"
+        nz-submenu
+        [nzTitle]="data.title"
+        class="super-item"
+        [nzOpen]="true"
+      >
+        <ul>
+          <ng-container *ngFor="let child of data.children">
+            <ng-container *ngxPermissionsOnly="child.permission">
+              <li
+                nz-menu-item
+                [routerLink]="child.routerLink"
+                [routerLinkActive]="'ant-menu-item-selected'"
+                class="menu-item sub-item"
+              >
+                <img
+                  [src]="'/assets/' + child.icon"
+                  style="width: 20px; height: 20px"
+                />{{ child.title }}
+              </li>
+            </ng-container>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
+    <!-- <li nz-menu-item [routerLink]="'/home'" class="menu-item" *ngxPermissionsOnly="['menu:dashboard']">
+      <img [src]="'/assets/dashboard.svg'"> <span nz-typography>Dashboard</span>
+    </li>
+    <li nz-submenu [nzTitle]="'Vận hành & triển khai'" class="super-item" [nzOpen]="true"
+      *ngxPermissionsOnly="['menu:transactions'||'menu:postoffices'||'menu:postmans'||'menu:lockers'||'menu:tasks'||'menu:logs']">
+      <ul>
+        <li nz-menu-item [routerLink]="'/transactions'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:transactions']">
+          <img [src]="'/assets/transaction.svg'"><span nz-typography>Lịch sử giao dịch</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/postoffices'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:postoffices']">
+          <img [src]="'/assets/postoffice.svg'"><span nz-typography>Quản lý bưu cục</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/postmans'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:postmans']">
+          <img [src]="'/assets/postman.svg'"><span nz-typography>Quản lý bưu tá</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/lockers'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:lockers']">
+          <img [src]="'/assets/locker.svg'"><span nz-typography>Danh sách Lockers</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/tasks'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:tasks']">
+          <img [src]="'/assets/task.svg'"><span nz-typography>Quản lý Task</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/locker-activity'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:logs']">
+          <img [src]="'/assets/report.svg'"><span nz-typography>Log hoạt động</span>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu [nzTitle]="'Dịch vụ & voucher'" class="super-item" [nzOpen]="true">
+      <ul>
+        <li nz-menu-item [routerLink]="'/services'" class="menu-item sub-item">
+          <img [src]="'/assets/transaction.svg'"><span nz-typography>Quản lý dịch vụ</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/vouchers'" class="menu-item sub-item">
+          <img [src]="'/assets/postoffice.svg'"><span nz-typography>Quản lý vouchers</span>
+        </li>
+
+      </ul>
+    </li>
+    <li nz-submenu [nzTitle]="'Quản lý đối tác'" class="super-item" [nzOpen]="true">
+      <ul>
+        <li nz-menu-item [routerLink]="'/merchant'" class="menu-item sub-item">
+          <img [src]="'/assets/merchant.svg'"><span nz-typography>Quản lý merchant</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/supplier'" class="menu-item sub-item">
+          <img [src]="'/assets/supplier.svg'"><span nz-typography>Quản lý supplier</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/delivery-partner'" class="menu-item sub-item">
+          <img [src]="'/assets/delivery-partner.svg'"><span nz-typography>Quản lý delivery</span>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu [nzTitle]="'Kho hàng'" class="super-item" [nzOpen]="true"
+      *ngxPermissionsOnly="['menu:store'||'menu:store:settings'||'menu:store:exports'||'menu:store:recycle']">
+      <ul>
+        <li nz-menu-item [routerLink]="'/store'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:store']">
+          <img [src]="'/assets/store.svg'"><span nz-typography>Tổng quan kho hàng</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/device-category'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:store:settings']">
+          <img [src]="'/assets/divice-group.svg'"><span nz-typography>Thiết lập kho</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/divice-group'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:store:exports']">
+          <img [src]="'/assets/export-store.svg'"><span nz-typography>Xuất hàng</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/device-recycle'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:store:recycle']">
+          <img [src]="'/assets/back-store.svg'"><span nz-typography>Hoàn trả về kho</span>
+        </li>
+
+      </ul>
+    </li>
+    <li nz-submenu [nzTitle]="'Thiết lập hệ thống'" class="super-item" [nzOpen]="true"
+      *ngxPermissionsOnly="['menu:users'||'menu:permissions'||'menu:roles'||'menu:locker:groups'||'menu:updater']">
+      <ul>
+        <li nz-menu-item [routerLink]="'/users'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:users']">
+          <img [src]="'/assets/user.svg'"><span nz-typography>Quản lý User</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/permissions'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:permissions']">
+          <img [src]="'/assets/permission.svg'"><span nz-typography>Quản lý quyền</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/roles'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:roles']">
+          <img [src]="'/assets/role.svg'"><span nz-typography>Quản lý vai trò</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/locker-category'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:locker:groups']">
+          <img [src]="'/assets/locker.svg'"><span nz-typography>Quản lý Locker</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/set-points'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:locker:groups']">
+          <img [src]="'/assets/locker.svg'"><span nz-typography>Quản lý điểm đặt</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/building-classification'" class="menu-item sub-item"
+          *ngxPermissionsOnly="['menu:locker:groups']">
+          <img [src]="'/assets/locker.svg'"><span nz-typography>Phân hạng vi trí</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/address'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:updater']">
+          <img [src]="'/assets/update.svg'"><span nz-typography>Quản lý địa điểm</span>
+        </li>
+        <li nz-menu-item [routerLink]="'/updates'" class="menu-item sub-item" *ngxPermissionsOnly="['menu:updater']">
+          <img [src]="'/assets/update.svg'"><span nz-typography>Cập nhật phần mềm</span>
+        </li>
+
+      </ul>
+    </li> -->
+  </ul>
+</div>

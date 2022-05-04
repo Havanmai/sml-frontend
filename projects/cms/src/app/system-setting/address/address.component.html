@@ -1,0 +1,122 @@
+<cms-page title="Quản lý địa điểm" [close]="false">
+  <div action>
+    <button nz-button nzType="primary" (click)="createAddress()">
+      <i nz-icon nzType="plus" nzTheme="outline"></i> Tạo mới
+    </button>
+  </div>
+  <div content class="mt-11">
+    <!--  <div nz-row class="mt-7" [nzGutter]="[16,5]">
+          <div nz-col class="mt-3" nzXs="12" nzSm="8" nzMd="6" nzLg="6" nzXl="4" nzXXl="4">
+            <nz-input-group  class="width-full" [nzPrefix]="prefixIconSearch" [nzSuffix]="inputClearTpl" >
+              <input type="text" nz-input placeholder="Nhập mã bưu tá"  [(ngModel)]="keyword" (keyup.enter)="searchKeyWord()"/>
+            </nz-input-group>
+            <ng-template #prefixIconSearch>
+              <i nz-icon nzType="search" (click)="searchKeyWord()"></i>
+            </ng-template>
+            <ng-template #inputClearTpl>
+              <i
+                nz-icon
+                class="ant-input-clear-icon"
+                nzTheme="fill"
+                nzType="close-circle"
+                *ngIf="keyword"
+                (click)="keyword='';searchKeyWord()"
+              ></i>
+            </ng-template>
+          </div>
+          <div nz-col class="mt-3" nzXs="12" nzSm="8" nzMd="8" nzLg="8" nzXl="2" nzXXl="2">
+            <button nz-button nzType="primary"  (click)='searchKeyWord()'> Tìm kiếm </button>
+          </div>
+        </div> -->
+    <nz-table
+      class="mt-5"
+      #basicTable
+      [nzData]="listOfData"
+      [nzFooter]="footer"
+      [nzFrontPagination]="false"
+      [nzPageSize]="size"
+      [nzPageIndex]="page"
+      [nzTotal]="total"
+      (nzPageIndexChange)="pageChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzWith="200px">Mã</th>
+          <th>Tỉnh</th>
+          <th>Quận/Huyện</th>
+          <th>Phường/Xã</th>
+          <th>Địa chỉ chi tiết</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.id }}</td>
+          <td>
+            {{
+              data.vtpPhuongXa
+                ? data.vtpPhuongXa.quanHuyen
+                  ? data.vtpPhuongXa.quanHuyen.tinh
+                    ? data.vtpPhuongXa.quanHuyen.tinh.name
+                      ? data.vtpPhuongXa.quanHuyen.tinh.name
+                      : "-"
+                    : "-"
+                  : "-"
+                : "-"
+            }}
+          </td>
+          <td>
+            {{
+              data.vtpPhuongXa
+                ? data.vtpPhuongXa.quanHuyen
+                  ? data.vtpPhuongXa.quanHuyen.tenQuanHuyen
+                    ? data.vtpPhuongXa.quanHuyen.tenQuanHuyen
+                    : "-"
+                  : "-"
+                : "-"
+            }}
+          </td>
+          <td>
+            {{
+              data.vtpPhuongXa
+                ? data.vtpPhuongXa.name
+                  ? data.vtpPhuongXa.name
+                  : "-"
+                : "-"
+            }}
+          </td>
+          <td>{{ data.detail ? data.detail : "-" }}</td>
+          <td>
+            <!-- <button nz-button nzType="text" class="mr-1" title="Xem chi tiết" routerLink="detail/{{data.id}}"><i nz-icon nzType="eye" nzTheme="outline"></i></button> -->
+            <button
+              nz-button
+              nzType="text"
+              class="mr-1"
+              title="Sửa"
+              (click)="editAddress(data)"
+            >
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </button>
+            <button
+              nz-button
+              nzType="text"
+              title="Xóa"
+              (click)="deleteAddress(data)"
+            >
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                class="text-danger"
+              ></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <ng-template #footer>
+        <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+      </ng-template>
+    </nz-table>
+    <div></div>
+  </div>
+</cms-page>

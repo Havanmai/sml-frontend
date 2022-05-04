@@ -1,0 +1,7 @@
+<nz-card nzTitle="Tần suất hoạt động" [nzExtra]="extraTemplate">
+  <div #chartsContainer></div>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <cms-date-selector (onSelect)="filterSelect($event)"></cms-date-selector>
+</ng-template>

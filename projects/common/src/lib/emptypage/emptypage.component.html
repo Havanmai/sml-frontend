@@ -1,0 +1,23 @@
+<nz-card class="page-card">
+    <div *ngIf="header" [ngClass]="{'page-header':true,'page-position':!isCollapsed,'page-position-collapse':isCollapsed} ">
+        <div nz-row>
+            <div nz-col nzXs="16" nzSm="16" nzMd="12" nzLg="8" nzXl="8">
+                <div nz-space nzAlign="center" [nzSize]="0">
+                    <ng-container *nzSpaceItem>
+                        <button *ngIf="close" nz-button nzType="text" class="close-btn mr-1 mr-md-3" (click)="closeClick()" title="Quay lại">
+                        <i nz-icon nzType="left" nzTheme="outline"></i>
+                    </button>
+                    </ng-container>
+                    <h4 *nzSpaceItem nz-typography class="d-inline-block mb-0">{{title}}</h4>
+                </div>
+            </div>
+            <div nz-col nzXs="8" nzSm="8" nzMd="12" nzLg="16" nzXl="16" [ngClass]="{'text-right':true, 'action-area':true}">
+                <ng-content select="[action]"></ng-content>
+            </div>
+        </div>
+    </div>
+    <div class="page-content" #divTarget>
+        <ng-content select="[content]"></ng-content>
+        <nz-back-top *ngIf="backToTop" [nzTarget]="divTarget"></nz-back-top>
+    </div>
+</nz-card>

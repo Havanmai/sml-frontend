@@ -1,0 +1,873 @@
+<nz-card>
+  <div class="mt-0 mx-0">
+    <div class="row-search" nz-row [nzGutter]="[16, 16]">
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="5"
+      >
+        <!--  <nz-input-group [nzPrefix]="prefixIconSearch" [nzSuffix]="inputClearTpl" >
+            <input type="text" nz-input placeholder="Nhập mã locker"  [(ngModel)]="codeSearch" (keyup.enter)="searchCode()"/>
+          </nz-input-group>
+          <ng-template #prefixIconSearch>
+            <i nz-icon nzType="search" (click)="searchCode()"></i>
+          </ng-template>
+          <ng-template #inputClearTpl>
+            <i
+              nz-icon
+              class="ant-input-clear-icon"
+              nzTheme="fill"
+              nzType="close-circle"
+              *ngIf="codeSearch"
+              (click)="codeSearch='';searchCode()"
+            ></i>
+          </ng-template> -->
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          nzServerSearch
+          nzAllowClear
+          nzPlaceHolder="Nhập mã locker"
+          [(ngModel)]="codeSearch"
+          [nzShowArrow]="false"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchCode($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfCabinets"
+            [nzLabel]="o.code"
+            [nzValue]="o.code"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="provinceId"
+          nzPlaceHolder="Chọn tỉnh"
+          nzAllowClear
+          (ngModelChange)="provinceChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfProvince"
+            [nzValue]="o.maTinh"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="distId"
+          nzPlaceHolder="Chọn quận/huyện"
+          nzAllowClear
+          (ngModelChange)="distChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfDist"
+            [nzValue]="o.id"
+            [nzLabel]="o.tenQuanHuyen"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="wardId"
+          nzPlaceHolder="Chọn phường/xã"
+          nzAllowClear
+          (ngModelChange)="wardChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfWard"
+            [nzValue]="o.id"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="postId"
+          (nzScrollToBottom)="loadMore()"
+          [nzDropdownRender]="renderTemplate"
+          [nzDropdownRender]="renderTemplate"
+          nzPlaceHolder="Chọn bưu cục"
+          nzAllowClear
+          (ngModelChange)="searchPost($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfPost"
+            [nzValue]="o.id"
+            [nzLabel]="o.name"
+          ></nz-option>
+          <ng-template #renderTemplate>
+            <nz-spin *ngIf="isLoadingScroll"></nz-spin>
+          </ng-template>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-1"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="2"
+        nzXXl="2"
+      >
+        <button nz-button nzType="primary" (click)="searchAll()">
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+
+    <div nz-row class="mt-3">
+      <div nz-col nzSpan="24">
+        <span nz-typography nzType="secondary">Thống kê</span>
+        <i
+          *ngIf="
+            titleBreadCrumbProvince == null &&
+            titleBreadCrumbPost == null &&
+            titleBreadCrumb == null
+          "
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="
+            titleBreadCrumbProvince == null &&
+            titleBreadCrumbPost == null &&
+            titleBreadCrumb == null
+          "
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          Tất cả các bưu cục
+        </h5>
+        <i
+          *ngIf="titleBreadCrumbProvince != null"
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="titleBreadCrumbProvince != null"
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          {{ titleBreadCrumbProvince }}
+        </h5>
+        <i
+          *ngIf="titleBreadCrumbDist != null"
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="titleBreadCrumbDist != null"
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          {{ titleBreadCrumbDist }}
+        </h5>
+        <i
+          *ngIf="titleBreadCrumbWard != null"
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="titleBreadCrumbWard != null"
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          {{ titleBreadCrumbWard }}
+        </h5>
+        <i
+          *ngIf="titleBreadCrumbPost != null"
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="titleBreadCrumbPost != null"
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          {{ titleBreadCrumbPost }}
+        </h5>
+        <i
+          *ngIf="titleBreadCrumb != null"
+          nz-icon
+          nzType="right"
+          nzTheme="outline"
+          class="next-segment"
+        ></i>
+        <h5
+          *ngIf="titleBreadCrumb != null"
+          nz-typography
+          class="mt-0 mb-2 d-inline-block"
+        >
+          {{ titleBreadCrumb }}
+        </h5>
+      </div>
+    </div>
+
+    <nz-spin [nzSpinning]="isLoadingMap">
+      <div nz-row nzGutter="16">
+        <div nz-col nzXs="24" nzSm="24" nzMd="5" nzLg="5" nzXl="4" nzXXl="3">
+          <div>
+            <div nz-row>
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="
+                    totalPost >= 0 &&
+                    totalTTB >= 0 &&
+                    totalHUB >= 0 &&
+                    totalTTKT >= 0 &&
+                    totalCH >= 0
+                      ? (totalPost + totalTTB + totalHUB + totalTTKT + totalCH
+                          | number)!
+                      : 0!
+                  "
+                  [nzTitle]="'Tổng số bưu cục'"
+                  [nzPrefix]="prefixTplOne"
+                ></nz-statistic>
+                <ng-template #prefixTplOne
+                  ><img
+                    src="/assets/postofficeall.svg"
+                    height="18"
+                    class="mr-2"
+                /></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="totalLocker ? (totalLocker | number)! : 0!"
+                  [nzTitle]="'Tổng Số Locker'"
+                  [nzPrefix]="prefixTplOne1"
+                ></nz-statistic>
+                <ng-template #prefixTplOne1
+                  ><img src="/assets/locker (2).svg" height="18" class="mr-2"
+                /></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="activeCount ? (activeCount | number)! : 0!"
+                  [nzTitle]="'Đang khả dụng'"
+                  [nzPrefix]="prefixTplOne2"
+                ></nz-statistic>
+                <ng-template #prefixTplOne2
+                  ><img src="/assets/active.svg" height="18" class="mr-2"
+                /></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="fullCount ? (fullCount | number)! : 0!"
+                  [nzTitle]="'Đầy'"
+                  [nzPrefix]="prefixTplOne3"
+                ></nz-statistic>
+                <ng-template #prefixTplOne3
+                  ><img src="/assets/full.svg" height="18" class="mr-2"
+                /></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="errorCount ? (errorCount | number)! : 0!"
+                  [nzTitle]="'Lỗi'"
+                  [nzPrefix]="prefixTplOne4"
+                ></nz-statistic>
+                <ng-template #prefixTplOne4
+                  ><img src="/assets/error.svg" height="18" class="mr-2"
+                /></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="lockerCount ? (lockerCount | number)! : 0!"
+                  [nzTitle]="'Khóa'"
+                  [nzPrefix]="prefixTplOne5"
+                ></nz-statistic>
+                <ng-template #prefixTplOne5
+                  ><i
+                    nz-icon
+                    nzType="lock"
+                    style="font-size: 20px; color: red"
+                    nzTheme="outline"
+                    class="mr-2"
+                  ></i
+                ></ng-template>
+              </div>
+
+              <div
+                nz-col
+                nzXs="10"
+                nzSm="11"
+                nzMd="24"
+                nzLg="24"
+                nzXl="24"
+                nzXXl="24"
+                class="top-statistic"
+              >
+                <nz-statistic
+                  [nzValue]="offCount ? (offCount | number)! : 0!"
+                  [nzTitle]="'Tắt'"
+                  [nzPrefix]="prefixTplOne6"
+                ></nz-statistic>
+                <ng-template #prefixTplOne6
+                  ><i
+                    nz-icon
+                    nzType="disconnect"
+                    style="font-size: 20px; color: #808080"
+                    class="mr-2"
+                    nzTheme="outline"
+                  ></i
+                ></ng-template>
+              </div>
+            </div>
+
+            <div class="mt-4 status-tag">
+              <p nz-typography nzType="secondary">Qui ước màu</p>
+              <nz-badge
+                nzStatus="success"
+                nzText="Khả dụng"
+                class="d-inline-block d-md-block mb-2 ml-2"
+              ></nz-badge>
+              <nz-badge
+                nzStatus="default"
+                nzText="Đầy"
+                class="d-inline-block d-md-block mb-2 ml-2"
+              ></nz-badge>
+              <nz-badge
+                nzStatus="error"
+                nzText="Lỗi"
+                class="d-inline-block d-md-block ml-2"
+              ></nz-badge>
+            </div>
+          </div>
+        </div>
+        <div
+          nz-col
+          nzXs="24"
+          nzSm="25"
+          nzMd="19"
+          nzLg="19"
+          nzXl="20"
+          nzXXl="21"
+        >
+          <div class="map-wrapper" id="map"></div>
+
+          <div>
+            <div id="popoverpoint">
+              <span
+                nz-popover
+                [nzPopoverTitle]="titleTemplate"
+                [nzPopoverVisible]="visible"
+                (nzPopoverVisibleChange)="change($event)"
+                [nzPopoverContent]="contentTemplate"
+              >
+              </span>
+              <ng-template #titleTemplate>
+                <div
+                  style="display: flex; justify-content: space-between"
+                  class="pt-2"
+                >
+                  <h5 nz-typography>
+                    {{
+                      lockerItem
+                        ? lockerItem.code && lockerItem.title
+                          ? lockerItem.code.concat(" / ", lockerItem.title)
+                          : "-"
+                        : "-"
+                    }}
+                  </h5>
+                  <span (click)="clickMe()" style="cursor: pointer"
+                    ><i nz-icon nzType="close" nzTheme="outline"></i
+                  ></span>
+                </div>
+              </ng-template>
+              <ng-template #contentTemplate>
+                <div class="ml-2">
+                  <div nz-row class="mt-3">
+                    <div nz-col nzSpan="6">
+                      <img src="assets/homepost.svg" class="mr-2" />
+                      <span nz-col class="text-bold">Bưu cục :</span>
+                    </div>
+                    <div nz-col nzSpan="18">
+                      {{
+                        lockerItem
+                          ? lockerItem.buuCuc.maBuuCuc
+                            ? lockerItem.buuCuc.maBuuCuc
+                            : "-"
+                          : "-"
+                      }}
+                    </div>
+                  </div>
+                  <div nz-row class="mt-3">
+                    <div nz-col nzSpan="6">
+                      <img src="assets/address.svg" class="mr-2" />
+                      <span nz-col class="text-bold">Địa chỉ :</span>
+                    </div>
+                    <div nz-col nzSpan="18">
+                      {{
+                        lockerItem
+                          ? lockerItem.address
+                            ? lockerItem.address.detail
+                              ? lockerItem.address.detail.concat(
+                                  ",",
+                                  lockerItem.address.vtpPhuongXa.name,
+                                  ",",
+                                  lockerItem.address.vtpPhuongXa.quanHuyen
+                                    .tenQuanHuyen,
+                                  ",",
+                                  lockerItem.address.vtpPhuongXa.quanHuyen.tinh
+                                    .name
+                                )
+                              : "-"
+                            : "-"
+                          : "-"
+                      }}
+                    </div>
+                  </div>
+                  <div nz-row class="mt-3">
+                    <div nz-col nzSpan="6">
+                      <img
+                        src="assets/active.svg"
+                        height="16"
+                        width="16"
+                        class="mr-2"
+                      />
+                      <span nz-col class="text-bold">Trạng thái :</span>
+                    </div>
+                    <div nz-col nzSpan="18">
+                      <nz-tag
+                        *ngIf="lockerItem.status != null"
+                        [nzColor]="lockerItem.status | colorStatusDetail"
+                        >{{ lockerItem.status | textStatusDetail }}</nz-tag
+                      >
+                    </div>
+                  </div>
+                  <div nz-row class="mt-4">
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Giao dịch</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Hoàn trả</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Còn trống</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Đầy</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>lỗi</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Đóng tủ</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">80</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div nz-row class="mt-4">
+                    <div nz-col nzSpan="7">
+                      <div>
+                        <span nz-typography>Phiên bản phần mềm</span>
+                      </div>
+                      <div>
+                        <span class="text-bold">{{
+                          lockerItem && lockerItem.hardwareStatus
+                            ? lockerItem.hardwareStatus.softwareVersion
+                              ? lockerItem.hardwareStatus.softwareVersion
+                              : "-"
+                            : "-"
+                        }}</span>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Màn hình</span>
+                      </div>
+                      <div>
+                        <div
+                          *ngIf="lockerItem.hardwareStatus == null"
+                          class="text-center"
+                        >
+                          -
+                        </div>
+                        <nz-tag
+                          *ngIf="lockerItem.hardwareStatus != null"
+                          [nzColor]="
+                            lockerItem.hardwareStatus.screen
+                              ? (lockerItem.hardwareStatus.screen
+                                | colorStatusDetail)
+                              : ''
+                          "
+                          >{{
+                            lockerItem.hardwareStatus.screen != null
+                              ? (lockerItem.hardwareStatus.screen
+                                | textStatusDetail)
+                              : "-"
+                          }}</nz-tag
+                        >
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="6">
+                      <div>
+                        <span nz-typography>Camera</span>
+                      </div>
+                      <div>
+                        <div class="mb-3">
+                          <span nz-typography>Cam 1: </span>
+                          <span
+                            *ngIf="lockerItem.hardwareStatus == null"
+                            class="text-center"
+                            >-</span
+                          >
+                          <nz-tag
+                            *ngIf="lockerItem.hardwareStatus != null"
+                            [nzColor]="
+                              lockerItem.hardwareStatus.firstCamera
+                                ? (lockerItem.hardwareStatus.firstCamera
+                                  | colorStatusDetail)
+                                : ''
+                            "
+                            >{{
+                              lockerItem.hardwareStatus.firstCamera != null
+                                ? (lockerItem.hardwareStatus.firstCamera
+                                  | textStatusDetail)
+                                : "-"
+                            }}</nz-tag
+                          >
+                        </div>
+                        <div>
+                          <span nz-typography>Cam 2: </span>
+                          <span
+                            *ngIf="lockerItem.hardwareStatus == null"
+                            class="text-center"
+                            >-</span
+                          >
+                          <nz-tag
+                            *ngIf="lockerItem.hardwareStatus != null"
+                            [nzColor]="
+                              lockerItem.hardwareStatus.secondCamera
+                                ? (lockerItem.hardwareStatus.secondCamera
+                                  | colorStatusDetail)
+                                : ''
+                            "
+                            >{{
+                              lockerItem.hardwareStatus.secondCamera != null
+                                ? (lockerItem.hardwareStatus.secondCamera
+                                  | textStatusDetail)
+                                : "-"
+                            }}</nz-tag
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="4">
+                      <div>
+                        <span nz-typography>Công tơ điện</span>
+                      </div>
+                      <div>
+                        <div
+                          *ngIf="lockerItem.hardwareStatus == null"
+                          class="text-center"
+                        >
+                          -
+                        </div>
+                        <nz-tag
+                          *ngIf="lockerItem.hardwareStatus != null"
+                          [nzColor]="
+                            lockerItem.hardwareStatus.powerMeter
+                              ? (lockerItem.hardwareStatus.powerMeter
+                                | colorStatusDetail)
+                              : ''
+                          "
+                          >{{
+                            lockerItem.hardwareStatus.powerMeter != null
+                              ? (lockerItem.hardwareStatus.powerMeter
+                                | textStatusDetail)
+                              : "-"
+                          }}</nz-tag
+                        >
+                      </div>
+                    </div>
+                    <div nz-col nzSpan="3">
+                      <div>
+                        <span nz-typography>Wifi</span>
+                      </div>
+                      <div>
+                        <div
+                          *ngIf="lockerItem.hardwareStatus == null"
+                          class="text-center"
+                        >
+                          -
+                        </div>
+                        <nz-tag
+                          *ngIf="lockerItem.hardwareStatus != null"
+                          [nzColor]="
+                            lockerItem.hardwareStatus.wifi
+                              ? (lockerItem.hardwareStatus.wifi
+                                | colorStatusDetail)
+                              : ''
+                          "
+                          >{{
+                            lockerItem.hardwareStatus.wifi != null
+                              ? (lockerItem.hardwareStatus.wifi
+                                | textStatusDetail)
+                              : "-"
+                          }}</nz-tag
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div nz-row class="mb-3 mt-4" nzJustify="center">
+                    <button
+                      nz-button
+                      nzType="primary"
+                      style="cursor: pointer"
+                      (click)="viewDetail(lockerItem.id)"
+                    >
+                      Xem chi tiết
+                    </button>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div>
+            <div id="pointpost">
+              <span
+                nz-popover
+                [nzPopoverTitle]="titleTemplatePost"
+                [nzPopoverVisible]="visiblePost"
+                (nzPopoverVisibleChange)="changePost($event)"
+                [nzPopoverContent]="contentTemplatePost"
+              >
+              </span>
+              <ng-template #titleTemplatePost>
+                <div
+                  style="display: flex; justify-content: space-between"
+                  class="pt-2"
+                >
+                  <h5 nz-typography>
+                    {{
+                      itemPostOffice
+                        ? itemPostOffice.name && itemPostOffice.capBuuCuc
+                          ? (
+                              itemPostOffice.capBuuCuc
+                              | levelPost: itemPostOffice.name
+                            ).concat(" ", itemPostOffice.name)
+                          : "-"
+                        : "-"
+                    }}
+                  </h5>
+                  <span (click)="clickMePost()" style="cursor: pointer"
+                    ><i nz-icon nzType="close" nzTheme="outline"></i
+                  ></span>
+                </div>
+              </ng-template>
+              <ng-template #contentTemplatePost>
+                <div class="mx-2">
+                  <div
+                    nz-row
+                    class="mt-3"
+                    style="display: flex; justify-content: center"
+                  >
+                    <img
+                      class="mb-2"
+                      style="width: 100%; height: 100%"
+                      src="assets/banner-vtp.png"
+                    />
+                  </div>
+                  <div nz-row class="mt-3">
+                    <div nz-col nzSpan="7">
+                      <img src="assets/homepost.svg" class="mr-2" />
+                      <span nz-col class="text-bold">Mã Bưu cục :</span>
+                    </div>
+                    <div nz-col nzSpan="17">
+                      {{
+                        itemPostOffice
+                          ? itemPostOffice.maBuuCuc
+                            ? itemPostOffice.maBuuCuc
+                            : "-"
+                          : "-"
+                      }}
+                    </div>
+                  </div>
+                  <div nz-row class="mt-3">
+                    <div nz-col nzSpan="7">
+                      <img src="assets/address.svg" class="mr-2" />
+                      <span nz-col class="text-bold">Địa chỉ :</span>
+                    </div>
+                    <div nz-col nzSpan="17">
+                      {{
+                        itemPostOffice
+                          ? itemPostOffice.address
+                            ? itemPostOffice.address
+                            : "-"
+                          : "-"
+                      }}
+                    </div>
+                  </div>
+                  <div nz-row class="my-3">
+                    <div nz-col nzSpan="7">
+                      <span nz-col class="text-bold pl-5">Mô tả :</span>
+                    </div>
+                    <div nz-col nzSpan="17">
+                      {{
+                        itemPostOffice
+                          ? itemPostOffice.description
+                            ? itemPostOffice.description
+                            : "-"
+                          : "-"
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nz-spin>
+  </div>
+</nz-card>

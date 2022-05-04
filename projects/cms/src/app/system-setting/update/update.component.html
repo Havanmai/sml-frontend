@@ -1,0 +1,288 @@
+<cms-page [title]="'Cập nhật phần mềm'" [close]="false">
+  <div action>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="showDialogCreate()"
+      class="mr-3"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Thêm mới version</span>
+    </button>
+  </div>
+  <div content class="my-3 mx-0 mx-md-3">
+    <nz-table
+      class="mt-11"
+      [nzData]="listUpdates"
+      [nzFrontPagination]="false"
+      [nzPageSize]="size"
+      [nzPageIndex]="page"
+      [nzTotal]="total"
+      (nzPageIndexChange)="pageChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Loại</th>
+          <th>Số phiên bản</th>
+          <th>Tên phiên bản</th>
+          <th>Nhóm Locker</th>
+          <th>Link</th>
+          <th>Miêu tả</th>
+          <th>Updater mới</th>
+          <th>Link updater</th>
+          <th>Tạo lúc</th>
+          <th>Trạng thái</th>
+          <th nzWidth="100px">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listUpdates">
+          <td>
+            <span *ngIf="data.type == 1">Android</span>
+            <span *ngIf="data.type == 2">Firmware</span>
+            <span *ngIf="!data.type">-</span>
+          </td>
+          <td class="text-bold">{{ data.id }}</td>
+          <td>{{ data.version }}</td>
+          <td>{{ data.category ? data.category.name : "-" }}</td>
+          <td>
+            <a
+              *ngIf="data.downloadUrl"
+              href="{{ data.downloadUrl }}"
+              target="_blank"
+              >Tải file</a
+            >
+            <span *ngIf="!data.downloadUrl">-</span>
+          </td>
+          <td>{{ data.description }}</td>
+          <td>
+            {{ data.updateNumber ? data.updateNumber : "-" }}
+          </td>
+          <td>
+            <a *ngIf="data.updater" href="{{ data.updater }}" target="_blank"
+              >Tải file</a
+            >
+            <span *ngIf="!data.updater">-</span>
+          </td>
+          <td>{{ data.createdDate | date: "hh:mm - dd/MM/yyyy" }}</td>
+          <td>
+            <nz-tag *ngIf="data.status" nzColor="success">Kích hoạt</nz-tag>
+            <nz-tag *ngIf="!data.status" nzColor="default"
+              >Chưa kích hoạt</nz-tag
+            >
+          </td>
+
+          <td>
+            <button
+              nz-button
+              nzType="text"
+              class="mr-1"
+              title="Sửa"
+              (click)="editUpdate(data)"
+            >
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showCreateDialog"
+  [nzClosable]="false"
+  nzTitle="Thêm mới version"
+  nzWidth="640px"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" (ngSubmit)="submitForm()">
+      <nz-form-item class="d-none">
+        <input type="hidden" nz-input id="id" formControlName="id" />
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="type" nzRequired>
+          <span>Loại cập nhật</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="18"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn loại phiên bản!"
+        >
+          <nz-select
+            formControlName="type"
+            [nzPlaceHolder]="'Chọn loại cập nhậ'"
+          >
+            <nz-option [nzValue]="1" nzLabel="Android SML"></nz-option>
+            <nz-option [nzValue]="2" nzLabel="Firmware"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="category" nzRequired>
+          <span>Nhóm SML</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="18"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn nhóm SmartLocker!"
+        >
+          <nz-select
+            formControlName="category"
+            [nzPlaceHolder]="'Chọn nhóm Smartlocker'"
+          >
+            <nz-option
+              *ngFor="let item of listCategory; index as i"
+              [nzValue]="item.id"
+              [nzLabel]="item.name"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+          <span>Tên phiên bản</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="18"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên phiên bản!"
+        >
+          <input
+            nz-input
+            id="name"
+            formControlName="name"
+            placeholder="Nhập tên phiên bản"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="file" nzRequired>
+          <span>Upload File</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+          <nz-upload
+            [nzMultiple]="false"
+            [(nzFileList)]="fileList1"
+            [nzBeforeUpload]="beforeUpload"
+          >
+            <button type="button" nz-button nzGhost>
+              <i nz-icon nzType="upload"></i>
+              Kéo thả hoặc chọn file
+            </button>
+            <p nz-typography nzType="danger" *ngIf="fileTypeError1">
+              {{ fileTypeError1 }}
+            </p>
+          </nz-upload>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">
+          <span>Miêu tả</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+          <nz-textarea-count [nzMaxCharacterCount]="200">
+            <textarea
+              rows="4"
+              formControlName="description"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="description"
+        ></nz-form-control>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+          <label
+            nz-checkbox
+            formControlName="newUpdater"
+            (ngModelChange)="updaterChange($event)"
+            >Sử dụng updater mới</label
+          >
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="updaterChangeFlag">
+        <nz-form-control
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="description"
+        ></nz-form-control>
+        <nz-form-control [nzSm]="18" [nzXs]="24">
+          <nz-upload
+            [nzMultiple]="false"
+            [(nzFileList)]="fileList2"
+            [nzBeforeUpload]="beforeUpload2"
+          >
+            <button type="button" nz-button nzGhost>
+              <i nz-icon nzType="upload"></i>
+              Chọn file Updater
+            </button>
+            <p nz-typography nzType="danger" *ngIf="fileTypeError2">
+              {{ fileTypeError2 }}
+            </p>
+          </nz-upload>
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitForm()"
+      [nzLoading]="submitting"
+      class="m-2"
+    >
+      Thêm mới
+    </button>
+    <button
+      nz-button
+      nzType="default"
+      (click)="cancelGroup()"
+      [disabled]="submitting"
+    >
+      Hủy
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="showEditDialog"
+  [nzClosable]="false"
+  nzTitle="Thay đổi trạng thái"
+>
+  <ng-container *nzModalContent>
+    <p nz-typography class="px-11">Chọn trạng thái để cập nhật</p>
+    <div class="text-center">
+      <nz-radio-group [(ngModel)]="radioValue">
+        <label nz-radio [nzValue]="true">Kích hoạt</label>
+        <label nz-radio [nzValue]="false">Chưa kích hoạt</label>
+      </nz-radio-group>
+    </div>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="updateStatus()"
+      [nzLoading]="updating"
+      class="m-2"
+    >
+      Cập nhật
+    </button>
+    <button
+      nz-button
+      nzType="default"
+      (click)="cancelEdit()"
+      [disabled]="updating"
+    >
+      Hủy
+    </button>
+  </div>
+</nz-modal>

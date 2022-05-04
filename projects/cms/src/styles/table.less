@@ -1,0 +1,54 @@
+// Pagination
+// ---
+@pagination-item-bg: @component-background;
+@pagination-item-size: @height-base - 4px;
+@pagination-item-size-sm: 24px;
+@pagination-font-family: @font-family;
+@pagination-font-weight-active: 500;
+@pagination-item-bg-active: @component-background;
+@pagination-item-link-bg: @component-background;
+@pagination-item-disabled-color-active: @white;
+@pagination-item-disabled-bg-active: darken(@disabled-bg, 10%);
+@pagination-item-input-bg: @component-background;
+@pagination-mini-options-size-changer-top: 0px;
+@pagination-item-hover-color:#10559E;
+
+// Table
+// --
+@table-bg: @component-background;
+@table-header-bg: #E5E5E5 ;
+@table-header-color: #223B55;
+@table-header-sort-bg: @background-color-base;
+@table-body-sort-bg: @gray-2;
+@table-row-hover-bg: @background-color-light;
+@table-selected-row-color: inherit;
+@table-selected-row-bg: @gray-3;
+@table-body-selected-sort-bg: @table-selected-row-bg;
+@table-selected-row-hover-bg: darken(@table-selected-row-bg, 2%);
+@table-expanded-row-bg: @gray-2;
+@table-padding-vertical: 10px;
+@table-padding-horizontal: 10px;
+@table-padding-vertical-md: (@table-padding-vertical * 3 / 4);
+@table-padding-horizontal-md: (@table-padding-horizontal / 2);
+@table-padding-vertical-sm: (@table-padding-vertical / 2);
+@table-padding-horizontal-sm: (@table-padding-horizontal / 2);
+@table-border-color: @border-color-split;
+@table-border-radius-base: 6px;
+@table-footer-bg: @background-color-white;
+@table-footer-color: #223B55;
+@table-header-bg-sm: @table-header-bg;
+@table-font-size: @font-size-base;
+@table-font-size-md: @table-font-size;
+@table-font-size-sm: @table-font-size;
+// Sorter
+// Legacy: `table-header-sort-active-bg` is used for hover not real active
+@table-header-sort-active-bg: darken(@table-header-bg, 0%);
+// Filter
+@table-header-filter-active-bg: darken(@table-header-sort-active-bg, 5%);
+@table-filter-btns-bg: inherit;
+@table-filter-dropdown-bg: @component-background;
+@table-expand-icon-bg: @component-background;
+@table-selection-column-width: 32px;
+// Sticky
+@table-sticky-scroll-bar-bg: fade(#000, 35%);
+@table-sticky-scroll-bar-radius: 4px;

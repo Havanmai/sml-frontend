@@ -1,0 +1,115 @@
+<div>
+  <div *nzModalTitle>Danh sách người dùng</div>
+  <div>
+    <div nz-row class="mt-3 mb-4 filter-panel" [nzGutter]="12">
+      <div
+        nz-col
+        nzXs="8"
+        nzSm="14"
+        nzMd="14"
+        nzLg="14"
+        nzXl="14"
+        nzXXl="14"
+        class="mt-4"
+      >
+        <nz-input-group [nzPrefix]="suffixIconSearch">
+          <input
+            type="text"
+            nz-input
+            placeholder="Email,Tài khoản, Tên"
+            [(ngModel)]="keyword"
+            (keyup.enter)="onSearch()"
+          />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+      <div
+        nz-col
+        nzXs="10"
+        nzSm="6"
+        nzMd="6"
+        nzLg="6"
+        nzXl="6"
+        nzXXl="6"
+        class="mt-4"
+      >
+        <nz-select
+          nzPlaceHolder="Vai trò"
+          [(ngModel)]="role"
+          nzBlock
+          style="width: 100%"
+          nzAllowClear
+          (ngModelChange)="onSearch()"
+        >
+          <nz-option
+            *ngFor="let item of listRoles; index as i"
+            [nzValue]="item.name"
+            [nzLabel]="item.description"
+          >
+          </nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        nzXs="6"
+        nzSm="4"
+        nzMd="4"
+        nzLg="4"
+        nzXl="4"
+        nzXXl="4"
+        class="mt-4"
+      >
+        <button nz-button nzType="default" nzBlock (click)="onSearch()">
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+
+    <nz-table
+      #iDataTable
+      [nzFrontPagination]="false"
+      [nzTotal]="totalPage"
+      [nzData]="listUsers"
+      [nzScroll]="{ y: '100%' }"
+      nzShowSizeChanger
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    >
+      <thead>
+        <tr>
+          <th
+            nzWidth="50px"
+            [(nzChecked)]="checkedAll"
+            [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="onAllChecked($event)"
+          ></th>
+          <th nzWidth="50px">Stt</th>
+          <th>Tên người dùng</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of iDataTable.data; let i = index">
+          <td
+            [nzChecked]="setOfCheckedId.has(data.id)"
+            (nzCheckedChange)="onItemChecked(data.id, $event)"
+          ></td>
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span>{{ data.firstName + data.lastName }}</span>
+          </td>
+          <td>
+            <span>{{ data.email }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="onSubmit()" class="m-2">
+      Xác nhận
+    </button>
+    <button nz-button nzType="default" (click)="onCancel()">Hủy</button>
+  </div>
+</div>

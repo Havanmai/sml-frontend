@@ -1,0 +1,164 @@
+<cms-page [title]="editMode ? 'Cập nhật tài khoản' : 'Tạo mới tài khoản'">
+  <div action></div>
+  <div content>
+    <div class="form-wr p-0 p-md-6">
+      <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="lastName"
+            >Họ và tên</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Vui lòng nhập họ tên!"
+          >
+            <div nz-row [nzGutter]="8">
+              <div nz-col [nzSpan]="12">
+                <input
+                  nz-input
+                  formControlName="lastName"
+                  id="lastName"
+                  placeholder="Nhập Họ"
+                />
+              </div>
+              <div nz-col [nzSpan]="12">
+                <input
+                  nz-input
+                  formControlName="firstName"
+                  id="firstName"
+                  placeholder="Nhập Tên"
+                />
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="login" nzRequired>
+            <span>Tên đăng nhập</span>
+          </nz-form-label>
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Tên đăng nhập không hợp lệ!"
+          >
+            <input
+              nz-input
+              id="login"
+              formControlName="login"
+              placeholder="Nhập tên đăng nhập"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>
+            <span>Email</span>
+          </nz-form-label>
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Email không hợp lệ!"
+          >
+            <input
+              nz-input
+              id="email"
+              formControlName="email"
+              placeholder="Nhập Email"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="!editMode">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired
+            >Mật khẩu</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Mật khẩu không hợp lệ!"
+          >
+            <input
+              nz-input
+              type="password"
+              id="password"
+              formControlName="password"
+              (ngModelChange)="updateConfirmValidator()"
+              placeholder="Nhập Mật khẩu"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="!editMode">
+          <nz-form-label
+            [nzSm]="6"
+            [nzXs]="24"
+            nzFor="retypePassword"
+            nzRequired
+            >Xác nhận mật khẩu</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+            <input
+              nz-input
+              type="password"
+              formControlName="retypePassword"
+              id="retypePassword"
+              placeholder="Nhập lại mật khẩu"
+            />
+            <ng-template #errorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Vui lòng xác nhận lại mật khẩu!</ng-container
+              >
+              <ng-container *ngIf="control.hasError('confirm')">
+                Mật khẩu và mật khẩu xác nhận không trùng khớp!
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>
+            <span>Vai trò</span>
+          </nz-form-label>
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Vui lòng chọn vai trò"
+          >
+            <nz-select
+              [nzMaxTagCount]="3"
+              nzMode="multiple"
+              nzPlaceHolder="Chọn vai trò"
+              [(ngModel)]="listOfSelectedValue"
+              formControlName="role"
+              [nzShowArrow]="true"
+            >
+              <nz-option
+                *ngFor="let item of listRoles; index as i"
+                [nzValue]="item.name"
+                [nzLabel]="item.description"
+              ></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>
+            <span>Trạng thái</span>
+          </nz-form-label>
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Vui lòng chọn vai trò"
+          >
+            <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái">
+              <nz-option [nzValue]="true" nzLabel="Kích hoạt"></nz-option>
+              <nz-option [nzValue]="false" nzLabel="Khóa"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row class="register-area mt-7">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button nz-button nzType="primary" [nzLoading]="isSubmiting">
+              {{ editMode ? "Cập nhật" : "Tạo mới User" }}
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>
+</cms-page>

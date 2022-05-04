@@ -1,0 +1,236 @@
+<div class="infor-wrapper">
+  <h5 nz-typography>Thông tin cơ bản</h5>
+  <div nz-row class="ml-4" nzGutter="16" *ngIf="Cabinet">
+    <div nz-col nzSpan="4" class="mt-3">
+      <nz-statistic
+        [nzValue]="''"
+        [nzTitle]="'Trạng thái'"
+        [nzPrefix]="prefixTplOne"
+      ></nz-statistic>
+      <ng-template #prefixTplOne>
+        <div *ngIf="Cabinet.status === null" class="text-center">-</div>
+        <nz-tag
+          *ngIf="Cabinet.status != null"
+          [nzColor]="Cabinet.status | colorStatusDetail"
+          >{{ Cabinet.status | textStatusDetail }}</nz-tag
+        >
+      </ng-template>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="
+          Cabinet.address != null
+            ? Cabinet.address.detail
+              ? Cabinet.address.detail.concat(
+                  ', ',
+                  Cabinet.address.vtpPhuongXa.name |uppercaseFirstString,
+                  ', ',
+                  Cabinet.address.vtpPhuongXa.quanHuyen.tenQuanHuyen |uppercaseFirstString,
+                  ', ',
+                  Cabinet.address.vtpPhuongXa.quanHuyen.tinh.name |uppercaseFirstString
+                )
+              : '-'
+            : '-'
+        "
+        [nzTitle]="'Địa chỉ'"
+      >
+      </nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="Cabinet.type | typeLocker"
+        [nzTitle]="'Locker type'"
+      >
+      </nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="Cabinet.supplier ? Cabinet.supplier.name : '-'"
+        [nzTitle]="'Supplier'"
+      >
+      </nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="'******'"
+        [nzTitle]="'Mã bí mật'"
+        [nzSuffix]="prefixTplCopy"
+      ></nz-statistic>
+      <ng-template #prefixTplCopy>
+        <button
+          nz-button
+          nzType="text"
+          (click)="coppySecret(Cabinet.secret)"
+          *ngIf="Cabinet.secret"
+        >
+          <i nz-icon nzType="copy" nzTheme="outline"></i>
+        </button>
+        <span *ngIf="!Cabinet.secret">-</span>
+      </ng-template>
+    </div>
+    <div nz-col nzSpan="4" class="mt-3">
+      <nz-statistic
+        [nzValue]="
+          Cabinet.buuCuc.maBuuCuc != null
+            ? (Cabinet.buuCuc.maBuuCuc | nzSafeNull: '-')
+            : '-'
+        "
+        [nzTitle]="'Bưu Cục'"
+      ></nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="
+          Cabinet.latitude != null && Cabinet.longitude != null
+            ? Cabinet.latitude + '-' + Cabinet.longitude
+            : '-'
+        "
+        [nzTitle]="'Tọa độ'"
+      ></nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="Cabinet.place != null ? Cabinet.place.name : '-'"
+        [nzTitle]="'Vị trí'"
+      >
+      </nz-statistic>
+    </div>
+    <div nz-col nzSpan="5" class="mt-3">
+      <nz-statistic
+        [nzValue]="
+          Cabinet.buildingClass != null ? Cabinet.buildingClass.name : '-'
+        "
+        [nzTitle]="'Thuộc tính tòa nhà'"
+      ></nz-statistic>
+    </div>
+  </div>
+  <div class="hardwar-status mt-2">
+    <div nz-row class="ml-4" nzGutter="20">
+      <div nz-col nzXs="8" nzMd="4" class="mt-3">
+        <nz-statistic
+          [nzValue]="
+            hardwareStatus != null
+              ? hardwareStatus.softwareVersion != null
+                ? hardwareStatus.softwareVersion
+                : '-'
+              : '-'
+          "
+          [nzTitle]="'Phiên bản phần mềm'"
+        >
+        </nz-statistic>
+      </div>
+      <div nz-col nzXs="8" nzMd="5" class="mt-3">
+        <nz-statistic
+          [nzValue]="''"
+          [nzTitle]="'Màn hình'"
+          [nzPrefix]="prefixTpl1"
+        ></nz-statistic>
+        <ng-template #prefixTpl1>
+          <div *ngIf="hardwareStatus == null" class="text-center">-</div>
+          <nz-tag
+            *ngIf="hardwareStatus != null"
+            [nzColor]="
+              hardwareStatus.screen
+                ? (hardwareStatus.screen | colorStatusDetail)
+                : ''
+            "
+            >{{
+              hardwareStatus.screen != null
+                ? (hardwareStatus.screen | textStatusDetail)
+                : "-"
+            }}</nz-tag
+          >
+        </ng-template>
+      </div>
+      <div nz-col nzXs="8" nzMd="5" class="mt-3">
+        <nz-statistic
+          [nzValue]="''"
+          [nzTitle]="'Camera'"
+          [nzPrefix]="prefixTpl2"
+        ></nz-statistic>
+        <ng-template #prefixTpl2>
+          <div class="mb-3">
+            <span nz-typography>Cam 1: </span>
+            <span *ngIf="hardwareStatus == null" class="text-center">-</span>
+            <nz-tag
+              *ngIf="hardwareStatus != null"
+              [nzColor]="
+                hardwareStatus.firstCamera
+                  ? (hardwareStatus.firstCamera | colorStatusDetail)
+                  : ''
+              "
+              >{{
+                hardwareStatus.firstCamera != null
+                  ? (hardwareStatus.firstCamera | textStatusDetail)
+                  : "-"
+              }}</nz-tag
+            >
+          </div>
+          <div>
+            <span nz-typography>Cam 2: </span>
+            <span *ngIf="hardwareStatus == null" class="text-center">-</span>
+            <nz-tag
+              *ngIf="hardwareStatus != null"
+              [nzColor]="
+                hardwareStatus.secondCamera
+                  ? (hardwareStatus.secondCamera | colorStatusDetail)
+                  : ''
+              "
+              >{{
+                hardwareStatus.secondCamera != null
+                  ? (hardwareStatus.secondCamera | textStatusDetail)
+                  : "-"
+              }}</nz-tag
+            >
+          </div>
+        </ng-template>
+      </div>
+      <div nz-col nzXs="8" nzMd="5" class="mt-3">
+        <nz-statistic
+          [nzValue]="''"
+          [nzTitle]="'Công tơ điện'"
+          [nzPrefix]="prefixTpl3"
+        ></nz-statistic>
+        <ng-template #prefixTpl3>
+          <div *ngIf="hardwareStatus == null" class="text-center">-</div>
+          <nz-tag
+            *ngIf="hardwareStatus != null"
+            [nzColor]="
+              hardwareStatus.powerMeter
+                ? (hardwareStatus.powerMeter | colorStatusDetail)
+                : ''
+            "
+            >{{
+              hardwareStatus.powerMeter != null
+                ? (hardwareStatus.powerMeter | textStatusDetail)
+                : "-"
+            }}</nz-tag
+          >
+        </ng-template>
+      </div>
+      <div nz-col nzXs="8" nzMd="5" class="mt-3">
+        <nz-statistic
+          [nzValue]="''"
+          [nzTitle]="'Wifi'"
+          [nzPrefix]="prefixTpl4"
+        ></nz-statistic>
+        <ng-template #prefixTpl4>
+          <span *ngIf="hardwareStatus == null" class="text-center">-</span>
+          <nz-tag
+            *ngIf="hardwareStatus != null"
+            [nzColor]="
+              hardwareStatus.wifi
+                ? (hardwareStatus.wifi | colorStatusDetail)
+                : ''
+            "
+            >{{
+              hardwareStatus.wifi != null
+                ? (hardwareStatus.wifi | textStatusDetail)
+                : "-"
+            }}</nz-tag
+          >
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

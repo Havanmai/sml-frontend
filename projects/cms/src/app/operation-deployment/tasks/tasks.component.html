@@ -1,0 +1,192 @@
+<cms-page title="Quản lý nhiệm vụ" [close]="false">
+  <div action>
+    <button nz-button nzType="primary" (click)="createTicket()">
+      <i nz-icon nzType="plus" nzTheme="outline"></i> Tạo mới
+    </button>
+  </div>
+  <div content style="height: 76vh">
+    <nz-layout style="height: 100%" class="mt-8">
+      <nz-sider
+        nzWidth="230px"
+        nzTheme="light"
+        style="
+          border: 1px solid #f0f0f0;
+          box-shadow: rgb(0 0 0 / 10%) 0px 1px 4px;
+          border-radius: 5px;
+        "
+      >
+        <ul nz-menu nzMode="inline" style="list-style-type: none; margin: 0">
+          <li
+            nz-menu-item
+            class="content-item mt-3"
+            nzSelected
+            (click)="alltask()"
+          >
+            <span nz-typography>Tất cả</span>
+          </li>
+          <li nz-menu-item class="content-item mt-3" (click)="mytask()">
+            <span nz-typography>Nhiệm vụ của tôi</span>
+          </li>
+          <li nz-menu-item class="content-item mt-3" (click)="dotask()">
+            <span nz-typography>Đang thực hiện</span>
+          </li>
+          <li nz-menu-item class="content-item mt-3" (click)="completetask()">
+            <span nz-typography>Đã hoàn thành</span>
+          </li>
+          <li nz-menu-item class="content-item mt-3" (click)="canceltask()">
+            <span nz-typography>Hủy</span>
+          </li>
+        </ul>
+      </nz-sider>
+      <nz-content class="ml-5 mt-1">
+        <div nz-row class="mb-3" [nzGutter]="[20, 20]">
+          <div nz-col nzSpan="4">
+            <nz-input-group [nzPrefix]="prefixIconSearch">
+              <input
+                type="text"
+                [(ngModel)]="idTicket"
+                nz-input
+                placeholder="Mã nhiệm vụ"
+                (keyup.enter)="searchAll()"
+              />
+            </nz-input-group>
+            <ng-template #prefixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-select
+              style="width: 100%"
+              nzShowSearch
+              nzPlaceHolder="Nhập tên,email,sdt người tạo "
+              [(ngModel)]="createBy"
+              (nzScrollToBottom)="loadMore()"
+              [nzShowArrow]="false"
+              nzAllowClear
+              [nzDropdownRender]="renderTemplate"
+              [nzFilterOption]="nzFilterOption"
+              (nzOnSearch)="search($event)"
+              (keyup.enter)="searchAll()"
+            >
+              <nz-option
+                *ngFor="let o of listOfOption"
+                [nzLabel]="o.text"
+                [nzValue]="o.value"
+              ></nz-option>
+            </nz-select>
+            <ng-template #renderTemplate>
+              <nz-spin *ngIf="isLoading"></nz-spin>
+            </ng-template>
+          </div>
+          <div
+            nz-col
+            [nzXs]="12"
+            [nzSm]="12"
+            [nzMd]="12"
+            [nzLg]="12"
+            [nzXl]="6"
+          >
+            <nz-range-picker
+              style="width: 97%"
+              nzFormat="dd/MM/yyyy"
+              [nzPlaceHolder]="['Từ ngày', 'Đến ngày']"
+              ngModel
+              (ngModelChange)="onChange($event)"
+              (keyup.enter)="searchAll()"
+            ></nz-range-picker>
+          </div>
+          <!--   <div nz-col nzSpan="4">
+                 <nz-input-group [nzPrefix]="prefixIconEmail">
+                     <input type="text" nz-input placeholder="Email" />
+                   </nz-input-group>
+                   <ng-template #prefixIconEmail>
+                     <i nz-icon nzType="mail" nzTheme="outline"></i>
+                   </ng-template>
+                </div> -->
+          <!--  <div nz-col nzSpan="4">
+                 <nz-input-group [nzPrefix]="prefixIconPhone">
+                     <input type="text" nz-input placeholder="SDT" />
+                   </nz-input-group>
+                   <ng-template #prefixIconPhone>
+                     <i nz-icon nzType="phone" nzTheme="outline"></i>
+                   </ng-template>
+                </div> -->
+          <div nz-col nzSpan="4">
+            <button nz-button nzType="primary" (click)="searchAll()">
+              <i nz-icon nzType="search"></i> Tìm Kiếm
+            </button>
+          </div>
+        </div>
+        <div>
+          <nz-table
+            #basicTable
+            [nzData]="listOfData"
+            [nzFrontPagination]="false"
+            [nzPageSize]="size"
+            [nzPageIndex]="page"
+            [nzTotal]="total"
+            [nzFooter]="footer"
+            (nzPageIndexChange)="pageChange($event)"
+          >
+            <thead>
+              <tr>
+                <th>Mã nhiệm vụ</th>
+                <th>Tiêu đề</th>
+                <th>Ngày tạo</th>
+                <th>Người tạo</th>
+                <!--  <th>Ngày đóng</th>
+                           <th>Người đóng</th> -->
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data">
+                <td>
+                  <a href="/tasks/detail/{{ data.id }}">{{
+                    data.id ? data.id : "-"
+                  }}</a>
+                </td>
+                <td>{{ data.title ? data.title : "-" }}</td>
+                <td>
+                  {{ data.createdDate ? (data.createdDate | dateText) : "-" }}
+                </td>
+                <td>
+                  {{
+                    data.createdBy
+                      ? data.createdBy.lastName
+                        ? data.createdBy.lastName.concat(
+                            " ",
+                            data.createdBy.firstName
+                          )
+                        : data.createdBy.firstName
+                        ? data.createdBy.firstName
+                        : "-"
+                      : "-"
+                  }}
+                </td>
+                <!-- <td>{{data.id}}</td>
+                           <td>{{data.id}}</td> -->
+                <td>
+                  <button
+                    nz-button
+                    nzType="text"
+                    class="mr-1"
+                    title="Xem chi tiết"
+                    routerLink="detail/{{ data.id }}"
+                  >
+                    <i nz-icon nzType="eye" nzTheme="outline"></i>
+                  </button>
+                  <!-- <button nz-button nzType="text" class="mr-1" title="Sửa" ><i nz-icon nzType="edit" nzTheme="outline"></i></button>
+                            <button nz-button nzType="text" title="Xóa"> <i nz-icon nzType="delete" nzTheme="outline" class="text-danger"></i></button> -->
+                </td>
+              </tr>
+            </tbody>
+            <ng-template #footer>
+              <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+            </ng-template>
+          </nz-table>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </div>
+</cms-page>
