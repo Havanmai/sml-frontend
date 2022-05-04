@@ -1,0 +1,191 @@
+<nz-form-item *ngIf="hiddenfile" class="mb-1" style="justify-content: end">
+  <a class="add-form-array" (click)="exportExcel()"
+    ><i nz-icon nzType="download" nzTheme="outline"></i>
+    <span class="ml-2">Tải tệp mẫu</span>
+  </a>
+</nz-form-item>
+<nz-form-item *ngIf="hiddenfile" class="mb-1">
+  <nz-form-control nzXs="24">
+    <nz-spin [nzSpinning]="codeUploading">
+      <nz-upload
+        nzType="drag"
+        [nzMultiple]="true"
+        [nzBeforeUpload]="beforeUploadCode"
+        nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      >
+        <p class="ant-upload-drag-icon">
+          <i nz-icon nzType="cloud-upload" nzTheme="outline"></i>
+        </p>
+        <p class="ant-upload-text">
+          Kéo thả file của bạn hoặc <a>chọn tệp tin</a>
+        </p>
+      </nz-upload>
+    </nz-spin>
+  </nz-form-control>
+</nz-form-item>
+<p class="require" *ngIf="isValidFile">Không để trống File</p>
+<nz-form-item
+  *ngIf="!hiddenfile && isLoading"
+  class="mb-1"
+  style="justify-content: space-between"
+>
+  <p class="title-table">Thông Tin File</p>
+  <a class="add-form-array">
+    <i nz-icon nzType="delete" nzTheme="outline" class="text-danger"></i>
+    <span class="ml-2" (click)="removeFile()">Hủy File</span>
+  </a>
+</nz-form-item>
+<nz-form-item *ngIf="!hiddenfile && isLoading">
+  <nz-form-control [nzSm]="24" [nzXs]="24">
+    <nz-table
+      #editRowTable
+      nzBordered
+      [nzData]="iData"
+      nzTableLayout="fixed"
+      (nzPageIndexChange)="pageChange()"
+    >
+      <thead>
+        <tr>
+          <th *ngFor="let h of lstHeaderImport" class="tb-header">
+            {{ h.name }}
+            <span *ngIf="h.require" [ngClass]="{ require: h.require }">*</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of editRowTable.data; let i = index">
+          <ng-container *ngIf="!editCache[i].edit; else editTemplate">
+            <td>{{ data.modelName }}</td>
+            <td>{{ data.color }}</td>
+            <td>{{ data.vendor }}</td>
+            <td>{{ data.weight }}</td>
+            <td>{{ data.long }}</td>
+            <td>{{ data.wide }}</td>
+            <td>{{ data.high }}</td>
+            <td>{{ data.version }}</td>
+            <td>{{ data.serial }}</td>
+            <td>{{ data.price }}</td>
+            <td>{{ data.note }}</td>
+            <td>
+              <a (click)="startEdit(i)">
+                <i
+                  nz-icon
+                  nzType="edit"
+                  nzTheme="outline"
+                  class="text-danger"
+                ></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td>
+              <nz-select
+                class="width-full"
+                [(ngModel)]="editCache[i].data.modelId"
+                nzAllowClear
+                nzPlaceHolder="Danh mục"
+                (ngModelChange)="onChangeModelId(editCache[i].data, i)"
+              >
+                <nz-option
+                  *ngFor="let m of lstDevice"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.color"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.vendor"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.weight"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.long"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.wide"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.high"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.version"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.serial"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.price"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                nz-input
+                [(ngModel)]="editCache[i].data.note"
+              />
+            </td>
+            <td>
+              <a (click)="saveEdit(editCache[i].data, i)" class="save mr-2">
+                <i
+                  nz-icon
+                  nzType="check"
+                  nzTheme="outline"
+                  class=""
+                  title="Lưu"
+                ></i>
+              </a>
+              <a (click)="cancelEdit(i)">
+                <i
+                  nz-icon
+                  nzType="close"
+                  nzTheme="outline"
+                  class="text-danger"
+                  title="Hủy"
+                ></i
+              ></a>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-form-control>
+</nz-form-item>

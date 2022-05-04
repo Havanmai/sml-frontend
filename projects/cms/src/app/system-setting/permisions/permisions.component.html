@@ -1,0 +1,206 @@
+<cms-page [title]="'Quản lý Quyền'" [close]="false">
+  <div action>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="showCreatePermissionModal()"
+      class="mr-3"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Tạo Quyền</span>
+    </button>
+    <button nz-button nzType="primary" (click)="showCreateGroupModal()">
+      <i nz-icon nzType="folder-add" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Tạo Nhóm quyền</span>
+    </button>
+  </div>
+  <div content class="my-3 mx-0 mx-md-3">
+    <nz-tabset [nzSelectedIndex]="tabSelected">
+      <nz-tab nzTitle="Quyền">
+        <cms-permission-list></cms-permission-list>
+      </nz-tab>
+      <nz-tab nzTitle="Nhóm quyền">
+        <cms-group-permission></cms-group-permission>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showCreateGroup"
+  [nzClosable]="false"
+  nzTitle="Tạo mới nhóm quyền"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createGroupForm"
+      (ngSubmit)="submitGroup()"
+      [nzLayout]="'vertical'"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="groupName" nzRequired>
+          <span>Tên nhóm</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên nhóm!"
+        >
+          <input
+            nz-input
+            id="groupName"
+            formControlName="groupName"
+            placeholder="Nhập tên nhóm"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitGroup()"
+      [nzLoading]="groupSubmitting"
+      class="m-2"
+    >
+      Tạo Nhóm Quyền
+    </button>
+    <button nz-button nzType="default" (click)="cancelGroup()">Hủy</button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="showCreateGroup"
+  [nzClosable]="false"
+  nzTitle="Tạo mới nhóm quyền"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createGroupForm"
+      (ngSubmit)="submitGroup()"
+      [nzLayout]="'vertical'"
+    >
+      <nz-form-item class="d-none">
+        <input type="hidden" nz-input id="id" formControlName="id" />
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="groupName" nzRequired>
+          <span>Tên nhóm</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên nhóm!"
+        >
+          <input
+            nz-input
+            id="groupName"
+            formControlName="groupName"
+            placeholder="Nhập tên nhóm"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitGroup()"
+      [nzLoading]="groupSubmitting"
+      class="m-2"
+    >
+      {{ editGroupFlag ? "Cập nhật" : "Tạo Nhóm Quyền" }}
+    </button>
+    <button
+      nz-button
+      nzType="default"
+      (click)="cancelGroup()"
+      [disabled]="groupSubmitting"
+    >
+      Hủy
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="showCreatePermission"
+  [nzClosable]="false"
+  nzTitle="Tạo mới Quyền"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createPermissionForm"
+      (ngSubmit)="submitPermission()"
+      [nzLayout]="'vertical'"
+    >
+      <nz-form-item class="d-none">
+        <input type="hidden" nz-input id="id" formControlName="id" />
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="name" nzRequired>
+          <span>Tên quyền</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tên quyền!"
+        >
+          <input
+            nz-input
+            id="name"
+            formControlName="name"
+            placeholder="Nhập tên quyền"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="groupName" nzRequired>
+          <span>Thuộc nhóm</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn nhóm quyền!"
+        >
+          <nz-select
+            formControlName="groupName"
+            nzPlaceHolder="Chọn nhóm quyền"
+          >
+            <nz-option
+              *ngFor="let item of listGroup; index as i"
+              [nzValue]="item.id"
+              [nzLabel]="item.name"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitPermission()"
+      [nzLoading]="permissionSubmitting"
+      class="m-2"
+    >
+      {{ editPermissionFlag ? "Cập nhật" : "Tạo Quyền" }}
+    </button>
+    <button
+      nz-button
+      nzType="default"
+      (click)="cancelPermission()"
+      [disabled]="permissionSubmitting"
+    >
+      Hủy
+    </button>
+  </div>
+</nz-modal>

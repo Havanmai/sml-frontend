@@ -1,0 +1,48 @@
+<cms-page [title]="'Quản lý Vai trò'" [close]="false">
+  <div action>
+    <a nz-button nzType="primary" routerLink="create"
+      ><i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Tạo mới</span></a
+    >
+  </div>
+  <div content class="my-3 pt-5">
+    <nz-table [nzData]="listRoles" [nzFrontPagination]="false">
+      <thead>
+        <tr>
+          <th>Mã Vai trò</th>
+          <th>Tên hiển thị</th>
+          <th nzWidth="160px">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listRoles">
+          <td class="text-bold">{{ data.name }}</td>
+          <td>{{ data.description }}</td>
+          <td>
+            <a
+              nz-button
+              nzType="text"
+              class="mr-1"
+              title="Sửa"
+              [routerLink]="'update/' + data.name"
+              ><i nz-icon nzType="edit" nzTheme="outline"></i
+            ></a>
+            <button
+              nz-button
+              nzType="text"
+              title="Xóa"
+              (click)="deleteRole(data)"
+            >
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                class="text-danger"
+              ></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</cms-page>

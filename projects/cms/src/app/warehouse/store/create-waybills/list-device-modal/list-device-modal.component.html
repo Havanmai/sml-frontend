@@ -1,0 +1,158 @@
+<cms-page [title]="'Danh sách thiết bị'" [close]="true">
+  <div action>
+    <button nz-button nzType="primary" (click)="onSubmitForm()">
+      Xác nhận
+    </button>
+  </div>
+  <div content style="width: 100%" class="mt-8">
+    <form nz-form [formGroup]="mainForm" [nzLayout]="'vertical'">
+      <div nz-row nzGutter="6">
+        <div nz-col nzXs="24" nzSm="8" nzMd="4">
+          <nz-form-item>
+            <nz-form-control nzXs="24" nzErrorTip="Không được để trống kho!">
+              <nz-select
+                class="width-full"
+                formControlName="deviceId"
+                nzAllowClear
+                nzPlaceHolder="Mã thiết bị"
+              >
+                <nz-option
+                  *ngFor="let m of lstDeviceId"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="4">
+          <nz-form-item>
+            <nz-form-control nzXs="24">
+              <input
+                nz-input
+                id="maloID"
+                formControlName="maloID"
+                placeholder="Mã lô"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="4">
+          <nz-form-item>
+            <nz-form-control nzXs="24">
+              <nz-select
+                class="width-full"
+                formControlName="modelId"
+                nzAllowClear
+                nzPlaceHolder="Danh mục"
+              >
+                <nz-option
+                  *ngFor="let m of lstDeviceId"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="4">
+          <nz-form-item>
+            <nz-form-control nzXs="24">
+              <nz-select
+                class="width-full"
+                formControlName="category"
+                nzAllowClear
+                nzPlaceHolder="Mã thiết bị"
+              >
+                <nz-option
+                  *ngFor="let m of lstDeviceId"
+                  [nzLabel]="m.name"
+                  [nzValue]="m.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzSm="8" nzMd="4">
+          <button nz-button nzType="primary" type="submit">
+            <i nz-icon nzType="search"></i> Tìm Kiếm
+          </button>
+        </div>
+        <div nz-col nzXs="24">
+          <nz-table
+            #iDataTable
+            [nzFrontPagination]="false"
+            [nzTotal]="totalPage"
+            [nzData]="listOfData"
+            [nzScroll]="{ y: '100%' }"
+            nzShowSizeChanger
+            (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+          >
+            <thead>
+              <tr>
+                <th
+                  [(nzChecked)]="checkedAll"
+                  [nzIndeterminate]="indeterminate"
+                  (nzCheckedChange)="onAllChecked($event)"
+                ></th>
+                <th>Stt</th>
+                <th>Mã</th>
+                <th>Mã lô</th>
+                <th>Danh mục</th>
+                <th>Nhóm</th>
+                <th>Màu</th>
+                <th>Trọng lượng</th>
+                <th>Đơn giá</th>
+                <th>Trạng thái</th>
+                <th>Kho</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of iDataTable.data; let i = index">
+                <td
+                  [nzChecked]="setOfCheckedId.has(data.id)"
+                  (nzCheckedChange)="onItemChecked(data.id, $event)"
+                ></td>
+                <td>{{ i + 1 }}</td>
+                <td>{{ data.id }}</td>
+                <td>
+                  <span *ngIf="data.name">{{ data.name }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.model"> {{ data.model.name }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.model"> {{ data.model.name }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.color"> {{ data.color }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.weight"> {{ data.weight }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.price"> {{ data.price }}</span>
+                </td>
+                <td>
+                  <span *ngIf="data.status === billsStatus.CHUAXUAT"
+                    >Chưa xuất</span
+                  >
+                  <span *ngIf="data.status === billsStatus.DAXUAT"
+                    >Đã xuất</span
+                  >
+                  <span *ngIf="data.status === billsStatus.HONG">Hỏng</span>
+                  <span *ngIf="data.status === billsStatus.DANGSUACHUA"
+                    >Đang sửa chữa</span
+                  >
+                </td>
+                <td>
+                  <span *ngIf="data.warehouse"> {{ data.warehouse.name }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+    </form>
+  </div>
+</cms-page>

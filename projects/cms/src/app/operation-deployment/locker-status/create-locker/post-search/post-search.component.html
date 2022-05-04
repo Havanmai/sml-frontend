@@ -1,0 +1,83 @@
+<div style="background-color: #f5f5f5; border-radius: 6px" class="p-3">
+  <div nz-row nzGutter="10">
+    <div nz-col nzSpan="7">
+      <nz-select
+        nzShowSearch
+        ngModel="provinceId"
+        nzPlaceHolder="Chọn tỉnh"
+        (ngModelChange)="provinceChange($event)"
+      >
+        <nz-option
+          *ngFor="let o of listOfProvince"
+          [nzValue]="o.maTinh"
+          [nzLabel]="o.name"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="7">
+      <nz-select
+        nzShowSearch
+        ngModel="distId"
+        nzPlaceHolder="Chọn quận/huyện"
+        (ngModelChange)="distChange($event)"
+      >
+        <nz-option
+          *ngFor="let o of listOfDist"
+          [nzValue]="o.id"
+          [nzLabel]="o.tenQuanHuyen"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="7">
+      <nz-select
+        nzShowSearch
+        ngModel="wardId"
+        nzPlaceHolder="Chọn phường/xã"
+        (ngModelChange)="wardChange($event)"
+      >
+        <nz-option
+          *ngFor="let o of listOfWard"
+          [nzValue]="o.id"
+          [nzLabel]="o.name"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="3">
+      <button type="button" nz-button (click)="searchPost()">
+        <i nz-icon nzType="search" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+  <div nz-row class="mt-3">
+    <div nz-col nzSpan="24">
+      <nz-table #basicTable [nzShowPagination]="false" [nzData]="listOfData">
+        <thead>
+          <tr>
+            <th nzWidth="60px">Mã BC</th>
+            <th nzWidth="120px">Tên</th>
+            <th>Địa chỉ</th>
+            <th nzWidth="80px">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfData">
+            <td class="text-bold">{{ data.maBuuCuc }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.address }}</td>
+            <td>
+              <button
+                nz-button
+                nzType="default"
+                nzSize="small"
+                nzGhost
+                (click)="selectPostOffice(data)"
+              >
+                Chọn
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

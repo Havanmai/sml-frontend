@@ -1,0 +1,101 @@
+<div>
+  <div *nzModalTitle>Chỉnh sửa nội dung</div>
+  <div>
+    <form
+      nz-form
+      [formGroup]="editContentForm"
+      (ngSubmit)="submitContent()"
+      [nzLayout]="'vertical'"
+      class="px-3"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="content" nzRequired>
+          <span>Nội dung</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập nội dung!"
+        >
+          <input
+            nz-input
+            class="pl-3"
+            id="content"
+            formControlName="content"
+            placeholder="Nhập nội dung"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="deadline" nzRequired>
+          <span>Deadline</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn ngày!"
+        >
+          <nz-date-picker
+            formControlName="deadline"
+            nzPlaceHolder="Chọn ngày"
+            style="width: 100%"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="receiver" nzRequired>
+          <span>Người nhận</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn tên người nhận!"
+        >
+          <nz-select
+            nzShowSearch
+            formControlName="receiver"
+            (nzScrollToBottom)="loadMore()"
+            [nzDropdownRender]="renderTemplate"
+            [nzFilterOption]="nzFilterOption"
+            (nzOnSearch)="search($event)"
+          >
+            <nz-option
+              *ngFor="let o of listOfOption"
+              [nzLabel]="o.text"
+              [nzValue]="o.value"
+            ></nz-option>
+          </nz-select>
+          <ng-template #renderTemplate>
+            <nz-spin *ngIf="isLoading"></nz-spin>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="description">
+          <span>Ghi chú</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui nhập ghi chú!">
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="description"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitContent()"
+      [nzLoading]="editSubmitting"
+      class="m-2"
+    >
+      Cập nhật
+    </button>
+    <button nz-button nzType="default" (click)="cancelContent()">Hủy</button>
+  </div>
+</div>

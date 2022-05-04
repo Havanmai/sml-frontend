@@ -1,0 +1,68 @@
+<nz-table
+  #iDataTable
+  [nzFrontPagination]="false"
+  [nzScroll]="{ y: '100%' }"
+  [nzData]="iData"
+  [nzTitle]="header"
+>
+  <thead>
+    <tr>
+      <th *ngFor="let h of lstHeaderExport" class="tb-header">
+        {{ h.name }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of iDataTable.data; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>
+        <span *ngIf="item.model">{{ item.model.name }}</span>
+      </td>
+      <td>
+        <span *ngIf="item.model">{{ item.model.name }}</span>
+      </td>
+      <td>{{ item.color }}</td>
+      <td>{{ item.weight }}</td>
+      <td>{{ item.price }}</td>
+      <td>
+        <span *ngIf="item.model">{{ item.model.unit }}</span>
+      </td>
+      <td>
+        <span *ngIf="item.status === billsStatus.CHUAXUAT">Chưa xuất</span>
+        <span *ngIf="item.status === billsStatus.DAXUAT">Đã xuất</span>
+        <span *ngIf="item.status === billsStatus.HONG">Hỏng</span>
+        <span *ngIf="item.status === billsStatus.DANGSUACHUA"
+          >Đang sửa chữa</span
+        >
+      </td>
+      <td>
+        <span *ngIf="item.warehouse">{{ item.warehouse.name }}</span>
+      </td>
+      <td>
+        <div class="btn-delete">
+          <button
+            nz-button
+            nzType="text"
+            title="Xóa"
+            (click)="deleteExportDevice(i)"
+          >
+            <i
+              nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              class="text-danger"
+            ></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  <ng-template #header>
+    <a class="add-form-array" (click)="addListDevice(isWarehouse)"
+      ><i nz-icon nzType="plus" nzTheme="outline"></i>
+      <span class="ml-1">Thêm danh sách thiết bị</span>
+    </a>
+  </ng-template>
+</nz-table>

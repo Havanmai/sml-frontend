@@ -1,0 +1,136 @@
+<cms-page [title]="'Chi tiết Workflow'" [close]="true">
+  <div action>
+    <a nz-button nzType="primary" class="mr-3"
+      ><i nz-icon nzType="edit" nzTheme="outline"></i>
+      <span class="d-none d-md-inline-block">Cập nhật</span></a
+    >
+  </div>
+
+  <div content>
+    <div class="my-2 p-0 p-lg-4">
+      <div nz-col nzXs="24" class="infor-wrapper">
+        <div nz-row [nzGutter]="[60, 20]">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name">
+                <span>Tên Workflow</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <span>{{ dataWorkflow.name }}</span>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">
+                <span>Ghi chú</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <span>{{ dataWorkflow.description }}</span>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <div nz-col nzXs="24">
+        <div style="text-align: end">
+          <a nz-button nzType="primary" (click)="openModalAddState()"
+            ><i nz-icon nzType="plus" nzTheme="outline"></i>
+            <span class="d-none d-md-inline-block">Thêm mới State</span></a
+          >
+        </div>
+        <div class="graph-box" id="graphBox">
+          <div id="container" #container></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="isVisibleAction"
+  nzTitle="Thông tin action"
+  nzCentered
+  (nzOnCancel)="handleCancelAction()"
+  (nzOnOk)="handleOkAction()"
+  nzOkText="Xác nhận"
+  nzCancelText="Hủy"
+>
+  <ng-container *nzModalContent>
+    <nz-select
+      nzShowSearch
+      nzAllowClear
+      nzPlaceHolder="Select a person"
+      [(ngModel)]="selectedNode"
+    >
+      <ng-container *ngFor="let item of lstState">
+        <nz-option
+          nzLabel="{{ item.name }}"
+          nzValue="{{ item.id }}"
+        ></nz-option>
+      </ng-container>
+    </nz-select>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isVisibleState"
+  nzTitle="Thêm State"
+  nzCentered
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="mainFormState">
+      <div nz-row nzGutter="16">
+        <div nz-col nzXs="12">
+          <nz-form-item>
+            <nz-form-label [nzXs]="24" nzFor="name" nzRequired>
+              <span>Chọn state đầu</span>
+            </nz-form-label>
+            <nz-form-control [nzXs]="24" nzErrorTip="Vui lòng chọn State đầu!">
+              <nz-select
+                nzShowSearch
+                nzAllowClear
+                nzPlaceHolder="Chọn state đầu"
+                formControlName="firstState"
+              >
+                <ng-container *ngFor="let item of lstState">
+                  <nz-option
+                    nzLabel="{{ item.name }}"
+                    nzValue="{{ item.id }}"
+                  ></nz-option>
+                </ng-container>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="12">
+          <nz-form-item>
+            <nz-form-label [nzXs]="24" nzFor="name" nzRequired>
+              <span>Chọn state cuối</span>
+            </nz-form-label>
+            <nz-form-control [nzXs]="24" nzErrorTip="Vui lòng chọn State cuối!">
+              <nz-select
+                nzShowSearch
+                nzAllowClear
+                nzPlaceHolder="Chọn state cuối"
+                formControlName="lastState"
+              >
+                <ng-container *ngFor="let item of lstState">
+                  <nz-option
+                    nzLabel="{{ item.name }}"
+                    [nzValue]="item.id"
+                  ></nz-option>
+                </ng-container>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="handleOkState()" class="m-2">
+      Xác nhận
+    </button>
+    <button nz-button nzType="default" (click)="handleCancel()">Hủy</button>
+  </div>
+</nz-modal>

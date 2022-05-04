@@ -1,0 +1,149 @@
+<cms-page [title]="'Quản lý bưu cục'" [close]="false">
+  <div content class="my-3 mx-0 mx-md-3">
+    <div nz-row class="mt-5 mb-4 filter-panel" [nzGutter]="12">
+      <div
+        nz-col
+        nzXs="8"
+        nzSm="5"
+        nzMd="5"
+        nzLg="5"
+        nzXl="4"
+        nzXXl="4"
+        class="mb-2 mt-4"
+      >
+        <nz-input-group [nzPrefix]="suffixIconSearch">
+          <input
+            type="text"
+            nz-input
+            placeholder="Nhập mã bưu cục"
+            [(ngModel)]="keyword"
+            (keyup.enter)="reload()"
+          />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+      <div
+        nz-col
+        nzXs="8"
+        nzSm="5"
+        nzMd="5"
+        nzLg="5"
+        nzXl="4"
+        nzXXl="4"
+        class="mb-2 mt-4"
+      >
+        <nz-select
+          style="width: 100%"
+          nzShowSearch
+          [ngModel]="provinceId"
+          nzPlaceHolder="Chọn Tỉnh/Thành"
+          nzAllowClear
+          (ngModelChange)="provinceChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfProvince"
+            [nzValue]="o.maTinh"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        nzXs="8"
+        nzSm="5"
+        nzMd="5"
+        nzLg="5"
+        nzXl="4"
+        nzXXl="4"
+        class="mb-2 mt-4"
+      >
+        <nz-select
+          style="width: 100%"
+          nzShowSearch
+          [ngModel]="distId"
+          nzPlaceHolder="Chọn Quận/Huyện"
+          nzAllowClear
+          (ngModelChange)="distChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfDist"
+            [nzValue]="o.id"
+            [nzLabel]="o.tenQuanHuyen"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        nzXs="8"
+        nzSm="5"
+        nzMd="5"
+        nzLg="5"
+        nzXl="4"
+        nzXXl="4"
+        class="mb-2 mt-4"
+      >
+        <nz-select
+          style="width: 100%"
+          nzShowSearch
+          [ngModel]="wardId"
+          nzPlaceHolder="Chọn Phường/Xã"
+          nzAllowClear
+          (ngModelChange)="wardChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfWard"
+            [nzValue]="o.id"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        nzXs="6"
+        nzSm="4"
+        nzMd="4"
+        nzLg="4"
+        nzXl="3"
+        nzXXl="2"
+        class="mb-2 mt-4"
+      >
+        <button nz-button nzType="primary" nzBlock (click)="reload()">
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+
+    <nz-table
+      class="mt-3"
+      [nzData]="listPost"
+      nzShowSizeChanger
+      [nzFrontPagination]="false"
+      [nzPageSize]="size"
+      [nzPageIndex]="page"
+      [nzTotal]="total"
+      [nzFooter]="footer"
+      (nzPageSizeChange)="sizeChange($event)"
+      (nzPageIndexChange)="pageChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Mã Bưu Cục</th>
+          <th>Tên Bưu cục</th>
+          <th>Địa chỉ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listPost">
+          <td class="text-bold">{{ data.maBuuCuc }}</td>
+          <td class="text-bold">{{ data.name }}</td>
+          <td>{{ data.address }}</td>
+        </tr>
+      </tbody>
+      <ng-template #footer>
+        <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+      </ng-template>
+    </nz-table>
+  </div>
+</cms-page>

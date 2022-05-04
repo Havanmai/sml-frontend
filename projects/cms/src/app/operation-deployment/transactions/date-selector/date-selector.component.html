@@ -1,0 +1,68 @@
+<button
+  style="
+    border: 1px solid #d9d9d9;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  "
+  nz-button
+  nzType="text"
+  nz-dropdown
+  [nzDropdownMenu]="menu"
+  nzTrigger="click"
+  class="date-picker-btn"
+  [nzPlacement]="'bottomRight'"
+  [nzClickHide]="false"
+  [nzVisible]="isvisible"
+  (nzVisibleChange)="onMenuChange($event)"
+>
+  <i nz-icon nzType="calendar" nzTheme="outline" class="calendar-icon mt-1"></i>
+  <span class="ml-2 text-content">{{ selectText }}</span>
+  <i nz-icon nzType="down" nzTheme="outline" class="select-arrow ml-2 mt-2"></i>
+</button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu *ngIf="!customMode">
+    <ng-container *ngFor="let item of listOptions; index as i">
+      <li
+        *ngIf="item"
+        nz-menu-item
+        (click)="selectOption(i)"
+        [nzSelected]="curentSelect == i"
+      >
+        {{ item }}
+      </li>
+      <li *ngIf="!item" nz-menu-divider></li>
+    </ng-container>
+    <li nz-menu-divider></li>
+    <li nz-menu-item (click)="customRangerClick()">Tùy chọn thời gian</li>
+  </ul>
+
+  <nz-range-picker
+    *ngIf="customMode"
+    nzInline
+    [(ngModel)]="rangeDate"
+    (ngModelChange)="onChange($event)"
+    [nzRenderExtraFooter]="dateFooter"
+  ></nz-range-picker>
+  <ng-template #dateFooter>
+    <div class="text-right">
+      <button
+        nz-button
+        nzType="primary"
+        nzSize="small"
+        class="mr-2"
+        (click)="customDateSelected()"
+      >
+        Chọn
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        nzSize="small"
+        (click)="cancelDateSelect()"
+      >
+        Hủy
+      </button>
+    </div>
+  </ng-template>
+</nz-dropdown-menu>

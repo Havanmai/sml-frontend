@@ -1,0 +1,656 @@
+<cms-page title="Chi tiết nhiệm vụ" [close]="true">
+  <div action>
+    <button
+      nz-button
+      nzType="primary"
+      nzGhost
+      class="mr-2"
+      (click)="attachFile()"
+    >
+      <i nz-icon nzType="file-done" nzTheme="outline"></i>
+    </button>
+    <!-- <button nz-button nzType="default" > Hủy </button> -->
+  </div>
+  <div content>
+    <nz-layout class="mt-5">
+      <nz-content>
+        <div class="imformation-detail mt-3">
+          <div nz-row class="mb-2">
+            <h5 nz-typography>Thông tin cơ bản</h5>
+          </div>
+          <div nz-row [nzGutter]="[10, 10]">
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography>Mã nhiệm vụ </span>
+              </div>
+              <div nz-row>
+                <span nz-typography>
+                  {{
+                    ItemTicket ? (ItemTicket.id ? ItemTicket.id : "-") : "-"
+                  }}</span
+                >
+              </div>
+            </div>
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography>Người tạo </span>
+              </div>
+              <div nz-row>
+                <span nz-typography
+                  >{{
+                    ItemTicket
+                      ? ItemTicket.createdBy
+                        ? ItemTicket.createdBy.lastName.concat(
+                            " ",
+                            ItemTicket.createdBy.firstName
+                          )
+                        : "-"
+                      : "-"
+                  }}
+                </span>
+              </div>
+            </div>
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography>Ngày tạo </span>
+              </div>
+              <div nz-row>
+                <span nz-typography>
+                  {{
+                    ItemTicket
+                      ? ItemTicket.createdDate
+                        ? (ItemTicket.createdDate | dateText)
+                        : "-"
+                      : "-"
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="[10, 10]" class="mt-3">
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography class="mr-2">Tiêu đề </span>
+                <i
+                  nz-icon
+                  nzType="edit"
+                  class="mt-1"
+                  nzTheme="outline"
+                  nz-tooltip
+                  nzTooltipTitle="chỉnh sửa tiêu đề"
+                  style="color: #ee1a30"
+                  [nzTooltipColor]="'#EE1A30'"
+                  (click)="showEditTitle()"
+                ></i>
+              </div>
+              <div nz-row>
+                <span nz-typography>{{
+                  ItemTicket ? (ItemTicket.title ? ItemTicket.title : "-") : "-"
+                }}</span>
+              </div>
+            </div>
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography>Người đóng </span>
+              </div>
+              <div nz-row>
+                <span nz-typography> - </span>
+              </div>
+            </div>
+            <div nz-col nzSpan="8">
+              <div nz-row>
+                <span nz-typography>Ngày đóng </span>
+              </div>
+              <div nz-row>
+                <span nz-typography> - </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nz-divider></nz-divider>
+        <div class="history-detail mt-3">
+          <div nz-row>
+            <h5 nz-typography>Lịch sử giao việc</h5>
+          </div>
+          <div nz-row class="mt-3">
+            <ng-container *ngFor="let task of listOfTask; let i = index">
+              <nz-collapse nzAccordion style="width: 100%">
+                <nz-collapse-panel
+                  style="width: 100%"
+                  [nzHeader]="panelTitile"
+                  [nzActive]="false"
+                  (nzActiveChange)="activeCollapseChange($event, task.id)"
+                >
+                  <div>
+                    <div nz-row>
+                      <div nz-col nzSpan="3">
+                        <span nz-typography>Nội dung :</span>
+                      </div>
+                      <div nz-col nzSpan="12">
+                        <div nz-row>
+                          {{ task.title ? task.title : "Chưa có nội dung" }}
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="9" *ngIf="rateTask != null">
+                        <div nz-row>
+                          <div nz-col nzSpan="10">
+                            <span nz-typography>Người đánh giá :</span>
+                          </div>
+                          <div nz-col nzSpan="14">
+                            {{
+                              rateTask
+                                ? rateTask.rateBy
+                                  ? rateTask.rateBy.lastName
+                                    ? rateTask.rateBy.lastName.concat(
+                                        " ",
+                                        rateTask.rateBy.firstName
+                                      )
+                                    : rateTask.rateBy.firstName
+                                    ? rateTask.rateBy.firstName
+                                    : "-"
+                                  : "-"
+                                : "-"
+                            }}
+                          </div>
+                        </div>
+                        <div nz-row class="mt-3">
+                          <div nz-col nzSpan="10" class="mt-1">
+                            <span nz-typography>Đánh giá :</span>
+                          </div>
+                          <div nz-col nzSpan="14">
+                            <nz-rate
+                              [ngModel]="rateTask.rate"
+                              nzDisabled
+                            ></nz-rate>
+                            <i
+                              nz-icon
+                              nzType="edit"
+                              class="mt-2 ml-4"
+                              nzTheme="outline"
+                              nz-tooltip
+                              nzTooltipTitle="Chỉnh sửa đánh giá"
+                              style="color: #ee1a30"
+                              [nzTooltipColor]="'#EE1A30'"
+                              (click)="showRateTitle()"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div nz-col nzSpan="9" *ngIf="rateTask == null">
+                        <span nz-typography class="mr-5">Đánh giá :</span>
+                        <span nz-typography nzType="secondary"
+                          >Chưa có đánh giá</span
+                        >
+                        <i
+                          nz-icon
+                          nzType="edit"
+                          class="mt-2 ml-4"
+                          nzTheme="outline"
+                          nz-tooltip
+                          nzTooltipTitle="Đánh giá"
+                          style="color: #ee1a30"
+                          [nzTooltipColor]="'#EE1A30'"
+                          (click)="showRateTitle()"
+                        ></i>
+                      </div>
+                    </div>
+                    <div nz-row class="mt-3">
+                      <div nz-col nzSpan="3">
+                        <span nz-typography>Deadline :</span>
+                      </div>
+                      <div nz-col nzSpan="12">
+                        <span nz-typography>{{
+                          task.deadline ? (task.deadline | dateText) : "-"
+                        }}</span>
+                      </div>
+                    </div>
+                    <nz-divider></nz-divider>
+                    <!-- <div nz-row  [nzGutter]="[40,10]"> -->
+                    <div>
+                      <!-- nz-col nzSpan="12" -->
+                      <h5 nz-typography>Tệp đính kèm</h5>
+                      <div
+                        style="border: 1px solid #f2f2f2; border-radius: 10px"
+                      >
+                        <div style="width: 75%; margin: auto" class="my-5">
+                          <nz-spin [nzSpinning]="codeUploading">
+                            <nz-upload
+                              nzType="drag"
+                              [nzMultiple]="true"
+                              [nzBeforeUpload]="beforeUploadCode"
+                              [nzFileListRender]="listFile"
+                              nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            >
+                              <p class="ant-upload-drag-icon">
+                                <img width="45px" src="/assets/file.svg" />
+                              </p>
+                              <p class="ant-upload-text mx-5">
+                                Kéo thả file của bạn hoặc <a>chọn tệp tin</a>
+                              </p>
+                            </nz-upload>
+                          </nz-spin>
+                        </div>
+                      </div>
+                      <ng-template #listFile>
+                        <!-- <div class="mt-3" style=" display:flex; justify-content:space-between;width:40%; margin:auto;" *ngIf="filename!=null">
+                                  <div><span nz-typography>{{filename}}</span></div>
+                                  <div>
+                                    <i nz-icon nzType="save" nz-tooltip nzTooltipTitle="Lưu file"  nzTheme="outline" (click)="addFileTask(task.id)" class="mr-2" style="cursor: pointer;" *ngIf="filename!=''"></i>
+                                    <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa file" nzTheme="outline"  style="cursor: pointer;" (click)="removeFile()" *ngIf="filename!=''"></i>
+                                  </div>
+                                </div>
+                                 -->
+                        <ng-container
+                          *ngIf="fileCodeList && fileCodeList.length > 0"
+                        >
+                          <ul
+                            class="mt-1"
+                            nz-list
+                            [nzDataSource]="fileCodeList"
+                            nzSize="small"
+                          >
+                            <li
+                              nz-list-item
+                              *ngFor="let item of fileCodeList"
+                              nzNoFlex
+                            >
+                              {{ item.name }}
+                              <ul nz-list-item-actions>
+                                <nz-list-item-action>
+                                  <a (click)="removeFile(item.uid)">
+                                    <i
+                                      nz-icon
+                                      nzType="delete"
+                                      nzTheme="outline"
+                                      class="text-danger"
+                                    ></i>
+                                  </a>
+                                </nz-list-item-action>
+                              </ul>
+                            </li>
+                          </ul>
+                        </ng-container>
+                        <div
+                          style="display: flex; justify-content: center"
+                          class="mb-3"
+                        >
+                          <button
+                            *ngIf="fileCodeList.length > 0"
+                            nz-button
+                            nzType="primary"
+                            nzGhost
+                            class="mr-2"
+                            (click)="addFileTask(task.id)"
+                          >
+                            <i
+                              nz-icon
+                              nzType="save"
+                              nzTheme="outline"
+                              class="mr-2"
+                            ></i>
+                            Lưu File
+                          </button>
+                        </div>
+                      </ng-template>
+                      <div nz-row class="mt-3" *ngIf="!showFile">
+                        <a (click)="showfileTask(task.id)" style="margin: auto"
+                          ><u class="ml-3"
+                            >Danh sách file đính kèm đã lưu
+                            <i
+                              nz-icon
+                              nzType="double-right"
+                              nzTheme="outline"
+                            ></i></u
+                        ></a>
+                      </div>
+                    </div>
+                    <div *ngIf="showFile" class="mt-3 ml-3">
+                      <!-- nz-col nzSpan="12" -->
+
+                      <span nz-typography class="text-bold"
+                        ><a (click)="hiddenfileTask()" class="mr-2"
+                          ><i
+                            nz-icon
+                            nzType="double-left"
+                            nzTheme="outline"
+                          ></i></a
+                        >Danh sách file đính kèm</span
+                      >
+                      <div
+                        class="mt-3"
+                        *ngIf="
+                          listOfFileTask && listOfFileTask.length > 0;
+                          else nodata
+                        "
+                      >
+                        <nz-table #basicTable [nzData]="listOfFileTask">
+                          <thead>
+                            <tr>
+                              <th>STT</th>
+                              <th>Tên File</th>
+                              <th>Dung lượng</th>
+                              <th>Thời gian tạo</th>
+                              <!--  <th>Hành động</th> -->
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="
+                                let data of basicTable.data;
+                                let i = index
+                              "
+                            >
+                              <td>{{ i + 1 }}</td>
+                              <td>
+                                <a
+                                  href="{{ data.downloadUrl }}"
+                                  download="{{ data.fileName }}"
+                                  >{{ data.fileName ? data.fileName : "-" }}</a
+                                >
+                              </td>
+                              <td>{{ data.fileSize ? data.fileSize : "-" }}</td>
+                              <td>
+                                {{
+                                  data.timestamp
+                                    ? (data.timestamp | dateText)
+                                    : "-"
+                                }}
+                              </td>
+                              <!--  <td>
+                                      <button nz-button> <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa file" nzTheme="outline"  style="cursor: pointer;" *ngIf="filename!=''"></i>
+                                      </button>
+                                    </td> -->
+                            </tr>
+                          </tbody>
+                        </nz-table>
+                      </div>
+                      <ng-template #nodata>
+                        <div>
+                          <span class="ml-5" nz-typography
+                            >(Danh sách trống)</span
+                          >
+                        </div>
+                      </ng-template>
+                    </div>
+                    <!--  <nz-divider *ngIf="showFile" ></nz-divider> -->
+                    <div class="mt-5">
+                      <!-- nz-col nzSpan="12" -->
+                      <div nz-row>
+                        <span nz-typography class="text-bold">Ghi chú :</span>
+                      </div>
+                      <div nz-row>
+                        <p nz-typography>
+                          {{
+                            task.description
+                              ? task.description
+                              : "(Chưa có ghi chú)"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- </div> -->
+                  </div>
+                </nz-collapse-panel>
+              </nz-collapse>
+              <ng-template #panelTitile>
+                <div style="display: inline">
+                  <span class="mr-4">{{ task.type | taskType }}</span>
+                  <span>
+                    {{
+                      task.assignee.lastName
+                        ? task.assignee.lastName.concat(
+                            " ",
+                            task.assignee.firstName
+                          )
+                        : task.assignee.firstName
+                        ? task.assignee.firstName
+                        : "-"
+                    }}
+                  </span>
+                  <span
+                    style="float: right"
+                    [ngStyle]="{
+                      padding: i == 0 ? '0px' : '4px',
+                      'margin-right':
+                        i == 0
+                          ? '0px'
+                          : listOfTask[0].status == 1
+                          ? '40px'
+                          : '40px'
+                    }"
+                  >
+                    <nz-tag
+                      class="mr-5 ml-5 header-title"
+                      [nzColor]="task.status | taskStatusColor"
+                      >{{ task.status | taskStatus }}</nz-tag
+                    >
+                    <span nz-typography class="mr-5 ml-5 header-title">{{
+                      task.createdDate | dateText
+                    }}</span>
+                    <ng-container *ngIf="i == 0">
+                      <button
+                        *ngIf="task.status == 1 && buttonMore == true"
+                        (mouseover)="changeAction()"
+                        nz-button
+                        nz-tooltip
+                        nzTooltipTitle="Mở rộng"
+                        nzType="default"
+                        nzShape="circle"
+                        class="mr-2"
+                      >
+                        <i nz-icon nzType="more" nzTheme="outline"></i>
+                      </button>
+                      <button
+                        *ngIf="task.status == 2 || task.status == 3"
+                        nz-button
+                        nz-tooltip
+                        nzTooltipTitle="Chuyển tiếp"
+                        (click)="createContent(task)"
+                        nzType="default"
+                        nzShape="circle"
+                        class="mr-2"
+                      >
+                        <i nz-icon nzType="forward" nzTheme="outline"></i>
+                      </button>
+                      <ng-container *ngIf="changeButton">
+                        <div
+                          style="display: inline"
+                          (mouseleave)="hiddenAction()"
+                        >
+                          <button
+                            nz-button
+                            nz-tooltip
+                            nzTooltipTitle="Chỉnh sửa"
+                            (click)="editContent(task)"
+                            nzType="default"
+                            nzShape="circle"
+                            class="mr-2"
+                          >
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                          </button>
+                          <button
+                            nz-button
+                            nz-tooltip
+                            nzTooltipTitle="Hoàn thành"
+                            (click)="comFor(task)"
+                            nzType="default"
+                            nzShape="circle"
+                            class="mr-2"
+                          >
+                            <i
+                              nz-icon
+                              nzType="check-circle"
+                              nzTheme="outline"
+                            ></i>
+                          </button>
+                          <button
+                            nz-button
+                            nz-tooltip
+                            nzTooltipTitle="Hủy"
+                            (click)="canFor(task)"
+                            nzType="default"
+                            nzShape="circle"
+                          >
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                          </button>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </span>
+                </div>
+              </ng-template>
+            </ng-container>
+          </div>
+        </div>
+      </nz-content>
+      <nz-sider
+        *ngIf="showAttachFile"
+        class="ml-5 mt-5 px-5 py-3"
+        nzWidth="350px"
+      >
+        <h4 nz-typography>File đính kèm</h4>
+        <div class="mt-3">
+          <div nz-row>
+            <h5 nz-typography>Mới tải gần đây</h5>
+          </div>
+          <div class="mt-3" style="border-bottom: 2px solid #fff">
+            <div nz-row class="mb-3" *ngFor="let fileAttach of listOfFile">
+              <div nz-col nzSpan="6">
+                <a
+                  href="{{ fileAttach.downloadUrl }}"
+                  download="{{ fileAttach.fileName }}"
+                  ><img src="/assets/file.svg" height="36"
+                /></a>
+              </div>
+              <div nz-col nzSpan="18">
+                <div nz-row>
+                  <span nz-typography class="text-bold">{{
+                    fileAttach.fileName ? fileAttach.fileName : "-"
+                  }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span nz-typography>
+                    {{ fileAttach.fileSize ? fileAttach.fileSize : "-" }}</span
+                  >
+                  <span nz-typography>
+                    {{
+                      fileAttach.timestamp
+                        ? (fileAttach.timestamp | dateFile)
+                        : "-"
+                    }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nz-sider>
+    </nz-layout>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="editTitle"
+  [nzClosable]="false"
+  nzTitle="Chỉnh sửa tiêu đề"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="editTitleForm"
+      (ngSubmit)="submitTitle()"
+      [nzLayout]="'vertical'"
+      class="px-3"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="title" nzRequired>
+          <span>Tiêu đề</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập tiêu đề!"
+        >
+          <input
+            nz-input
+            class="pl-3"
+            id="title"
+            formControlName="title"
+            placeholder="Nhập tiêu đề"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitTitle()"
+      [nzLoading]="editSubmitting"
+      class="m-2"
+    >
+      Cập nhật
+    </button>
+    <button nz-button nzType="default" (click)="cancelTitle()">Hủy</button>
+  </div>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="openRate"
+  [nzClosable]="false"
+  [nzTitle]="editRate ? 'Chỉnh sửa đánh giá' : 'Tạo đánh giá'"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="editRateForm"
+      (ngSubmit)="submitRate()"
+      [nzLayout]="'vertical'"
+      class="px-5"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="stars" nzRequired>
+          <span>Đánh giá</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn người đánh giá!"
+        >
+          <nz-rate formControlName="stars"></nz-rate>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="rater" nzRequired>
+          <span>Nhận xét </span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng chọn người đánh giá!"
+        >
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="description"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitRate()"
+      [nzLoading]="editRateSubmitting"
+      class="m-2"
+    >
+      {{ editRate ? "Chỉnh sửa đánh giá" : "Tạo đánh giá" }}
+    </button>
+    <button nz-button nzType="default" (click)="cancelRate()">Hủy</button>
+  </div>
+</nz-modal>

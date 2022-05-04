@@ -1,0 +1,48 @@
+<cms-page title="{{ lstDataDetail ? lstDataDetail.id : '-' }} / Phiếu {{
+    (lstDataDetail ? lstDataDetail.type : null) | billname
+  }}" [close]="true">
+  <div action>
+    <button *ngIf="lstDataDetail" [disabled]="lstDataDetail && lstDataDetail.type === billsType.XUATKHO" nz-button
+      nzType="primary" class="mr-3" (click)="showModal(true)">
+      <i nz-icon nzType="printer" nzTheme="outline"></i><span class="d-none d-md-inline-block">In phiếu nhập</span>
+    </button>
+    <button *ngIf="lstDataDetail" [disabled]="
+        lstDataDetail &&
+        (lstDataDetail.type === billsType.NHAPKHO ||
+          lstDataDetail.type === billsType.HOANKHO)
+      " nz-button nzType="primary" class="mr-3" (click)="showModal(false)">
+      <i nz-icon nzType="printer" nzTheme="outline"></i><span class="d-none d-md-inline-block">In phiếu xuất</span>
+    </button>
+  </div>
+  <div content>
+    <div nz-row class="my-2 p-0 p-lg-4">
+      <div nz-col nzXs="24">
+        <cms-detail [iData]="lstDataDetail"></cms-detail>
+      </div>
+      <nz-tabset nz-col nzXs="24" [nzSelectedIndex]="tabSelected">
+        <nz-tab nzTitle="Danh Sách" (nzSelect)="selectTab(1)">
+          <cms-listing [iData]="lstData"></cms-listing>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+</cms-page>
+<nz-modal [(nzVisible)]="isVisibleModal" nzCentered [nzFooter]="modalFooter" (nzOnCancel)="onCancelModal()">
+  <ng-container *nzModalContent>
+    <ng-container *ngIf="isImportDevice; else exportModal">
+      <cms-dialog-import-device-modal [id]="'importDevice'" [lstData]="lstData" [iData]="lstDataDetail">
+      </cms-dialog-import-device-modal>
+    </ng-container>
+    <ng-template #exportModal>
+      <cms-dialog-export-device-modal [id]="'exportDevice'" [lstData]="lstData" [iData]="lstDataDetail">
+      </cms-dialog-export-device-modal>
+    </ng-template>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="onCancelModal()">Hủy</button>
+    <button [printSectionId]="isImportDevice ? 'importDevice' : 'exportDevice'" ngxPrint [useExistingCss]="true"
+      nz-button nzType="primary" (click)="onOkModal()">
+      In phiếu
+    </button>
+  </ng-template>
+</nz-modal>

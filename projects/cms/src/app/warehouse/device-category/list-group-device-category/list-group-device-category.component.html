@@ -1,0 +1,50 @@
+<nz-table
+  #basicTable
+  [nzData]="listOfData"
+  [nzFooter]="footer"
+  [nzFrontPagination]="false"
+  [nzPageSize]="size"
+  [nzPageIndex]="page"
+  [nzTotal]="total"
+  (nzPageIndexChange)="pageChange($event)"
+>
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Mã thiết bị</th>
+      <th>Tên nhóm thiết bị</th>
+      <th>Ghi chú</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.id }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.note }}</td>
+      <td>
+        <button
+          nz-button
+          nzType="text"
+          class="mr-1"
+          title="Sửa"
+          (click)="editCategoryGroup(data)"
+        >
+          <i nz-icon nzType="edit" nzTheme="outline"></i>
+        </button>
+        <button
+          nz-button
+          nzType="text"
+          title="Xóa"
+          (click)="deleteCategoryGroup(data)"
+        >
+          <i nz-icon nzType="delete" nzTheme="outline" class="text-danger"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <ng-template #footer>
+    <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+  </ng-template>
+</nz-table>

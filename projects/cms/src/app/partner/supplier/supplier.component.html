@@ -1,0 +1,310 @@
+<cms-page title="Quản lý Supplier" [close]="false">
+  <div action>
+    <button nz-button nzType="primary" (click)="creatSupplier()">
+      <i nz-icon nzType="plus" nzTheme="outline"></i> Tạo mới
+    </button>
+  </div>
+  <div content>
+    <div nz-row class="mt-9 mb-5" [nzGutter]="[20, 20]">
+      <div nz-col nzSpan="4">
+        <nz-input-group [nzPrefix]="prefixIconSearch">
+          <input
+            type="text"
+            (ngModel)="(code)"
+            (keyup.enter)="search()"
+            nz-input
+            placeholder="Mã supplier"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-input-group [nzPrefix]="prefixIconStore">
+          <input
+            type="text"
+            [(ngModel)]="name"
+            (keyup.enter)="search()"
+            nz-input
+            placeholder="Tên supplier"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconStore>
+          <i nz-icon nzType="appstore" nzTheme="outline"></i>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-input-group [nzPrefix]="prefixIconEmail">
+          <input
+            type="text"
+            nz-input
+            [(ngModel)]="email"
+            (keyup.enter)="search()"
+            placeholder="Email"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconEmail>
+          <i nz-icon nzType="mail" nzTheme="outline"></i>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-input-group [nzPrefix]="prefixIconPhone">
+          <input
+            type="text"
+            nz-input
+            [(ngModel)]="phone"
+            (keyup.enter)="search()"
+            placeholder="SDT"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconPhone>
+          <i nz-icon nzType="phone" nzTheme="outline"></i>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="4">
+        <button nz-button nzType="primary" (click)="search()">
+          <i nz-icon nzType="search"></i> Tìm Kiếm
+        </button>
+      </div>
+    </div>
+    <div>
+      <nz-table
+        [nzData]="listOfData"
+        [nzFrontPagination]="false"
+        [nzPageSize]="size"
+        [nzPageIndex]="page"
+        [nzTotal]="total"
+        [nzFooter]="footer"
+        (nzPageSizeChange)="changeSize($event)"
+        (nzPageIndexChange)="changePage($event)"
+      >
+        <thead>
+          <tr>
+            <th>Mã supplier</th>
+            <th>Tên supplier</th>
+            <th>Email</th>
+            <th>SDT</th>
+            <th>Địa chỉ</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of listOfData">
+            <td>
+              <a href="#">{{ data.code ? data.code : "-" }}</a>
+            </td>
+            <td>{{ data.name ? data.name : "-" }}</td>
+            <td>{{ data.email ? data.email : "-" }}</td>
+            <td>{{ data.phoneNumber ? data.phoneNumber : "-" }}</td>
+            <td>{{ data.address ? data.address : "-" }}</td>
+            <td>
+              <nz-tag [nzColor]="data.status == 1 ? 'green' : 'red'">{{
+                data.status == 1 ? "Active" : "Inactive"
+              }}</nz-tag>
+            </td>
+            <td>
+              <button
+                nz-button
+                nzType="text"
+                class="mr-1"
+                title="Sửa"
+                (click)="editSupplier(data)"
+              >
+                <i nz-icon nzType="edit" nzTheme="outline"></i>
+              </button>
+              <button
+                nz-button
+                nzType="text"
+                title="Xóa"
+                (click)="deleteSupplier(data)"
+              >
+                <i
+                  nz-icon
+                  nzType="delete"
+                  nzTheme="outline"
+                  class="text-danger"
+                ></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <ng-template #footer>
+          <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+        </ng-template>
+      </nz-table>
+    </div>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showCreateSupplier"
+  [nzClosable]="false"
+  [nzTitle]="!editModal ? 'Tạo Supplier mới' : 'Chỉnh sửa Supplier'"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="createFormSupplier"
+      (ngSubmit)="submitCreateSupplier()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="codeSupplier" nzRequired
+          >Mã Supplier</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để tên Supplier!"
+        >
+          <input
+            nz-input
+            formControlName="codeSupplier"
+            id="codeSupplier"
+            placeholder="nhập mã Supplier"
+            (blur)="checkDupplicate()"
+          />
+          <div class="alert-danger" [hidden]="!dupplicate">
+            Mã Supplier đã tồn tại!
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nameSupplier" nzRequired
+          >Tên Supplier</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để tên Supplier!"
+        >
+          <input
+            nz-input
+            formControlName="nameSupplier"
+            id="nameSupplier"
+            placeholder="nhập tên Supplier"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired
+          >Email</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            id="email"
+            formControlName="email"
+            placeholder="nhập email"
+          />
+          <div
+            *ngIf="
+              !createFormSupplier.controls.email?.valid &&
+              (createFormSupplier.controls.email?.dirty ||
+                createFormSupplier.controls.email?.touched)
+            "
+          >
+            <div
+              class="alert-danger"
+              [hidden]="!createFormSupplier.controls.email.errors.required"
+            >
+              Không được để trống email!
+            </div>
+            <div
+              class="alert-danger"
+              [hidden]="!createFormSupplier.controls.email.errors.email"
+            >
+              Không đúng định dạng email!
+            </div>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone" nzRequired
+          >SDT</nz-form-label
+        >
+        <nz-form-control [nzSm]="10" [nzXs]="24" class="mr-5">
+          <input
+            nz-input
+            id="phone"
+            formControlName="phone"
+            placeholder="nhập số điện thoại"
+          />
+          <div
+            *ngIf="
+              !createFormSupplier.controls.phone?.valid &&
+              (createFormSupplier.controls.phone?.dirty ||
+                createFormSupplier.controls.phone?.touched)
+            "
+          >
+            <div
+              class="alert-danger"
+              [hidden]="!createFormSupplier.controls.phone.errors.required"
+            >
+              Không được để trống số điện thoại !
+            </div>
+            <div
+              class="alert-danger"
+              [hidden]="!createFormSupplier.controls.phone.errors.pattern"
+            >
+              Không đúng định dạng số điện thoại!
+            </div>
+          </div>
+        </nz-form-control>
+        <nz-form-control [nzSm]="2" [nzXs]="24">
+          <label nz-checkbox formControlName="status">Active</label>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="address" nzRequired
+          >Địa chỉ</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống địa chỉ !"
+        >
+          <input
+            nz-input
+            id="address"
+            formControlName="address"
+            placeholder="nhập địa chỉ"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="note"
+          >Ghi chú</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống ghi chú!"
+        >
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="note"
+              placeholder="Ghi chú"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitCreateSupplier()"
+      class="m-2"
+    >
+      Lưu
+    </button>
+    <button nz-button nzType="default" (click)="cancelCreateSupplier()">
+      Hủy
+    </button>
+  </div>
+</nz-modal>

@@ -1,0 +1,211 @@
+<div class="header-wr">
+  <div nz-row>
+    <div nz-col nzXs="12" nzSm="10" nzMd="8" nzLg="8" nzXl="6" nzXXl="6">
+      <span class="bread_menu mr-2">
+        <button nz-button nzType="text" (click)="tonggleMenu()">
+          <i nz-icon nzType="menu" nzTheme="outline" style="color: #223b55"></i>
+        </button>
+      </span>
+      <span class="logo" (click)="gotohome()">
+        <img src="/assets/logo.svg" />
+      </span>
+    </div>
+    <div
+      nz-col
+      nzXs="2"
+      nzSm="6"
+      nzMd="8"
+      nzLg="10"
+      nzXl="13"
+      nzXXl="14"
+      class="text-right"
+    >
+      <div nz-row>
+        <div nz-col nzXs="12">
+          <div class="input-search">
+            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
+              <input
+                id="inputSearch"
+                placeholder="Tìm kiếm"
+                nz-input
+                [(ngModel)]="inputValue"
+                (ngModelChange)="onChange($event)"
+                [nzAutocomplete]="auto"
+                (focus)="onFocusEvent($event)"
+              />
+            </nz-input-group>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+              <nz-auto-optgroup
+                *ngFor="let group of filteredOptions"
+                [nzLabel]="groupTitle"
+              >
+                <ng-template #groupTitle>
+                  <h5 class="mt-2" nz-typography>
+                    {{ group.title }}
+                  </h5>
+                </ng-template>
+                <nz-auto-option
+                  [nzValue]="inputmenu"
+                  [nzLabel]="labelmenu"
+                  *ngIf="group.title === 'Menu'; else noMenu"
+                >
+                  <nz-tag
+                    class="tag-menu py-2 px-2"
+                    *ngFor="let option of group.resultSearch ;let i=index"
+                    (click)="directionalSearchMenu(option)"
+                    nzColor="processing"
+                    ><span style="font-size: 14px" >{{
+                      option.title
+                    }}</span></nz-tag
+                  >
+                </nz-auto-option>
+                <ng-template #noMenu>
+                  <nz-auto-option
+                    *ngFor="let option of group.resultSearch;let x=index"
+                    (click)="
+                      directionalSearchNoMenu(group.routerLink, option)
+                    "
+                    [nzLabel]="option.code?(option.tilte?option.code.concat(' - ',option.tilte):option.code):(option.ma_van_don?option.ma_van_don:(option.title?option.title:''))"
+                    [nzValue]="option.code?(option.tilte?option.code.concat(' - ',option.tilte):option.code):(option.ma_van_don?option.ma_van_don:(option.title?option.title:''))"
+                    >
+                    {{ option.code?(option.tilte?option.code.concat(' - ',option.tilte):option.code):(option.ma_van_don?option.ma_van_don:(option.title?option.title:'')) }}
+                  </nz-auto-option>
+                </ng-template>
+              </nz-auto-optgroup>
+            </nz-autocomplete>
+          </div>
+        </div>
+        <div nz-col nzXs="12">
+          <button
+            *ngIf="countpermission > 0"
+            nz-button
+            nzType="primary"
+            nz-dropdown
+            [nzDropdownMenu]="menu2"
+            class="quick-menu"
+          >
+            <i nz-icon nzType="thunderbolt" nzTheme="outline"></i
+            ><span class="d-none d-md-inline-block">Khởi Tạo Nhanh</span>
+          </button>
+          <nz-dropdown-menu #menu2="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <ng-container *ngFor="let data of ListStartFast">
+                <ng-container *ngxPermissionsOnly="data.permission">
+                  <li
+                    nz-menu-item
+                    (click)="startfast(data.routerLink, data.modal)"
+                  >
+                    <ng-container *ngIf="data.icon; else noicon">
+                      <i
+                        nz-icon
+                        [nzType]="data.iconText"
+                        nzTheme="outline"
+                        class="mr-3"
+                      ></i
+                      >{{ data.title }}
+                    </ng-container>
+                    <ng-template #noicon>
+                      <img
+                        style="width: 16px; height: 16px"
+                        class="mr-3"
+                        src="{{ data.iconText }}"
+                      />{{ data.title }}
+                    </ng-template>
+                  </li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+    </div>
+    <div
+      nz-col
+      nzXs="10"
+      nzSm="8"
+      nzMd="8"
+      nzLg="6"
+      nzXl="5"
+      nzXXl="4"
+      class="text-right"
+    >
+      <button nz-button nzType="text" class="mr-1" title="Trợ giúp">
+        <i nz-icon nzType="question-circle" nzTheme="outline"></i>
+      </button>
+      <button nz-button nzType="text" class="mr-3" title="Thông báo">
+        <i nz-icon nzType="bell" nzTheme="outline"></i>
+      </button>
+      <button
+        *ngIf="currentUser"
+        nz-button
+        nz-dropdown
+        [nzDropdownMenu]="menu"
+        class="avatar-menu"
+      >
+        <nz-avatar
+          *ngIf="currentUser.imageUrl"
+          nzIcon="user"
+          [nzSrc]="currentUser.imageUrl"
+          [nzSize]="26"
+          class="user-avatar"
+        ></nz-avatar>
+        <nz-avatar
+          *ngIf="!currentUser.imageUrl"
+          [nzText]="miniAvatarStr"
+          [nzSize]="26"
+          class="user-avatar"
+          style="background-color: #87d068"
+        ></nz-avatar>
+        <span class="username d-none d-md-inline-block">{{
+          currentUser.lastName + " " + currentUser.firstName
+            | nzEllipsis: 13:"..."
+        }}</span>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li *ngIf="currentUser" vnpt-menu-item>
+            <div class="user-info px-3 py-1">
+              <nz-avatar
+                *ngIf="currentUser.imageUrl"
+                [nzSize]="56"
+                class="menu-avatar"
+                [nzSrc]="currentUser.imageUrl"
+              ></nz-avatar>
+              <nz-avatar
+                *ngIf="!currentUser.imageUrl"
+                [nzSize]="56"
+                class="menu-avatar-text"
+                nzIcon="user"
+                style="background-color: #87d068"
+              ></nz-avatar>
+              <div>
+                <h5 nz-typography class="truncate">
+                  {{ currentUser.lastName + " " + currentUser.firstName }}
+                </h5>
+                <span nz-typography vType="secondary" class="email">{{
+                  currentUser.authorities[0]
+                }}</span>
+              </div>
+            </div>
+          </li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item class="py-3" (click)="changePassword()">
+            <span class="px-3"
+              ><i nz-icon nzType="setting" nzTheme="outline" class="mr-3"></i
+              >Đổi mật khẩu</span
+            >
+          </li>
+          <li nz-menu-item class="py-3" (click)="logout()">
+            <span class="px-3"
+              ><i nz-icon nzType="logout" nzTheme="outline" class="mr-3"></i
+              >Đăng xuất</span
+            >
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+</div>

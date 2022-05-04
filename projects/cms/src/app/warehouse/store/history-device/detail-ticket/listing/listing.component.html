@@ -1,0 +1,36 @@
+<nz-table #table [nzData]="iData" (nzPageIndexChange)="onPageChange($event)" [nzScroll]="{ y: '100%' }">
+  <thead>
+    <tr>
+      <th>stt</th>
+      <th>Mã thiết bị</th>
+      <th>Locker</th>
+      <th>Mã lô</th>
+      <th>Danh mục</th>
+      <th>Nhóm</th>
+      <th>Màu</th>
+      <th>Trọng lượng</th>
+      <th>Kích thước</th>
+      <th>Đơn giá</th>
+      <th>Serial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of table.data; let i = index">
+      <td>{{ data.no}}</td>
+      <td>{{ data.id }}</td>
+      <td class="text-bold">{{ data.bill.lockerId }}</td>
+      <td>{{ data.batchNumber }}</td>
+      <td>
+        <span *ngIf="data.model">{{ data.model.name }}</span>
+      </td>
+      <td>
+        <span *ngIf="data.warehouse">{{ data.warehouse.name }}</span>
+      </td>
+      <td>{{ data.color }}</td>
+      <td>{{ data.weight }}</td>
+      <td>{{ data.dimension }}</td>
+      <td>{{ data.price }}</td>
+      <td>{{ data.serial }}</td>
+    </tr>
+  </tbody>
+</nz-table>

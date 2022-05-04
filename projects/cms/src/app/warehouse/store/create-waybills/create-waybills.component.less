@@ -1,0 +1,58 @@
+.alert-danger {
+  color: #b11226;
+}
+.width-full {
+  width: 100%;
+}
+nz-divider {
+  margin: 4px 0;
+}
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 8px;
+  .add-locker {
+    color: #ee1a30;
+    font-size: 13px;
+    font-weight: 500;
+    &:hover {
+      color: #f01229;
+    }
+  }
+}
+.tb-header {
+  position: relative;
+  .require {
+    color: #ee1a30;
+  }
+}
+.add-form-array {
+  color: #ee1a30;
+  font-size: 13px;
+  font-weight: 500;
+  &:hover {
+    color: #f01229;
+  }
+}
+.btn-delete {
+  width: 100%;
+  text-align: center;
+  button {
+    &:hover {
+      .text-danger {
+        color: aliceblue !important;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .ant-radio-wrapper {
+    align-items: center;
+  }
+  .required {
+    .ant-select-selector {
+      border: 1px solid #b11226 !important;
+    }
+  }
+}

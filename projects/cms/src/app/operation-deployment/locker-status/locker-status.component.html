@@ -1,0 +1,361 @@
+<cms-page [title]="'Danh sách SmartLocker'" [close]="false">
+  <div action>
+    <button
+      *ngxPermissionsOnly="['lockers:creating']"
+      nz-button
+      nzType="primary"
+      (click)="createLockerCabinet()"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i> Tạo mới locker
+    </button>
+  </div>
+  <div content>
+    <div class="row-search mt-2" nz-row [nzGutter]="[16, 5]">
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="5"
+      >
+        <nz-input-group
+          class="width-full"
+          [nzPrefix]="prefixIconSearch"
+          [nzSuffix]="inputClearTpl"
+        >
+          <input
+            type="text"
+            nz-input
+            placeholder="Nhập mã locker"
+            [(ngModel)]="codeSearch"
+            (keyup.enter)="searchCode()"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconSearch>
+          <i nz-icon nzType="search" (click)="searchCode()"></i>
+        </ng-template>
+        <ng-template #inputClearTpl>
+          <i
+            nz-icon
+            class="ant-input-clear-icon"
+            nzTheme="fill"
+            nzType="close-circle"
+            *ngIf="codeSearch"
+            (click)="codeSearch = ''; searchCode()"
+          ></i>
+        </ng-template>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="provinceId"
+          nzPlaceHolder="Chọn tỉnh"
+          nzAllowClear
+          (ngModelChange)="provinceChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfProvince"
+            [nzValue]="o.maTinh"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="distId"
+          nzPlaceHolder="Chọn quận/huyện"
+          nzAllowClear
+          (ngModelChange)="distChange($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfDist"
+            [nzValue]="o.id"
+            [nzLabel]="o.tenQuanHuyen"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="wardId"
+          nzPlaceHolder="Chọn phường/xã"
+          nzAllowClear
+          (ngModelChange)="wardChange($event)"
+        >
+          <nz-option
+            class="width-full"
+            *ngFor="let o of listOfWard"
+            [nzValue]="o.id"
+            [nzLabel]="o.name"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="4"
+        nzXXl="4"
+      >
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          [ngModel]="postId"
+          (nzScrollToBottom)="loadMore()"
+          [nzDropdownRender]="renderTemplate"
+          [nzDropdownRender]="renderTemplate"
+          nzPlaceHolder="Chọn bưu cục"
+          nzAllowClear
+          (ngModelChange)="searchPost($event)"
+        >
+          <nz-option
+            *ngFor="let o of listOfPost"
+            [nzValue]="o.id"
+            [nzLabel]="o.name"
+          ></nz-option>
+          <ng-template #renderTemplate>
+            <nz-spin *ngIf="isLoadingScroll"></nz-spin>
+          </ng-template>
+        </nz-select>
+      </div>
+      <div
+        nz-col
+        class="mt-3"
+        nzXs="12"
+        nzSm="8"
+        nzMd="8"
+        nzLg="8"
+        nzXl="2"
+        nzXXl="2"
+      >
+        <button nz-button nzType="primary" (click)="searchCode()">
+          Tìm kiếm
+        </button>
+      </div>
+    </div>
+    <div class="table-main mt-6">
+      <nz-table
+        #basicTable
+        [nzData]="listOfData"
+        [nzFooter]="footer"
+        [nzFrontPagination]="false"
+        [nzPageSize]="size"
+        [nzPageIndex]="page"
+        [nzTotal]="total"
+        (nzPageIndexChange)="pageChange($event)"
+      >
+        <thead>
+          <tr>
+            <th>Trạng thái</th>
+            <th>Mã Locker</th>
+            <th>Tên hiển thị</th>
+            <th>Bưu cục</th>
+            <th>Mã bí mật</th>
+            <th>Nhóm Locker</th>
+            <th>Supplier</th>
+            <th>Địa chỉ</th>
+            <th>Lat - Long</th>
+            <th nzWidth="100px">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>
+              <div *ngIf="data.status === null" class="text-center">-</div>
+              <nz-tag *ngIf="data.status === 1" [nzColor]="'green'"
+                >ONLINE</nz-tag
+              >
+              <nz-tag *ngIf="data.status === 0" [nzColor]="''">OFFLINE</nz-tag>
+              <nz-tag *ngIf="data.status === 2" [nzColor]="'red'">ERROR</nz-tag>
+              <nz-tag *ngIf="data.status === 4" [nzColor]="'#808080'"
+                >LOCKED</nz-tag
+              >
+              <nz-tag *ngIf="data.status === 3" [nzColor]="'gold'">FULL</nz-tag>
+            </td>
+            <td>
+              <a class="text-bold mr-2" routerLink="detail/{{ data.id }}">{{
+                data.code
+              }}</a>
+              <i
+                nz-icon
+                nzType="copy"
+                style="cursor: pointer"
+                nzTheme="outline"
+                (click)="coppySecretCode(data)"
+                nzTooltipTitle="copy"
+                nzTooltipPlacement="topLeft"
+                nz-tooltip
+              ></i>
+            </td>
+            <td>
+              <a class="text-bold" routerLink="detail/{{ data.id }}">{{
+                data.title
+              }}</a>
+            </td>
+            <td>{{ data.buuCuc ? data.buuCuc.maBuuCuc : "-" }}</td>
+            <td>
+              <span class="mr-4">*******</span>
+              <i
+                nz-icon
+                nzType="copy"
+                style="cursor: pointer"
+                nzTheme="outline"
+                (click)="coppySecret(data.secret)"
+                nzTooltipTitle="copy"
+                nzTooltipPlacement="topLeft"
+                nz-tooltip
+              ></i>
+            </td>
+            <td>{{ data.category ? data.category.name : "-" }}</td>
+            <td>{{ data.supplier ? data.supplier.name : "-" }}</td>
+            <td>
+              {{
+                data.address
+                  ? data.address.detail
+                    ? data.address.detail.concat(
+                        ", ",
+                        data.address.vtpPhuongXa.name|uppercaseFirstString,
+                        ", ",
+                        data.address.vtpPhuongXa.quanHuyen.tenQuanHuyen|uppercaseFirstString,
+                        ", ",
+                        data.address.vtpPhuongXa.quanHuyen.tinh.name|uppercaseFirstString
+                      )
+                    : "-"
+                  : "-"
+              }}
+            </td>
+            <td>
+              <span *ngIf="data.latitude && data.longitude"
+                ><i
+                  nz-icon
+                  nzType="copy"
+                  style="cursor: pointer"
+                  nzTheme="outline"
+                  (click)="copyLatLong(data.latitude, data.longitude)"
+                  nzTooltipTitle="copy"
+                  nzTooltipPlacement="topLeft"
+                  nz-tooltip
+                ></i
+              ></span>
+              <span nz-typography *ngIf="!data.latitude || !data.longitude"
+                >Chưa có
+              </span>
+              <span
+                class="ml-4"
+                style="cursor: pointer"
+                (click)="editLocationModal(data)"
+                ><i
+                  style="color: #ee1a30"
+                  nz-icon
+                  nzType="edit"
+                  nzTheme="outline"
+                ></i
+              ></span>
+            </td>
+            <td>
+              <i
+                nz-dropdown
+                [nzDropdownMenu]="menu"
+                nz-icon
+                nzType="more"
+                nzTheme="outline"
+              ></i>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item routerLink="edit/{{ data.id }}">
+                    <i nz-icon nzType="edit" nzTheme="outline" class="mr-2"></i
+                    >Chỉnh sửa
+                  </li>
+                  <li nz-menu-item routerLink="detail/{{ data.id }}">
+                    <i nz-icon nzType="read" nzTheme="outline" class="mr-2"></i
+                    >Chi tiết
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+        </tbody>
+        <ng-template #footer>
+          <span *ngIf="total">Tổng {{ total }} bản ghi</span>
+        </ng-template>
+      </nz-table>
+    </div>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="showEditLocation"
+  [nzClosable]="false"
+  nzTitle="Chỉnh sửa Latt - Long"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="editLocation"
+      (ngSubmit)="submitLocation()"
+      [nzLayout]="'vertical'"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="22" [nzXs]="24" nzFor="lattlong" nzRequired>
+          <span>Tọa độ</span>
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="24"
+          [nzXs]="24"
+          nzErrorTip="Vui lòng nhập đúng định dạng tọa độ!"
+        >
+          <input
+            nz-input
+            id="lattlong"
+            formControlName="lattlong"
+            placeholder="Ex: 21.009009610216186, 105.76938496250344"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <button class="d-none"></button>
+    </form>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="submitLocation()" class="m-2">
+      Lưu
+    </button>
+    <button nz-button nzType="default" (click)="cancelLocation()">Hủy</button>
+  </div>
+</nz-modal>

@@ -1,0 +1,150 @@
+<cms-page title="Chi tiết đơn hàng" [close]="true">
+  <div action>
+    <button nzType="primary" nz-button (click)="Lockerlock()">
+      Khóa khẩn cấp
+    </button>
+    <button
+      nzType="primary"
+      nz-button
+      printTitle="Chi tiết  Giao dịch "
+      printSectionId="print-section"
+      ngxPrint
+      class="ml-3"
+      [useExistingCss]="true"
+    >
+      In
+    </button>
+  </div>
+  <div content id="print-section">
+    <cms-header-detail-order></cms-header-detail-order>
+    <nz-divider></nz-divider>
+    <div>
+      <h5 nz-typography>
+        <i nz-icon nzType="history" class="mr-2" nzTheme="outline"></i>Lịch sử
+        đơn
+      </h5>
+      <div class="px-4">
+        <nz-steps [nzCurrent]="1" nzProgressDot nzDirection="vertical">
+          <ng-container *ngFor="let item of listOfHistoryTransactionReverse">
+            <nz-step [nzTitle]="title" [nzDescription]="description"> </nz-step>
+            <ng-template #title>
+              {{ item.timestamp | dateHistory }}
+              <span
+                nz-button
+                (click)="videoPlay(item.id)"
+                *ngIf="
+                  item.sessionType == 1 ||
+                  item.sessionType == 2 ||
+                  item.sessionType == 3 ||
+                  item.sessionType == 4 ||
+                  item.sessionType == 6
+                "
+                ><i
+                  class="ml-3"
+                  style="cursor: pointer"
+                  nz-icon
+                  nzType="video-camera"
+                  nzTheme="outline"
+                ></i
+              ></span>
+            </ng-template>
+            <ng-template #description>
+              <div>
+                <h5 nz-typography class="mb-2">
+                  {{ item.sessionType | textDetailSessionType }}
+                </h5>
+              </div>
+              <div class="timeline-content">
+                <div class="mb-1" nz-row *ngIf="item.sessionType != 2">
+                  <span class="step-title">Bưu tá :</span>
+                  <span
+                    >{{ item.buutaName ? item.buutaName : " " }} -
+                    {{ item.buutaPhone ? item.buutaPhone : " " }}</span
+                  >
+                </div>
+                <div class="mb-1" nz-row *ngIf="item.sessionType != 2">
+                  <span class="step-title">Locker :</span>
+                  <span>
+                    {{ item.buutaName ? item.buutaName : " " }} -
+                    {{ item.buutaPhone ? item.buutaPhone : " " }}</span
+                  >
+                </div>
+                <div class="mb-1" nz-row *ngIf="item.sessionType != 2">
+                  <span class="step-title">Mã ngăn :</span>
+                  <span> {{ item.lockerId ? item.lockerId : "-" }}</span>
+                </div>
+                <div class="mb-1" nz-row>
+                  <span class="step-title">Lý do :</span>
+                  <span>{{ item.reason | textReason }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+        </nz-steps>
+      </div>
+    </div>
+  </div>
+</cms-page>
+
+<nz-modal
+  [(nzVisible)]="isVisibleVideo"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzClosable]="false"
+>
+  <ng-template #modalTitle>
+    <div style="display: flex; justify-content: space-between">
+      <h5 nz-typography style="color: #fff">Video</h5>
+      <div>
+        <span
+          nz-typography
+          (click)="handleCancel()"
+          style="color: #fff; cursor: pointer"
+          >x</span
+        >
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <nz-layout>
+      <nz-sider>
+        <ul
+          nz-menu
+          nzTheme="light"
+          nzMode="inline"
+          *ngFor="let item of listOfVideo; let i = index"
+        >
+          <li *ngIf="i == 0" nzSelected="" nz-menu-item>
+            <i nz-icon nzType="video-camera" nzTheme="outline"></i>
+            <span nz-typography (click)="selectVideo(item.value)">{{
+              item.name
+            }}</span>
+          </li>
+          <li *ngIf="i != 0" nz-menu-item>
+            <i nz-icon nzType="video-camera" nzTheme="outline"></i>
+            <span nz-typography (click)="selectVideo(item.value)">{{
+              item.name
+            }}</span>
+          </li>
+        </ul>
+      </nz-sider>
+      <nz-layout>
+        <nz-content style="text-align: center; padding-left: 5%">
+          <iframe
+            width="500px"
+            height="300"
+            [src]="linkVideo | safe"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </nz-content>
+      </nz-layout>
+    </nz-layout>
+  </ng-template>
+
+  <ng-template #modalFooter> </ng-template>
+</nz-modal>

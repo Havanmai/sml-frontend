@@ -1,0 +1,119 @@
+<cms-page title="Log hoạt động" [close]="false">
+  <div content class="mt-9">
+    <div nz-row class="mt-5" [nzGutter]="[16, 16]">
+      <div nz-col nzSpan="5">
+        <nz-input-group
+          class="width-full"
+          [nzPrefix]="prefixIconSearch"
+          [nzSuffix]="inputClearTpl"
+        >
+          <input
+            type="text"
+            nz-input
+            placeholder="Nhập từ tìm kiếm"
+            [(ngModel)]="keyword"
+            (keyup.enter)="searchCode()"
+          />
+        </nz-input-group>
+        <ng-template #prefixIconSearch>
+          <i nz-icon nzType="search" (click)="searchCode()"></i>
+        </ng-template>
+        <ng-template #inputClearTpl>
+          <i
+            nz-icon
+            class="ant-input-clear-icon"
+            nzTheme="fill"
+            nzType="close-circle"
+            *ngIf="keyword"
+            (click)="keyword = ''; searchCode()"
+          ></i>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="5">
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          (nzScrollToBottom)="loadMoreLockerCabinet()"
+          (ngModelChange)="changeLockerCabinet($event)"
+          [nzDropdownRender]="renderTemplate"
+          nzAllowClear
+          nzPlaceHolder="Nhập mã Locker"
+          [(ngModel)]="codeLockerCabinets"
+        >
+          <nz-option
+            *ngFor="let cl of listOfLockerCabinets"
+            [nzLabel]="cl.code"
+            [nzValue]="cl.id"
+          ></nz-option>
+        </nz-select>
+        <ng-template #renderTemplate>
+          <nz-spin *ngIf="isLoadingLockerCabinets"></nz-spin>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="5">
+        <nz-select
+          class="width-full"
+          nzShowSearch
+          (nzScrollToBottom)="loadMoreLocker()"
+          [nzDropdownRender]="renderTemplateLockerItem"
+          nzAllowClear
+          nzPlaceHolder="Nhập mã ngăn tủ"
+          [(ngModel)]="codeLockerItem"
+        >
+          <nz-option
+            *ngFor="let cl of listOfLockerItem"
+            [nzLabel]="cl.id"
+            [nzValue]="cl.id"
+          ></nz-option>
+        </nz-select>
+        <ng-template #renderTemplateLockerItem>
+          <nz-spin *ngIf="isLoadingLockerItem"></nz-spin>
+        </ng-template>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-select
+          class="width-full"
+          ngModel="lucy"
+          nzShowSearch
+          nzAllowClear
+          nzPlaceHolder="Loại"
+        >
+          <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col nzSpan="3">
+        <button nz-button nzType="primary">Tìm kiếm</button>
+      </div>
+    </div>
+    <div class="table mt-6">
+      <nz-table>
+        <thead>
+          <tr>
+            <th>Mã Locker</th>
+            <th>Mã ngăn</th>
+            <th>Đèn</th>
+            <th>Đèn UV</th>
+            <th>Cảm biến cửa</th>
+            <th>Số ngăn</th>
+            <th>Camera 1</th>
+            <th>Camera 2</th>
+            <th>Thời gian</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- <td>Mã Locker</td>
+          <td>Mã ngăn</td>
+          <td>Đèn</td>
+          <td>Đèn UV</td>
+          <td>Cảm biến cửa</td>
+          <td>Số ngăn</td>
+          <td>Camera 1</td>
+          <td>Camera 2</td>
+          <td>Thời gian</td> -->
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</cms-page>

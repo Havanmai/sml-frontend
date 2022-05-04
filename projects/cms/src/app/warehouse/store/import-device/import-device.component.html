@@ -1,0 +1,260 @@
+<cms-page title="Nhập hàng lẻ" [close]="true">
+  <div action>
+    <a nz-button nzType="primary" (click)="submitCreateDevice()"
+      ><i nz-icon nzType="check" nzTheme="outline"></i
+      ><span class="d-none d-md-inline-block">Xác nhận</span></a
+    >
+  </div>
+  <div content>
+    <form
+      nz-form
+      [formGroup]="createForm"
+      (ngSubmit)="submitCreateDevice()"
+      class="mt-9"
+      style="width: 60%"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="menu"
+          >Danh mục</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống danh mục!"
+        >
+          <nz-select formControlName="menu" nzPlaceHolder="Chọn danh mục">
+            <nz-option
+              *ngFor="let m of listOfMenu"
+              [nzLabel]="m.name"
+              [nzValue]="m.id"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="color"
+          >Màu sắc</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống màu sắc!"
+        >
+          <nz-tree-select
+            nzShowSearch
+            nzPlaceHolder="Chọn màu sắc"
+            [nzExpandedKeys]="expandKeys"
+            formControlName="color"
+            [nzNodes]="listOfColor"
+            (ngModelChange)="onChange($event)"
+          ></nz-tree-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="vendor"
+          >Nhà cung cấp</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống màu sắc!"
+        >
+          <input nz-input formControlName="vendor" id="vendor" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="weight"
+          >Trọng lượng</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống trọng lượng!"
+        >
+          <nz-input-group nzCompact nz-row>
+            <input
+              nz-col
+              [nzSm]="18"
+              [nzMd]="18"
+              [nzXl]="20"
+              [nzXl]="21"
+              [nzXs]="20"
+              formControlName="weight"
+              type="number"
+              nz-input
+              placeholder="Nhập trọng lượng"
+            />
+            <nz-select
+              nz-col
+              [nzSm]="6"
+              [nzMd]="6"
+              [nzXl]="4"
+              [nzXl]="3"
+              [nzXs]="4"
+              formControlName="unitweight"
+              style="width: 70px"
+            >
+              <nz-option [nzLabel]="'G'" [nzValue]="0"></nz-option>
+              <nz-option [nzLabel]="'KG'" [nzValue]="1"></nz-option>
+            </nz-select>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="size"
+          >Kích thước
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống kích thước!"
+        >
+          <div nz-row [nzGutter]="[10, 10]">
+            <nz-input-group
+              nz-col
+              [nzSm]="24"
+              [nzXl]="8"
+              [nzXs]="24"
+              nzAddOnAfter="mm"
+            >
+              <input
+                type="number"
+                nz-input
+                formControlName="sizeLegth"
+                placeholder="Dài"
+              />
+            </nz-input-group>
+            <nz-input-group
+              nz-col
+              [nzSm]="24"
+              [nzXl]="8"
+              [nzXs]="24"
+              nzAddOnAfter="mm"
+            >
+              <input
+                type="number"
+                nz-input
+                formControlName="sizeLarge"
+                placeholder="Rộng"
+              />
+            </nz-input-group>
+            <nz-input-group
+              nz-col
+              [nzSm]="24"
+              [nzXl]="8"
+              [nzXs]="24"
+              nzAddOnAfter="mm"
+            >
+              <input
+                type="number"
+                nz-input
+                formControlName="sizeHeight"
+                placeholder="Cao"
+              />
+            </nz-input-group>
+          </div>
+          <!-- -->
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="version"
+          >Phiên bản</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống phiên bản!"
+        >
+          <input
+            nz-input
+            id="version"
+            formControlName="version"
+            placeholder="nhập phiên bản"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="serial" nzRequired
+          >Serial</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống Serial !"
+        >
+          <input
+            nz-input
+            id="serial"
+            formControlName="serial"
+            placeholder="nhập Serial"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="depot"
+          >Nhập vào kho</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống kho hàng !"
+        >
+          <nz-select formControlName="depot" nzPlaceHolder="Chọn kho hàng">
+            <!--  <nz-option  *ngFor="let m of listOfMenu" [nzLabel]="m.name" [nzValue]="m.id"></nz-option> -->
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price">Giá</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-input-group nzCompact nzAddOnAfter="VND">
+            <input
+              nz-input
+              type="text"
+              (keyup)="formatCurrency_Value($event)"
+              formControlName="price"
+              id="price"
+              placeholder="Nhập giá thiết bị "
+            />
+          </nz-input-group>
+          <div
+            *ngIf="
+              !createForm.controls.price?.valid &&
+              (createForm.controls.price?.dirty ||
+                createForm.controls.price?.touched)
+            "
+          >
+            <div
+              class="alert-danger"
+              [hidden]="!createForm.controls.price.errors.required"
+            >
+              Không được để trống giá thiết bị!
+            </div>
+            <div class="alert-danger" [hidden]="isNotNumber">
+              Hãy nhập đúng định dạng số cho giá, không nhập chữ !
+            </div>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="note"
+          >Ghi chú</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Không được để trống ghi chú!"
+        >
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              formControlName="note"
+              placeholder="Ghi chú"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</cms-page>

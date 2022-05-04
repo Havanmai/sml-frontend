@@ -1,0 +1,91 @@
+@heading-1-size: ceil(@font-size-base * 2.71);
+@heading-2-size: ceil(@font-size-base * 2.14);
+@heading-3-size: ceil(@font-size-base * 1.71);
+@heading-4-size: ceil(@font-size-base * 1.42);
+@heading-5-size: ceil(@font-size-base * 1.14);
+@heading-6-size: ceil(@font-size-base * 0.85);
+
+// https://github.com/oneui-design/oneui-design/issues/20210
+@line-height-base: 1.5715;
+
+// vertical paddings
+@padding-lg: 16px; // containers
+@padding-md: 15px; // small containers and buttons
+@padding-sm: 12px; // Form controls and items
+@padding-xs: 8px; // small items
+@padding-xss: 4px; // more small
+
+//custom padding and margin config
+//1rem = 14px , each level step = 0.5rem
+@padding-1: 3.5px;
+@padding-2: 7px;
+@padding-3: 14px;
+@padding-4: 21px;
+@padding-5: 28px;
+@padding-6: 35px;
+@padding-7: 42px;
+@padding-8: 49px;
+@padding-9: 56px;
+@padding-10: 63px;
+@padding-11: 70px;
+
+// custom logo config
+//
+@logo-xs:16px;
+@logo-sm:20px;
+@logo-md:28px;
+@logo-lg:32px;
+@logo-xl:36px;
+@logo-xxl:40px;
+// vertical padding for all form controls
+@control-padding-horizontal: @padding-sm;
+@control-padding-horizontal-sm: @padding-xs;
+
+// vertical margins
+@margin-lg: 24px; // containers
+@margin-md: 16px; // small containers and buttons
+@margin-sm: 12px; // Form controls and items
+@margin-xs: 8px; // small items
+@margin-xss: 4px; // more small
+
+// height rules
+//@height-base: 32px;
+//@height-lg: 40px;
+//@height-sm: 26px;
+
+// Media queries breakpoints
+// @screen-xs and @screen-xs-min is not used in Grid
+// smallest break point is @screen-md
+@screen-xs: 480px;
+@screen-xs-min: @screen-xs;
+// 👆 Extra small screen / phone
+
+// 👇 Small screen / tablet
+@screen-sm: 576px;
+@screen-sm-min: @screen-sm;
+
+// Medium screen / desktop
+@screen-md: 768px;
+@screen-md-min: @screen-md;
+
+// Large screen / wide desktop
+@screen-lg: 992px;
+@screen-lg-min: @screen-lg;
+
+// Extra large screen / full hd
+@screen-xl: 1200px;
+@screen-xl-min: @screen-xl;
+
+// Extra extra large screen / large desktop
+@screen-xxl: 1600px;
+@screen-xxl-min: @screen-xxl;
+
+// provide a maximum
+@screen-xs-max: (@screen-sm-min - 1px);
+@screen-sm-max: (@screen-md-min - 1px);
+@screen-md-max: (@screen-lg-min - 1px);
+@screen-lg-max: (@screen-xl-min - 1px);
+@screen-xl-max: (@screen-xxl-min - 1px);
+@screen-xxl-max: (@screen-xxl-min - 1px);
+
+

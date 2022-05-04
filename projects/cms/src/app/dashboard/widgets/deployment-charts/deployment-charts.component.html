@@ -1,0 +1,12 @@
+<nz-card nzTitle="Triển khai mới" [nzExtra]="extraTemplate">
+  <div #chartsContainer></div>
+  <div class="text-right">
+    <a routerLink="/lockers"
+      >Danh sách SmartLocker <i nz-icon nzType="right" nzTheme="outline"></i
+    ></a>
+  </div>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <cms-date-selector (onSelect)="filterSelect($event)"></cms-date-selector>
+</ng-template>

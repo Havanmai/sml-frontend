@@ -1,0 +1,38 @@
+<nz-card nzTitle="Thống kê người dùng" [nzExtra]="extraTemplate">
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="24">
+      <div nz-space nzAlign="start">
+        <div *nzSpaceItem class="statistic-item ml-2 mr-2 mr-md-5 mr-lg-7">
+          <div class="icon"><img src="/assets/user-outline.svg" /></div>
+          <div class="content">600</div>
+          <div class="title">Tổng số user</div>
+        </div>
+        <div *nzSpaceItem class="statistic-item mr-2 mr-md-5 mr-lg-7">
+          <div class="icon"><img src="/assets/group-outline.svg" /></div>
+          <div class="content">300</div>
+          <div class="title">User mới</div>
+        </div>
+        <div *nzSpaceItem class="statistic-item mr-2 mr-md-5 mr-lg-7">
+          <div class="icon"><img src="/assets/receiver.svg" /></div>
+          <div class="content">5m:26s</div>
+          <div class="title">Thời gian giao hàng trung bình</div>
+        </div>
+        <div *nzSpaceItem class="statistic-item mr-2 mr-md-5 mr-lg-7">
+          <div class="icon"><img src="/assets/delivery.svg" /></div>
+          <div class="content">6m:15s</div>
+          <div class="title">Thời gian nhận hàng trung bình</div>
+        </div>
+        <div *nzSpaceItem class="statistic-item mr-2">
+          <div class="icon"><img src="/assets/return.svg" /></div>
+          <div class="content">20%</div>
+          <div class="title">Tỉ lệ quay lại</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div #chartsContainer></div>
+</nz-card>
+
+<ng-template #extraTemplate>
+  <cms-date-selector (onSelect)="filterSelect($event)"></cms-date-selector>
+</ng-template>
